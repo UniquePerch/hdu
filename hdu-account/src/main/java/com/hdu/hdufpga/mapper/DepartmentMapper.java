@@ -1,9 +1,9 @@
 package com.hdu.hdufpga.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hdu.hdufpga.entity.po.UserPO;
+import com.hdu.entity.po.DepartmentPO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface UserMapper extends BaseMapper<UserPO> {
+public interface DepartmentMapper extends BaseMapper<DepartmentPO> {
 }

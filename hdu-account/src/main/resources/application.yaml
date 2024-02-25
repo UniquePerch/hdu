@@ -1,12 +1,12 @@
 server:
-  port: 8081
+  port: 8080
 spring:
   cloud:
     nacos:
       discovery:
         server-addr: 47.99.175.197:8848
   application:
-    name: hdu-interrupt
+    name: hdu-account
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root

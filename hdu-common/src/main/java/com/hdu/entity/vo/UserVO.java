@@ -1,9 +1,8 @@
-package com.hdu.hdufpga.entity.vo;
+package com.hdu.entity.vo;
 
-import com.hdu.hdufpga.entity.BaseEntity;
-import lombok.*;
-
-import java.util.Date;
+import com.hdu.entity.BaseEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)

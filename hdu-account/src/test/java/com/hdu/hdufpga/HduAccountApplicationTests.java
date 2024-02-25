@@ -1,22 +1,25 @@
 package com.hdu.hdufpga;
 
+import com.hdu.entity.po.DepartmentPO;
+import com.hdu.entity.po.UserPO;
+import com.hdu.hdufpga.controller.DepartmentController;
 import com.hdu.hdufpga.controller.UserController;
-import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.service.UserService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class HduFpgaApplicationTests {
+import javax.annotation.Resource;
 
-    @Autowired
+@SpringBootTest
+class HduAccountApplicationTests {
+
+    @Resource
     UserService userService;
 
-    @Autowired
+    @Resource
     UserController userController;
     @Test
-    void contextLoads() {
+    void testUser() {
         UserPO userPO = UserPO.builder()
                 .username("lyh")
                 .password("yy5201314")
@@ -30,4 +33,15 @@ class HduFpgaApplicationTests {
         System.out.println(userController.get(3));
     }
 
+
+    @Resource
+    DepartmentController departmentController;
+    @Test
+    void testDepartment() {
+        DepartmentPO departmentPO = DepartmentPO.builder()
+                .name("杭电")
+                .fatherDepartment(0)
+                .build();
+        System.out.println(departmentController.create(departmentPO));
+    }
 }

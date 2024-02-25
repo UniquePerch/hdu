@@ -1,23 +1,19 @@
 package com.hdu.hdufpga.controller;
 
-import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hdu.hdufpga.entity.BaseEntity;
-import com.hdu.hdufpga.entity.Result;
+import com.hdu.entity.BaseEntity;
+import com.hdu.entity.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.Date;
 
 @Slf4j
 public abstract class BaseController <S extends IService<T>,T extends BaseEntity>{
-    @Resource
+    //此处必须使用Autowired
+    @Autowired
     protected S service;
 
     @PostMapping("/create")
@@ -44,7 +40,7 @@ public abstract class BaseController <S extends IService<T>,T extends BaseEntity
         try {
             return Result.ok(service.getById(id));
         } catch (Exception e){
-            log.info(e.toString());
+            log.error(e.toString());
             return Result.error();
         }
     }

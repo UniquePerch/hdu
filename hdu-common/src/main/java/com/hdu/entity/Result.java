@@ -1,4 +1,4 @@
-package com.hdu.hdufpga.entity;
+package com.hdu.entity;
 
 import cn.hutool.json.JSONUtil;
 
