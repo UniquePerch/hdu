@@ -1,15 +1,15 @@
 package com.hdu.hdufpga.controller;
 
 import com.hdu.controller.BaseController;
-import com.hdu.entity.po.DepartmentPO;
-import com.hdu.hdufpga.service.DepartmentService;
+import com.hdu.entity.po.RolePO;
+import com.hdu.hdufpga.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin/department")
+@RequestMapping("/admin/role")
 @Slf4j
-public class DepartmentController extends BaseController<DepartmentService, DepartmentPO> {
+public class RoleController extends BaseController<RoleService, RolePO> {
 
 }

@@ -1,5 +1,6 @@
 package com.hdu.entity.po;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.hdu.entity.BaseEntity;
 import lombok.*;
@@ -15,6 +16,10 @@ public class UserPO extends BaseEntity {
     private String password;
     private String realName;
     private Long activeTime;
-    private String department;
-    private Integer userLevel;
+    @TableField("department")
+    private Integer userDepartmentId;
+    private String userDepartmentName;
+    @TableField("role")
+    private Integer userRoleId;
+    private String userRoleName;
 }
