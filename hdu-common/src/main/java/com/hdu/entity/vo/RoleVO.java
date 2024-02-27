@@ -1,13 +1,13 @@
 package com.hdu.entity.vo;
 
 import com.hdu.entity.BaseEntity;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Builder
+@NoArgsConstructor
 public class RoleVO extends BaseEntity {
     private String name;
     private String privilegeCharacter;
