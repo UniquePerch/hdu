@@ -7,9 +7,8 @@ import com.hdu.entity.PageRecord;
 import com.hdu.entity.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Date;
 
@@ -19,7 +18,7 @@ public abstract class BaseController <S extends MPJBaseService<T>,T extends Base
     @Autowired
     protected S service;
 
-    @PostMapping("/create")
+    @RequestMapping("/create")
     public Result create(@RequestBody T t){
         try {
             t.setCreateTime(new Date());
@@ -35,7 +34,7 @@ public abstract class BaseController <S extends MPJBaseService<T>,T extends Base
         }
     }
 
-    @PostMapping("/delete")
+    @RequestMapping("/delete")
     public Result delete(Integer id){
         try {
             if (service.removeById(id)) {
@@ -49,7 +48,7 @@ public abstract class BaseController <S extends MPJBaseService<T>,T extends Base
         }
     }
 
-    @PostMapping("/update")
+    @RequestMapping("/update")
     public Result update(T t){
         try {
             t.setUpdateTime(new Date());
@@ -64,7 +63,7 @@ public abstract class BaseController <S extends MPJBaseService<T>,T extends Base
         }
     }
 
-    @GetMapping("/get")
+    @RequestMapping("/get")
     public Result get(Integer id){
         try {
             T t = service.getById(id);
@@ -79,7 +78,7 @@ public abstract class BaseController <S extends MPJBaseService<T>,T extends Base
         }
     }
 
-    @GetMapping("/listPage")
+    @RequestMapping("/listPage")
     public Result listPage(Integer current,Integer size){
         try {
             Page<T> page = service.page(new Page<>(current, size));

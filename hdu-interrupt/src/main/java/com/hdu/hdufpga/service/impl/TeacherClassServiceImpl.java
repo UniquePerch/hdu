@@ -4,6 +4,8 @@ package com.hdu.hdufpga.service.impl;
 import cn.hutool.core.convert.Convert;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.listener.PageReadListener;
+import com.hdu.entity.constant.AccountConstant;
+import com.hdu.entity.constant.RoleConstant;
 import com.hdu.entity.po.UserPO;
 import com.hdu.entity.vo.UserVO;
 import com.hdu.hdufpga.client.UserClient;
@@ -26,7 +28,6 @@ public class TeacherClassServiceImpl implements TeacherClassService {
     @Resource
     TeacherClassMapper teacherClassMapper;
 
-    //todo:分布式事务
     @Override
     @GlobalTransactional
     public List<UserVO> uploadStudentList(MultipartFile file, Integer classId, Integer departmentId) throws IOException {
@@ -40,8 +41,8 @@ public class TeacherClassServiceImpl implements TeacherClassService {
                 .doRead();
         voList.forEach(userVO -> {
             userVO.setUserDepartmentId(departmentId);
-            userVO.setPassword("123456");
-            userVO.setUserRoleId(1);
+            userVO.setPassword(AccountConstant.DEFAULT_PASSWORD);
+            userVO.setUserRoleId(RoleConstant.STUDENT);
         });
         List<UserPO> poList = new ArrayList<>();
         voList.forEach(e->poList.add(Convert.convert(UserPO.class,e)));
@@ -49,11 +50,13 @@ public class TeacherClassServiceImpl implements TeacherClassService {
         poList.forEach(e->{
             if(userClient.create(e).getResult()==null){
                 voList.add(Convert.convert(UserVO.class,e));
-            } else {
-                //TODO:要先查询才能知道用户id，这里直接getId是不行的
-                teacherClassMapper.insertStudentClassRelation(e.getId(),classId);
+                poList.remove(e);
             }
         });
+        List<String> userNameList = new ArrayList<>();
+        poList.forEach(e->userNameList.add(e.getUsername()));
+        List<Integer> idList = userClient.getIdByUserName(userNameList);
+        idList.forEach(e-> teacherClassMapper.insertStudentClassRelation(e,classId));
         return voList;
     }
 }

@@ -1,6 +1,6 @@
 package com.hdu.hdufpga;
 
-import com.hdu.entity.vo.RoleVO;
+import cn.hutool.core.codec.Base64Decoder;
 import com.hdu.hdufpga.controller.DepartmentController;
 import com.hdu.hdufpga.controller.RoleController;
 import com.hdu.hdufpga.controller.UserController;
@@ -36,10 +36,9 @@ class HduAccountApplicationTests {
     RoleController roleController;
     @Test
     void testRole(){
-        RoleVO roleVO = RoleVO.builder()
-                .enable(true)
-                .privilegeCharacter("admin")
-                .name("超级管理员")
-                .build();
+        String s = "JXU2MjExJXU3MjMxJXU0RjYw";
+        String hex = Base64Decoder.decodeStr(s);
+        System.out.println(hex);
+        //25105
     }
 }
