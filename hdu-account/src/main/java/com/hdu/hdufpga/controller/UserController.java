@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/user")
+@RequestMapping("/co/user")
 @Slf4j
 public class UserController extends BaseController<UserService, UserPO> {
     @RequestMapping("/getIdByUserName")

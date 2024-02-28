@@ -10,9 +10,9 @@ import java.util.List;
 
 @FeignClient("hdu-account")
 public interface UserClient {
-    @RequestMapping("/admin/user/create")
+    @RequestMapping("/co/user/create")
     Result create(UserPO userPO);
 
-    @GetMapping("/admin/user/getIdByUserName")
+    @GetMapping("/co/user/getIdByUserName")
     List<Integer> getIdByUserName(List<String> userNameList);
 }

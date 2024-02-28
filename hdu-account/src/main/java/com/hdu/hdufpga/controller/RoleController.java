@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin/role")
+@RequestMapping("/co/role")
 @Slf4j
 public class RoleController extends BaseController<RoleService, RolePO> {
 

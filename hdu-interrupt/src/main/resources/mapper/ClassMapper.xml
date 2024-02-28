@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hdu.hdufpga.mapper.TeacherClassMapper">
+<mapper namespace="com.hdu.hdufpga.mapper.ClassMapper">
     <insert id="insertStudentClassRelation">
         insert into foreign_user_class (user_id, class_id) values (#{student_id}, #{class_id})
     </insert>
