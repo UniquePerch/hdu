@@ -10,4 +10,6 @@ public interface ChapterService extends MPJBaseService<ChapterPO> {
     Boolean recordFinish(Integer userId, Integer chapterId);
 
     List<UserChapterRecordVO> getAllChapterRecord();
+
+    List<UserChapterRecordVO> getChapterRecordByUserId(Integer userId);
 }

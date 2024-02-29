@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
 import java.util.List;
 
 @SpringBootTest
@@ -25,5 +26,13 @@ class HduInterruptApplicationTests {
                 ;
         List<ClassPO> list = classMapper.selectJoinList(ClassPO.class,wrapper);
         System.out.println(list);
+    }
+
+    @Test
+    void testCal(){
+        Calendar calendar = Calendar.getInstance();
+        System.out.println(calendar.get(Calendar.YEAR));
+        System.out.println(calendar.get(Calendar.MONTH) + 1);
+        System.out.println(calendar.get(Calendar.DAY_OF_MONTH));
     }
 }

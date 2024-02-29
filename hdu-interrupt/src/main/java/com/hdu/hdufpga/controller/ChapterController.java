@@ -18,7 +18,7 @@ public class ChapterController extends BaseController<ChapterService, ChapterPO>
             if(service.recordFinish(userId,chapterId)){
                 return Result.ok("记录学习记录成功");
             } else {
-                return Result.error("记录学习记录失败");
+                return Result.error("已经学习过该知识点");
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -30,6 +30,19 @@ public class ChapterController extends BaseController<ChapterService, ChapterPO>
     public Result getAllChapterRecord(){
         try {
             return Result.ok(service.getAllChapterRecord());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            if(e.getMessage().toLowerCase().contains("unique")){
+                return Result.ok("已经学习过该知识点");
+            }
+            return Result.error("数据库原因，获取学习记录失败");
+        }
+    }
+
+    @RequestMapping("/getChapterRecordByUserId")
+    public Result getChapterRecordByUserId(Integer userId){
+        try {
+            return Result.ok(service.getChapterRecordByUserId(userId));
         } catch (Exception e) {
             log.error(e.getMessage());
             return Result.error("数据库原因，获取学习记录失败");
