@@ -3,6 +3,7 @@ package com.hdu.hdufpga.controller;
 import com.hdu.controller.BaseController;
 import com.hdu.entity.Result;
 import com.hdu.hdufpga.entity.po.PaperPO;
+import com.hdu.hdufpga.entity.vo.HandInInfoVO;
 import com.hdu.hdufpga.entity.vo.PaperVO;
 import com.hdu.hdufpga.service.PaperService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,63 @@ public class PaperController extends BaseController<PaperService, PaperPO> {
     public Result getPapersByClassId(Integer classId) {
         try {
             return Result.ok(service.getPapersByClassId(classId));
+        } catch (Exception e) {
+            log.error(e.toString());
+            return Result.error();
+        }
+    }
+
+    @RequestMapping(value = "/handInPaper",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result handInPaper(HandInInfoVO handInInfoVO) {
+        try {
+            return Result.ok(service.handInPaper(handInInfoVO));
+        } catch (Exception e) {
+            log.error(e.toString());
+            return Result.error();
+        }
+    }
+
+    @RequestMapping("/getHandInInfoByClassId")
+    public Result getHandInInfoByClassId(Integer classId) {
+        try {
+            return Result.ok(service.getHandInInfoByClassId(classId));
+        } catch (Exception e) {
+            log.error(e.toString());
+            if(e.getMessage().equals("已超过截止时间"))
+                return Result.error("已超过截止时间");
+            return Result.error();
+        }
+    }
+
+    @RequestMapping("/updateHandInInfo")
+    public Result updateHandInInfo(HandInInfoVO handInInfoVO) {
+        try {
+            return Result.ok(service.updateHandInInfo(handInInfoVO));
+        } catch (Exception e) {
+            log.error(e.toString());
+            if(e.getMessage().equals("作业已批改，不可修改提交"))
+                return Result.error("作业已批改，不可修改");
+            if (e.getMessage().equals("已超过截止时间"))
+                return Result.error("已超过截止时间,不可修改");
+            return Result.error();
+        }
+    }
+
+    @RequestMapping("/correctingPaper")
+    public Result correctingPaper(HandInInfoVO handInInfoVO) {
+        try {
+            return Result.ok(service.correctingPaper(handInInfoVO));
+        } catch (Exception e) {
+            log.error(e.toString());
+            return Result.error();
+        }
+    }
+
+    //打回报告
+    @RequestMapping("/returnPaper")
+    public Result returnPaper(HandInInfoVO handInInfoVO) {
+        try {
+            return Result.ok(service.returnPaper(handInInfoVO.getId()));
         } catch (Exception e) {
             log.error(e.toString());
             return Result.error();

@@ -1,9 +1,11 @@
 package com.hdu.entity;
 
 import cn.hutool.json.JSONUtil;
+import lombok.Data;
 
 import java.io.Serializable;
 
+@Data
 public class Result implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -59,31 +61,6 @@ public class Result implements Serializable {
 
     public static Result ok() {
         return new Result(CODE);
-    }
-
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public Object getResult() {
-        return result;
-    }
-
-    public void setResult(Object result) {
-        this.result = result;
     }
 
     @Override
