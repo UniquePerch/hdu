@@ -5,7 +5,6 @@ import com.hdu.entity.BaseEntity;
 import com.hdu.entity.po.UserPO;
 import com.hdu.hdufpga.controller.PaperController;
 import com.hdu.hdufpga.entity.po.ClassPO;
-import com.hdu.hdufpga.entity.vo.HandInInfoVO;
 import com.hdu.hdufpga.mapper.ClassMapper;
 import com.hdu.hdufpga.service.PaperService;
 import org.junit.jupiter.api.Test;
@@ -45,8 +44,6 @@ class HduInterruptApplicationTests {
     PaperController paperController;
     @Test
     void testPaper(){
-        HandInInfoVO handInInfoVO = new HandInInfoVO();
-        handInInfoVO.setId(1);
-        System.out.println(paperController.returnPaper(handInInfoVO));
+
     }
 }
