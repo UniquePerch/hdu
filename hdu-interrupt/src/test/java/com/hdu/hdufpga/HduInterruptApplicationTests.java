@@ -6,7 +6,6 @@ import com.hdu.entity.po.UserPO;
 import com.hdu.hdufpga.controller.PaperController;
 import com.hdu.hdufpga.entity.po.ClassPO;
 import com.hdu.hdufpga.mapper.ClassMapper;
-import com.hdu.hdufpga.service.PaperService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -39,11 +38,9 @@ class HduInterruptApplicationTests {
     }
 
     @Resource
-    PaperService paperService;
-    @Resource
     PaperController paperController;
     @Test
     void testPaper(){
-
+        System.out.println(paperController.getHandInInfoByClassId(1));
     }
 }

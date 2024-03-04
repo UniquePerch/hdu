@@ -16,16 +16,16 @@ public class BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @TableId(type = IdType.AUTO)
     @JsonIgnore
-    private Integer id;
+    protected Integer id;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField
-    private Date createTime;
+    protected Date createTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField
-    private Date updateTime;
+    protected Date updateTime;
 
     @TableLogic
-    private Boolean isDeleted;
+    protected Boolean isDeleted;
 }

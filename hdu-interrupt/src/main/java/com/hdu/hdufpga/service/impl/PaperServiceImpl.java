@@ -64,7 +64,7 @@ public class PaperServiceImpl extends MPJBaseServiceImpl<PaperMapper, PaperPO> i
     public List<HandInInfoVO> getHandInInfoByClassId(Integer classId) {
         MPJLambdaWrapper<HandInInfoPO> wrapper = new MPJLambdaWrapper<>();
         wrapper
-                .select(HandInInfoPO::getFilePath, HandInInfoPO::getGrade, HandInInfoPO::getState,HandInInfoPO::getPaperId,HandInInfoPO::getUserId,HandInInfoPO::getClassId)
+                .select(HandInInfoPO::getId,HandInInfoPO::getFilePath, HandInInfoPO::getGrade, HandInInfoPO::getState,HandInInfoPO::getPaperId,HandInInfoPO::getUserId,HandInInfoPO::getClassId)
                 .selectAs(UserPO::getRealName, HandInInfoPO::getUserRealName)
                 .selectAs(UserPO::getUsername, HandInInfoPO::getUserName)
                 .leftJoin(UserPO.class, UserPO::getId, HandInInfoPO::getUserId)
