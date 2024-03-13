@@ -1,7 +1,6 @@
 package com.hdu.hdufpga.controller;
 
-import com.hdu.controller.BaseController;
-import com.hdu.entity.Result;
+import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.entity.po.TestRecordPO;
 import com.hdu.hdufpga.service.TestRecordService;
 import lombok.extern.slf4j.Slf4j;

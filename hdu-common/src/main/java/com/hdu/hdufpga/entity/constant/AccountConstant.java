@@ -1,4 +1,4 @@
-package com.hdu.entity.constant;
+package com.hdu.hdufpga.entity.constant;
 
 //账户相关常量
 public class AccountConstant {

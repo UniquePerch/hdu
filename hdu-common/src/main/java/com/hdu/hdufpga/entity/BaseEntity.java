@@ -1,4 +1,4 @@
-package com.hdu.entity;
+package com.hdu.hdufpga.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

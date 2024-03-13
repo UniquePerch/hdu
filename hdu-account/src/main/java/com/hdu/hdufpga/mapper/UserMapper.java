@@ -1,7 +1,7 @@
 package com.hdu.hdufpga.mapper;
 
 import com.github.yulichang.base.MPJBaseMapper;
-import com.hdu.entity.po.UserPO;
+import com.hdu.hdufpga.entity.po.UserPO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

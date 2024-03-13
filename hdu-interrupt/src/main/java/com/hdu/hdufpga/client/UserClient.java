@@ -1,7 +1,7 @@
 package com.hdu.hdufpga.client;
 
-import com.hdu.entity.Result;
-import com.hdu.entity.po.UserPO;
+import com.hdu.hdufpga.entity.Result;
+import com.hdu.hdufpga.entity.po.UserPO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

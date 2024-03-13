@@ -4,16 +4,16 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.listener.PageReadListener;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.yulichang.base.MPJBaseServiceImpl;
-import com.hdu.entity.constant.AccountConstant;
-import com.hdu.entity.constant.RoleConstant;
-import com.hdu.entity.po.UserPO;
-import com.hdu.entity.vo.UserVO;
+import com.hdu.hdufpga.entity.constant.AccountConstant;
+import com.hdu.hdufpga.entity.constant.RoleConstant;
+import com.hdu.hdufpga.entity.po.UserPO;
+import com.hdu.hdufpga.entity.vo.UserVO;
 import com.hdu.hdufpga.client.UserClient;
 import com.hdu.hdufpga.entity.po.ClassPO;
 import com.hdu.hdufpga.entity.vo.ClassVO;
 import com.hdu.hdufpga.mapper.ClassMapper;
 import com.hdu.hdufpga.service.ClassService;
-import com.hdu.util.ConvertUtil;
+import com.hdu.hdufpga.util.ConvertUtil;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,7 +50,7 @@ public class ClassServiceImpl extends MPJBaseServiceImpl<ClassMapper, ClassPO> i
         List<UserPO> poList = ConvertUtil.copyList(voList, UserPO.class);
         voList.clear();
         poList.forEach(e->{
-            if(userClient.create(e).getResult()==null){
+            if(userClient.create(e).getResult() == null){
                 voList.add(ConvertUtil.copy(e,UserVO.class));
                 poList.remove(e);
             }
@@ -71,5 +71,11 @@ public class ClassServiceImpl extends MPJBaseServiceImpl<ClassMapper, ClassPO> i
         ;
         List<ClassPO> poList = classMapper.selectList(wrapper);
         return ConvertUtil.copyList(poList,ClassVO.class);
+    }
+
+    @Override
+    public List<UserVO> getStudentListByClassId(Integer classId) {
+        List<UserPO> poList = classMapper.selectStudentListByClassId(classId);
+        return ConvertUtil.copyList(poList,UserVO.class);
     }
 }

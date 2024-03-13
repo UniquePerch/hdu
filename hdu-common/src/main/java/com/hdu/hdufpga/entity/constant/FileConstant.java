@@ -1,4 +1,4 @@
-package com.hdu.entity.constant;
+package com.hdu.hdufpga.entity.constant;
 
 public class FileConstant {
     public static final String TEACHER_PAPER_UPLOAD_PATH = "/profile/upload/teacher/paper/";

@@ -1,6 +1,6 @@
-package com.hdu.entity.vo;
+package com.hdu.hdufpga.entity.vo;
 
-import com.hdu.entity.BaseEntity;
+import com.hdu.hdufpga.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,9 @@
 package com.hdu.hdufpga;
 
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
-import com.hdu.entity.BaseEntity;
-import com.hdu.entity.po.UserPO;
+import com.hdu.hdufpga.controller.ClassController;
+import com.hdu.hdufpga.entity.BaseEntity;
+import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.controller.PaperController;
 import com.hdu.hdufpga.entity.po.ClassPO;
 import com.hdu.hdufpga.mapper.ClassMapper;
@@ -42,5 +43,12 @@ class HduInterruptApplicationTests {
     @Test
     void testPaper(){
         System.out.println(paperController.getHandInInfoByClassId(1));
+    }
+
+    @Resource
+    ClassController classController;
+    @Test
+    void testClass(){
+        System.out.println(classController.getStudentListByClassId(1));
     }
 }

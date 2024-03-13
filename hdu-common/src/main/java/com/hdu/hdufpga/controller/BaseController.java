@@ -1,10 +1,10 @@
-package com.hdu.controller;
+package com.hdu.hdufpga.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.base.MPJBaseService;
-import com.hdu.entity.BaseEntity;
-import com.hdu.entity.PageRecord;
-import com.hdu.entity.Result;
+import com.hdu.hdufpga.entity.BaseEntity;
+import com.hdu.hdufpga.entity.PageRecord;
+import com.hdu.hdufpga.entity.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

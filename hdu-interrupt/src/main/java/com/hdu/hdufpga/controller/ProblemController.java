@@ -1,7 +1,6 @@
 package com.hdu.hdufpga.controller;
 
-import com.hdu.controller.BaseController;
-import com.hdu.entity.Result;
+import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.entity.po.Problem1PO;
 import com.hdu.hdufpga.entity.vo.Problem1VO;
 import com.hdu.hdufpga.service.ProblemService;

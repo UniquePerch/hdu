@@ -1,8 +1,8 @@
-package com.hdu.util;
+package com.hdu.hdufpga.util;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.text.UnicodeUtil;
-import com.hdu.entity.constant.FileConstant;
+import com.hdu.hdufpga.entity.constant.FileConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 

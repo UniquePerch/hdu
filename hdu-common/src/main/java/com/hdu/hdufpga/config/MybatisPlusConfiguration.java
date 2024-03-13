@@ -1,4 +1,4 @@
-package com.hdu.config;
+package com.hdu.hdufpga.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

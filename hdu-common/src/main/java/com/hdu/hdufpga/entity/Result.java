@@ -1,4 +1,4 @@
-package com.hdu.entity;
+package com.hdu.hdufpga.entity;
 
 import cn.hutool.json.JSONUtil;
 import lombok.Data;

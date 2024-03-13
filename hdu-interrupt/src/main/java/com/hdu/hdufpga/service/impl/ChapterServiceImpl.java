@@ -2,14 +2,14 @@ package com.hdu.hdufpga.service.impl;
 
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
-import com.hdu.entity.po.UserPO;
+import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.entity.po.ChapterPO;
 import com.hdu.hdufpga.entity.po.UserChapterRecordPO;
 import com.hdu.hdufpga.entity.vo.UserChapterRecordVO;
 import com.hdu.hdufpga.mapper.ChapterMapper;
 import com.hdu.hdufpga.mapper.UserChapterMapper;
 import com.hdu.hdufpga.service.ChapterService;
-import com.hdu.util.ConvertUtil;
+import com.hdu.hdufpga.util.ConvertUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

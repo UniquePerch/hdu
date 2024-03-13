@@ -1,8 +1,7 @@
 package com.hdu.hdufpga.controller;
 
-import com.hdu.controller.BaseController;
-import com.hdu.entity.Result;
-import com.hdu.entity.vo.UserVO;
+import com.hdu.hdufpga.entity.Result;
+import com.hdu.hdufpga.entity.vo.UserVO;
 import com.hdu.hdufpga.entity.po.ClassPO;
 import com.hdu.hdufpga.service.ClassService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +35,16 @@ public class ClassController extends BaseController<ClassService, ClassPO>{
     public Result getSortedClassListByTeacherId(Integer teacherId) {
         try {
             return Result.ok(service.getSortedClassList(teacherId));
+        } catch (Exception e) {
+            log.error(e.toString());
+            return Result.error();
+        }
+    }
+
+    @RequestMapping("/getStudentListByClassId")
+    public Result getStudentListByClassId(Integer classId) {
+        try {
+            return Result.ok(service.getStudentListByClassId(classId));
         } catch (Exception e) {
             log.error(e.toString());
             return Result.error();

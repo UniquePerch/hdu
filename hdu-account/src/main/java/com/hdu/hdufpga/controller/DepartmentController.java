@@ -1,7 +1,6 @@
 package com.hdu.hdufpga.controller;
 
-import com.hdu.controller.BaseController;
-import com.hdu.entity.po.DepartmentPO;
+import com.hdu.hdufpga.entity.po.DepartmentPO;
 import com.hdu.hdufpga.service.DepartmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;

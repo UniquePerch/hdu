@@ -1,8 +1,8 @@
-package com.hdu.entity.po;
+package com.hdu.hdufpga.entity.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.hdu.entity.BaseEntity;
+import com.hdu.hdufpga.entity.BaseEntity;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = false)

@@ -6,4 +6,12 @@
     <insert id="insertStudentClassRelation">
         insert into foreign_user_class (user_id, class_id) values (#{student_id}, #{class_id})
     </insert>
+    <select id="selectStudentListByClassId" resultType="com.hdu.hdufpga.entity.po.UserPO">
+        select
+            t1.id,t1.username,t1.real_name
+        from foreign_user_class t
+        left join t_user t1 on t.user_id = t1.id
+        where
+            t.class_id = #{class_id}
+    </select>
 </mapper>

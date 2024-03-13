@@ -1,7 +1,7 @@
 package com.hdu.hdufpga.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.hdu.entity.BaseEntity;
+import com.hdu.hdufpga.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

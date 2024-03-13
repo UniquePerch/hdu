@@ -3,15 +3,15 @@ package com.hdu.hdufpga.service.impl;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.yulichang.base.MPJBaseServiceImpl;
-import com.hdu.entity.BaseEntity;
-import com.hdu.entity.constant.ProblemConstant;
+import com.hdu.hdufpga.entity.BaseEntity;
+import com.hdu.hdufpga.entity.constant.ProblemConstant;
 import com.hdu.hdufpga.entity.po.Problem1PO;
 import com.hdu.hdufpga.entity.po.TestRecordPO;
 import com.hdu.hdufpga.entity.vo.Problem1VO;
 import com.hdu.hdufpga.mapper.ProblemMapper;
 import com.hdu.hdufpga.mapper.TestRecordMapper;
 import com.hdu.hdufpga.service.ProblemService;
-import com.hdu.util.ConvertUtil;
+import com.hdu.hdufpga.util.ConvertUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

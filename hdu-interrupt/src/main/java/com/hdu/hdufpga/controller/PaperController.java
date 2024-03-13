@@ -1,7 +1,6 @@
 package com.hdu.hdufpga.controller;
 
-import com.hdu.controller.BaseController;
-import com.hdu.entity.Result;
+import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.entity.po.PaperPO;
 import com.hdu.hdufpga.entity.vo.HandInInfoVO;
 import com.hdu.hdufpga.entity.vo.PaperVO;

@@ -1,4 +1,4 @@
-package com.hdu.util;
+package com.hdu.hdufpga.util;
 
 import cn.hutool.core.convert.Convert;
 import lombok.extern.slf4j.Slf4j;

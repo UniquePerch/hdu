@@ -1,4 +1,4 @@
-package com.hdu.entity.constant;
+package com.hdu.hdufpga.entity.constant;
 
 //角色常量，用于鉴权
 public class RoleConstant {
