@@ -7,10 +7,13 @@ import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.controller.PaperController;
 import com.hdu.hdufpga.entity.po.ClassPO;
 import com.hdu.hdufpga.mapper.ClassMapper;
+import com.hdu.hdufpga.service.UserService;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -50,5 +53,15 @@ class HduInterruptApplicationTests {
     @Test
     void testClass(){
         System.out.println(classController.getStudentListByClassId(1));
+    }
+
+    @DubboReference
+    UserService userService;
+
+    @Test
+    void testDubbo(){
+        ArrayList<String> objects = new ArrayList<>();
+        objects.add("20042025");
+        System.out.println(userService.getIdByUserName(objects));
     }
 }

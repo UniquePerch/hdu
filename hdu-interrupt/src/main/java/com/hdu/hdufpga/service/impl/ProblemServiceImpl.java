@@ -12,6 +12,7 @@ import com.hdu.hdufpga.mapper.ProblemMapper;
 import com.hdu.hdufpga.mapper.TestRecordMapper;
 import com.hdu.hdufpga.service.ProblemService;
 import com.hdu.hdufpga.util.ConvertUtil;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@DubboService
 public class ProblemServiceImpl extends MPJBaseServiceImpl<ProblemMapper, Problem1PO> implements ProblemService {
     @Resource
     ProblemMapper problemMapper;

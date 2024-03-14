@@ -5,6 +5,7 @@ import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.mapper.UserMapper;
 import com.hdu.hdufpga.service.UserService;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@DubboService
 public class UserServiceImpl extends MPJBaseServiceImpl<UserMapper, UserPO> implements UserService {
     @Resource
     UserMapper userMapper;

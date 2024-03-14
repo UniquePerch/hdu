@@ -6,15 +6,17 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.hdu.hdufpga.entity.constant.AccountConstant;
 import com.hdu.hdufpga.entity.constant.RoleConstant;
-import com.hdu.hdufpga.entity.po.UserPO;
-import com.hdu.hdufpga.entity.vo.UserVO;
-import com.hdu.hdufpga.client.UserClient;
 import com.hdu.hdufpga.entity.po.ClassPO;
+import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.entity.vo.ClassVO;
+import com.hdu.hdufpga.entity.vo.UserVO;
 import com.hdu.hdufpga.mapper.ClassMapper;
 import com.hdu.hdufpga.service.ClassService;
+import com.hdu.hdufpga.service.UserService;
 import com.hdu.hdufpga.util.ConvertUtil;
 import io.seata.spring.annotation.GlobalTransactional;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,9 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@DubboService
 public class ClassServiceImpl extends MPJBaseServiceImpl<ClassMapper, ClassPO> implements ClassService {
-    @Resource
-    UserClient userClient;
+    @DubboReference
+    UserService userService;
 
     @Resource
     ClassMapper classMapper;
@@ -50,14 +53,14 @@ public class ClassServiceImpl extends MPJBaseServiceImpl<ClassMapper, ClassPO> i
         List<UserPO> poList = ConvertUtil.copyList(voList, UserPO.class);
         voList.clear();
         poList.forEach(e->{
-            if(userClient.create(e).getResult() == null){
+            if(!userService.save(e)){
                 voList.add(ConvertUtil.copy(e,UserVO.class));
                 poList.remove(e);
             }
         });
         List<String> userNameList = new ArrayList<>();
         poList.forEach(e->userNameList.add(e.getUsername()));
-        List<Integer> idList = userClient.getIdByUserName(userNameList);
+        List<Integer> idList = userService.getIdByUserName(userNameList);
         idList.forEach(e-> classMapper.insertStudentClassRelation(e,classId));
         return voList;
     }
