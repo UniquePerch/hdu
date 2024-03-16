@@ -2,19 +2,19 @@ package com.hdu.hdufpga.service.impl;
 
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
-import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.entity.po.ChapterPO;
 import com.hdu.hdufpga.entity.po.UserChapterRecordPO;
+import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.entity.vo.UserChapterRecordVO;
 import com.hdu.hdufpga.mapper.ChapterMapper;
 import com.hdu.hdufpga.mapper.UserChapterMapper;
 import com.hdu.hdufpga.service.ChapterService;
 import com.hdu.hdufpga.util.ConvertUtil;
+import com.hdu.hdufpga.util.TimeUtil;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -27,7 +27,7 @@ public class ChapterServiceImpl extends MPJBaseServiceImpl<ChapterMapper, Chapte
     UserChapterMapper userChapterMapper;
     @Override
     public Boolean recordFinish(Integer userId, Integer chapterId) {
-        return chapterMapper.recordFinish(userId,chapterId,new Date()) == 1;
+        return chapterMapper.recordFinish(userId,chapterId, TimeUtil.getNowTime()) == 1;
     }
 
     @Override

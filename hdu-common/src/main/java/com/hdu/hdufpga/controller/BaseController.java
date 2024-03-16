@@ -5,12 +5,11 @@ import com.github.yulichang.base.MPJBaseService;
 import com.hdu.hdufpga.entity.BaseEntity;
 import com.hdu.hdufpga.entity.PageRecord;
 import com.hdu.hdufpga.entity.Result;
+import com.hdu.hdufpga.util.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Date;
 
 @Slf4j
 public abstract class BaseController <S extends MPJBaseService<T>,T extends BaseEntity>{
@@ -21,8 +20,8 @@ public abstract class BaseController <S extends MPJBaseService<T>,T extends Base
     @RequestMapping("/create")
     public Result create(@RequestBody T t){
         try {
-            t.setCreateTime(new Date());
-            t.setUpdateTime(new Date());
+            t.setCreateTime(TimeUtil.getNowTime());
+            t.setUpdateTime(TimeUtil.getNowTime());
             if (service.save(t)) {
                 return Result.ok(t);
             } else {
@@ -51,7 +50,7 @@ public abstract class BaseController <S extends MPJBaseService<T>,T extends Base
     @RequestMapping("/update")
     public Result update(T t){
         try {
-            t.setUpdateTime(new Date());
+            t.setUpdateTime(TimeUtil.getNowTime());
             if (service.updateById(t)) {
                 return Result.ok(t);
             } else {

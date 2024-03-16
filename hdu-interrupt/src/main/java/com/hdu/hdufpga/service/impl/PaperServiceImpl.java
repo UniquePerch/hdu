@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.hdu.hdufpga.entity.constant.FileConstant;
-import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.entity.po.HandInInfoPO;
 import com.hdu.hdufpga.entity.po.PaperPO;
+import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.entity.vo.HandInInfoVO;
 import com.hdu.hdufpga.entity.vo.PaperVO;
 import com.hdu.hdufpga.mapper.HandInInfoMapper;
@@ -15,13 +15,13 @@ import com.hdu.hdufpga.mapper.PaperMapper;
 import com.hdu.hdufpga.service.PaperService;
 import com.hdu.hdufpga.util.ConvertUtil;
 import com.hdu.hdufpga.util.MFileUtil;
+import com.hdu.hdufpga.util.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 
@@ -53,7 +53,7 @@ public class PaperServiceImpl extends MPJBaseServiceImpl<PaperMapper, PaperPO> i
     @Override
     public Boolean handInPaper(HandInInfoVO handInInfoVO) throws IOException {
         PaperPO paperPO = paperMapper.selectById(handInInfoVO.getPaperId());
-        if(paperPO.getDeadline().before(new Date())){
+        if(paperPO.getDeadline().before(TimeUtil.getNowTime())){
             throw new RuntimeException("已超过截止时间");
         }
         handInInfoVO.setFilePath(MFileUtil.uploadFile(handInInfoVO.getFile(), FileConstant.STUDENT_PAPER_UPLOAD_PATH));
@@ -96,7 +96,7 @@ public class PaperServiceImpl extends MPJBaseServiceImpl<PaperMapper, PaperPO> i
     public Boolean updateHandInInfo(HandInInfoVO handInInfoVO) {
         HandInInfoPO handInInfoPOOld = handInInfoMapper.selectById(handInInfoVO.getId());
         PaperPO paperPO = paperMapper.selectById(handInInfoPOOld.getPaperId());
-        if(paperPO.getDeadline().before(new Date())){
+        if(paperPO.getDeadline().before(TimeUtil.getNowTime())){
             throw new RuntimeException("已超过截止时间");
         }
         if(handInInfoPOOld.getState()) {

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hdu.hdufpga.mapper.StudentResourceRecordMapper">
+
+    <update id="updateUserResourceRecord">
+        UPDATE t_user_resource_record SET duration = duration + #{duration}, times = times + 1, update_time = #{updateTime} WHERE user_id = #{userId} AND resource_id = #{resourceId}
+    </update>
+</mapper>

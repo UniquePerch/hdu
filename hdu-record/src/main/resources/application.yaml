@@ -1,10 +1,6 @@
 server:
-  port: 8081
+  port: 8082
 spring:
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 47.99.175.197:8848
   application:
     name: hdu-record
   datasource:
@@ -22,3 +18,12 @@ seata:
       hdu-interrupt-seata-service-group: default
     grouplist:
       default: 47.99.175.197:8091
+dubbo:
+  application:
+    name: hdu-account
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://47.99.175.197:8848
+    group: dubbo
