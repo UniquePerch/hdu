@@ -10,6 +10,7 @@ import com.hdu.hdufpga.entity.po.PaperPO;
 import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.entity.vo.HandInInfoVO;
 import com.hdu.hdufpga.entity.vo.PaperVO;
+import com.hdu.hdufpga.exception.HomeworkException;
 import com.hdu.hdufpga.mapper.HandInInfoMapper;
 import com.hdu.hdufpga.mapper.PaperMapper;
 import com.hdu.hdufpga.service.PaperService;
@@ -51,10 +52,10 @@ public class PaperServiceImpl extends MPJBaseServiceImpl<PaperMapper, PaperPO> i
     }
 
     @Override
-    public Boolean handInPaper(HandInInfoVO handInInfoVO) throws IOException {
+    public Boolean handInPaper(HandInInfoVO handInInfoVO) throws IOException, HomeworkException {
         PaperPO paperPO = paperMapper.selectById(handInInfoVO.getPaperId());
         if(paperPO.getDeadline().before(TimeUtil.getNowTime())){
-            throw new RuntimeException("已超过截止时间");
+            throw new HomeworkException("已超过截止时间");
         }
         handInInfoVO.setFilePath(MFileUtil.uploadFile(handInInfoVO.getFile(), FileConstant.STUDENT_PAPER_UPLOAD_PATH));
         handInInfoVO.setClassId(paperPO.getClassId());
@@ -93,14 +94,14 @@ public class PaperServiceImpl extends MPJBaseServiceImpl<PaperMapper, PaperPO> i
     }
 
     @Override
-    public Boolean updateHandInInfo(HandInInfoVO handInInfoVO) {
+    public Boolean updateHandInInfo(HandInInfoVO handInInfoVO) throws HomeworkException {
         HandInInfoPO handInInfoPOOld = handInInfoMapper.selectById(handInInfoVO.getId());
         PaperPO paperPO = paperMapper.selectById(handInInfoPOOld.getPaperId());
         if(paperPO.getDeadline().before(TimeUtil.getNowTime())){
-            throw new RuntimeException("已超过截止时间");
+            throw new HomeworkException("已超过截止时间");
         }
         if(handInInfoPOOld.getState()) {
-            throw new RuntimeException("作业已批改，不可修改提交");
+            throw new HomeworkException("作业已批改，不可修改提交");
         }
         HandInInfoPO handInInfoPONew = ConvertUtil.copy(handInInfoVO, HandInInfoPO.class);
         return handInInfoMapper.updateById(handInInfoPONew) > 0;
