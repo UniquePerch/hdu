@@ -1,5 +1,6 @@
 package com.hdu.hdufpga.service.Impl;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
@@ -9,9 +10,11 @@ import com.hdu.hdufpga.entity.po.UserResourceRecordPO;
 import com.hdu.hdufpga.entity.vo.UserResourceRecordVO;
 import com.hdu.hdufpga.mapper.StudentResourceRecordMapper;
 import com.hdu.hdufpga.service.UserResourceRecordService;
-import com.hdu.hdufpga.util.ConvertUtil;
-import com.hdu.hdufpga.util.TimeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,24 +22,28 @@ import java.util.List;
 
 @DubboService
 @Service
+@Slf4j
 public class StudentResourceRecordServiceImpl extends MPJBaseServiceImpl<StudentResourceRecordMapper, UserResourceRecordPO> implements UserResourceRecordService {
     @Resource
     private StudentResourceRecordMapper studentResourceRecordMapper;
 
+    @Resource
+    private RocketMQTemplate rocketMQTemplate;
+
     @Override
     public Boolean updateResourceRecord(UserResourceRecordVO userResourceRecordVO) {
-        UserResourceRecordPO userResourceRecordPO = ConvertUtil.copy(userResourceRecordVO, UserResourceRecordPO.class);
-        Integer res;
-        if(checkRecordExist(userResourceRecordPO)) {
-            userResourceRecordPO.setUpdateTime(TimeUtil.getNowTime());
-            res =  studentResourceRecordMapper.updateUserResourceRecord(userResourceRecordPO);
-        } else {
-            userResourceRecordPO.setCreateTime(TimeUtil.getNowTime());
-            userResourceRecordPO.setUpdateTime(TimeUtil.getNowTime());
-            userResourceRecordPO.setTimes(1);
-            res = studentResourceRecordMapper.insert(userResourceRecordPO);
-        }
-        return res > 0;
+        rocketMQTemplate.asyncSend("resourceRecord", userResourceRecordVO, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                log.info("send resourceRecord success : {}", JSONUtil.parse(userResourceRecordVO));
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                log.error("send resourceRecord error : {} \n exception : {}", JSONUtil.parse(userResourceRecordVO),throwable.getMessage());
+            }
+        });
+        return true;
     }
 
     @Override

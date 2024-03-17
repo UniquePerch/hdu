@@ -4,7 +4,7 @@
 
 1.nacos(记得要在数据库上部署相关的sql)
 ```shell
-  docker run --name nacos -p 8848:8849 --privileged=true --restart=always -e SPRING_DATASOURCE_PLATFORM=mysql -e MYSQL_SERVICE_HOST=localhost -e MYSQL_SERVICE_PORT=3306 -e MYSQL_SERVICE_USER=root -e MYSQL_SERVICE_PASSWORD=lyh701721 -e MYSQL_SERVICE_DB_NAME=nacos -e MODE=standalone -d nacos/nacos-server:2.0.2
+docker run --name nacos -p 8848:8849 --privileged=true --restart=always -e SPRING_DATASOURCE_PLATFORM=mysql -e MYSQL_SERVICE_HOST=localhost -e MYSQL_SERVICE_PORT=3306 -e MYSQL_SERVICE_USER=root -e MYSQL_SERVICE_PASSWORD=lyh701721 -e MYSQL_SERVICE_DB_NAME=nacos -e MODE=standalone -d nacos/nacos-server:2.0.2
 ```
 
 2.mysql
@@ -27,3 +27,27 @@ docker run -it --name myredis -p 6379:6379 -v /mydata/redis/conf/redis.conf:/usr
 docker run --name some-zookeeper -p 2181:2181 --restart always -d zookeeper
 ```
 
+6.rocketmq
+```shell
+docker pull xuchengen/rocketmq:latest
+```
+
+```shell
+docker volume create rocketmq_data
+```
+
+```shell
+docker run -itd \
+ --name=rocketmq \
+ --hostname rocketmq \
+ --restart=always \
+ -p 8080:8080 \
+ -p 9876:9876 \
+ -p 10909:10909 \
+ -p 10911:10911 \
+ -p 10912:10912 \
+ -v rocketmq_data:/home/app/data \
+ -v /etc/localtime:/etc/localtime \
+ -v /var/run/docker.sock:/var/run/docker.sock \
+ xuchengen/rocketmq:latest
+```

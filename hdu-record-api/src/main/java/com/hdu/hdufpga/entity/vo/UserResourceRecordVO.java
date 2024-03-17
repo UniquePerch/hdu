@@ -1,5 +1,6 @@
 package com.hdu.hdufpga.entity.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hdu.hdufpga.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +13,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResourceRecordVO extends BaseEntity {
     Integer userId;
     String userName;

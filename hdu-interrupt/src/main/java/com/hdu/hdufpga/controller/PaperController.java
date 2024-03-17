@@ -39,9 +39,9 @@ public class PaperController extends BaseController<PaperService, PaperPO> {
     public Result handInPaper(HandInInfoVO handInInfoVO) {
         try {
             return Result.ok(service.handInPaper(handInInfoVO));
-        } catch (Exception e) {
+        }catch (Exception e) {
             log.error(e.toString());
-            return Result.error();
+            return Result.error(e.getMessage());
         }
     }
 
@@ -51,8 +51,6 @@ public class PaperController extends BaseController<PaperService, PaperPO> {
             return Result.ok(service.getHandInInfoByClassId(classId));
         } catch (Exception e) {
             log.error(e.toString());
-            if(e.getMessage().equals("已超过截止时间"))
-                return Result.error("已超过截止时间");
             return Result.error();
         }
     }
@@ -63,11 +61,7 @@ public class PaperController extends BaseController<PaperService, PaperPO> {
             return Result.ok(service.updateHandInInfo(handInInfoVO));
         } catch (Exception e) {
             log.error(e.toString());
-            if(e.getMessage().equals("作业已批改，不可修改提交"))
-                return Result.error("作业已批改，不可修改");
-            if (e.getMessage().equals("已超过截止时间"))
-                return Result.error("已超过截止时间,不可修改");
-            return Result.error();
+            return Result.error(e.getMessage());
         }
     }
 

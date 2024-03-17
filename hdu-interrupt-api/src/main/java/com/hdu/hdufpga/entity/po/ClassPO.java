@@ -19,5 +19,7 @@ public class ClassPO extends BaseEntity {
     @TableField("create_by")
     Integer createByUserId;
 
+
+    @TableField(exist = false)
     String createByUsername;
 }
