@@ -20,10 +20,12 @@ seata:
       default: 47.99.175.197:8091
 dubbo:
   application:
-    name: hdu-account
+    name: hdu-interrupt
   protocol:
     name: dubbo
     port: -1
   registry:
     address: nacos://47.99.175.197:8848?register-consumer-url=true
     group: dubbo
+  metadata-report:
+    address: nacos://47.99.175.197:8848
