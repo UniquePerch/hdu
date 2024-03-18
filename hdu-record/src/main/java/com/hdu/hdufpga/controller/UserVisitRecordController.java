@@ -11,9 +11,9 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/co/userRequest")
+@RequestMapping("/co/userVisitRecord")
 @Slf4j
-public class UserRequestController {
+public class UserVisitRecordController {
     @Resource
     UserRecordService userRecordService;
     @RequestMapping("/getUserVisitInfo")
