@@ -1,16 +1,21 @@
 package com.hdu.hdufpga.service.Impl;
 
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.hdu.hdufpga.entity.po.ResourcePO;
 import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.entity.po.UserResourceRecordPO;
+import com.hdu.hdufpga.entity.vo.StudentStudyRecord;
 import com.hdu.hdufpga.entity.vo.UserResourceRecordVO;
+import com.hdu.hdufpga.entity.vo.UserVO;
 import com.hdu.hdufpga.mapper.StudentResourceRecordMapper;
+import com.hdu.hdufpga.service.ClassService;
+import com.hdu.hdufpga.service.TestRecordService;
 import com.hdu.hdufpga.service.UserResourceRecordService;
+import com.hdu.hdufpga.util.ConvertUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -18,6 +23,7 @@ import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @DubboService
@@ -29,6 +35,12 @@ public class StudentResourceRecordServiceImpl extends MPJBaseServiceImpl<Student
 
     @Resource
     private RocketMQTemplate rocketMQTemplate;
+
+    @DubboReference
+    private ClassService classService;
+
+    @DubboReference
+    private TestRecordService testRecordService;
 
     @Override
     public Boolean updateResourceRecord(UserResourceRecordVO userResourceRecordVO) {
@@ -66,11 +78,20 @@ public class StudentResourceRecordServiceImpl extends MPJBaseServiceImpl<Student
         return studentResourceRecordMapper.selectJoinList(UserResourceRecordPO.class, wrapper);
     }
 
-    private Boolean checkRecordExist(UserResourceRecordPO userResourceRecordPO) {
-        LambdaQueryWrapper<UserResourceRecordPO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper
-                .eq(UserResourceRecordPO::getUserId, userResourceRecordPO.getUserId())
-                .eq(UserResourceRecordPO::getResourceId, userResourceRecordPO.getResourceId());
-        return studentResourceRecordMapper.selectCount(queryWrapper) > 0;
+    @Override
+    public List<StudentStudyRecord> getRecordByClass(Integer classId) {
+        String className = classService.getById(classId).getName();
+        List<StudentStudyRecord> userRecordList = new ArrayList<>();
+        List<UserVO> userList = classService.getStudentListByClassId(classId);
+        for(UserVO userVO : userList) {
+            StudentStudyRecord userRecord = new StudentStudyRecord();
+            userRecord.setClassName(className);
+            userRecord.setUserRealName(userVO.getRealName());
+            userRecord.setTestCount(testRecordService.getTestCount(userVO.getId(),classId));
+            userRecord.setMaxTestScore(testRecordService.getMaxScore(userVO.getId(),classId));
+            userRecord.setUserResourceRecordVOList(ConvertUtil.copyList(getRecordByUserId(userVO.getId()), UserResourceRecordVO.class));
+            userRecordList.add(userRecord);
+        }
+        return userRecordList;
     }
 }

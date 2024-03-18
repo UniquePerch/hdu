@@ -1,4 +1,4 @@
-package com.hdu.hdufpga.mqListener;
+package com.hdu.hdufpga.listener;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hdu.hdufpga.entity.po.UserResourceRecordPO;
@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 
 @RocketMQMessageListener(topic = "resourceRecord", consumerGroup = "resourceRecord")
 @Component
-public class ResourceRecordListener implements RocketMQListener<UserResourceRecordVO> {
+public class MQResourceRecordListener implements RocketMQListener<UserResourceRecordVO> {
     @Resource
     private StudentResourceRecordMapper studentResourceRecordMapper;
 
@@ -32,7 +32,7 @@ public class ResourceRecordListener implements RocketMQListener<UserResourceReco
             res = studentResourceRecordMapper.insert(userResourceRecordPO);
         }
         if(res == 0) {
-            throw new RuntimeException("update resource record error");
+            throw new RuntimeException("更新学生资源观看记录失败");
         }
     }
 

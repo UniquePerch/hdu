@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class UserRecord {
+public class StudentStudyRecord {
 
     String userRealName;
 

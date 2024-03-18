@@ -5,11 +5,13 @@ import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.mapper.UserMapper;
 import com.hdu.hdufpga.service.UserService;
+import com.hdu.hdufpga.util.TimeUtil;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,5 +30,19 @@ public class UserServiceImpl extends MPJBaseServiceImpl<UserMapper, UserPO> impl
         List<Integer> idList = new ArrayList<>();
         poList.forEach(e->idList.add(e.getId()));
         return idList;
+    }
+
+    @Override
+    public Long getUserCountByDate(Date startDate, Date endDate) {
+        LambdaQueryWrapper<UserPO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.between(UserPO::getCreateTime,startDate,endDate);
+        return userMapper.selectCount(wrapper);
+    }
+
+    @Override
+    public boolean save(UserPO entity) {
+        entity.setCreateTime(TimeUtil.getNowTime());
+        entity.setUpdateTime(TimeUtil.getNowTime());
+        return super.save(entity);
     }
 }

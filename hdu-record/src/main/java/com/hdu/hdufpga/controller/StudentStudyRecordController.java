@@ -2,7 +2,6 @@ package com.hdu.hdufpga.controller;
 
 import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.entity.vo.UserResourceRecordVO;
-import com.hdu.hdufpga.service.UserRecordService;
 import com.hdu.hdufpga.service.UserResourceRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +16,6 @@ public class StudentStudyRecordController {
     @Resource
     UserResourceRecordService userResourceRecordService;
 
-    @Resource
-    UserRecordService userRecordService;
-
     @RequestMapping("/updateResourceRecord")
     public Result updateResourceRecord(UserResourceRecordVO userResourceRecordVO){
         try {
@@ -33,7 +29,7 @@ public class StudentStudyRecordController {
     @RequestMapping("/getRecordByClass")
     public Result getRecordByClass(Integer classId){
         try {
-            return Result.ok(userRecordService.getRecordByClass(classId));
+            return Result.ok(userResourceRecordService.getRecordByClass(classId));
         } catch (Exception e) {
             log.error("getRecordByClass error",e);
             return Result.error();

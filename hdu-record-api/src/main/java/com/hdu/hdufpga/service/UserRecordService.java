@@ -1,9 +1,9 @@
 package com.hdu.hdufpga.service;
 
-import com.hdu.hdufpga.entity.vo.UserRecord;
+import com.hdu.hdufpga.entity.vo.UserVisitInfoVO;
 
-import java.util.List;
+import java.util.Date;
 
 public interface UserRecordService {
-    List<UserRecord> getRecordByClass(Integer classId);
+    UserVisitInfoVO getUserVisitInfo(Date startDate,Date endDate);
 }
