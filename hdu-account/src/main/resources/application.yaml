@@ -1,6 +1,11 @@
 server:
   port: 8080
 spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.99.175.197:8848
+        namespace: cea83c1b-7a99-4bb1-8596-895a4faab520
   application:
     name: hdu-account
   datasource:
@@ -20,12 +25,15 @@ seata:
       default: 47.99.175.197:8091
 dubbo:
   application:
-    name: hdu-account
+    name: ${spring.application.name}
   protocol:
     name: dubbo
     port: -1
   registry:
     address: nacos://47.99.175.197:8848
     group: dubbo
+    register-mode: interface
+    parameters:
+      namespace: c29600b0-2e5d-450b-bab0-e56d78292d51
   metadata-report:
     address: nacos://47.99.175.197:8848

@@ -1,0 +1,52 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
+      routes:
+        - id: hdu-account
+          uri: lb://hdu-account
+          predicates:
+            - Path=/account/**
+          filters:
+            - StripPrefix=1
+        - id: hdu-interrupt
+          uri: lb://hdu-interrupt
+          predicates:
+            - Path=/interrupt/**
+          filters:
+            - StripPrefix=1
+        - id: hdu-record
+          uri: lb://hdu-record
+          predicates:
+            - Path=/record/**
+          filters:
+            - StripPrefix=1
+      globalcors: #跨域配置
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://127.0.0.1:8080" #允许跨域
+              - "http://127.0.0.1:8081"
+              - "http://127.0.0.1:8082"
+            allow-credentials: true
+            allowed-headers: "*"
+            allowedMethods: #请求方式
+              - GET
+              - POST
+              - DELETE
+              - PUT
+              - PATCH
+              - OPTIONS
+              - HEAD
+              - CONNECT
+              - TRACE
+    nacos:
+      discovery:
+        server-addr: 47.99.175.197:8848
+        namespace: cea83c1b-7a99-4bb1-8596-895a4faab520
+  application:
+    name: hdu-gateway
+server:
+  port: 8500

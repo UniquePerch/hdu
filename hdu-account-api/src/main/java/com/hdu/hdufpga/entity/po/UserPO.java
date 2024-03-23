@@ -18,8 +18,10 @@ public class UserPO extends BaseEntity {
     private Long activeTime;
     @TableField("department")
     private Integer userDepartmentId;
+    @TableField(exist = false)
     private String userDepartmentName;
     @TableField("role")
     private Integer userRoleId;
+    @TableField(exist = false)
     private String userRoleName;
 }

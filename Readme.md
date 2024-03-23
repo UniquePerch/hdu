@@ -29,25 +29,13 @@ docker run --name some-zookeeper -p 2181:2181 --restart always -d zookeeper
 
 6.rocketmq
 ```shell
-docker pull xuchengen/rocketmq:latest
+nohup sh bin/mqnamesrv &
 ```
 
 ```shell
-docker volume create rocketmq_data
+nohup sh bin/mqbroker -n localhost:9876 -c conf/broker.conf &
 ```
 
 ```shell
-docker run -itd \
- --name=rocketmq \
- --hostname rocketmq \
- --restart=always \
- -p 8080:8080 \
- -p 9876:9876 \
- -p 10909:10909 \
- -p 10911:10911 \
- -p 10912:10912 \
- -v rocketmq_data:/home/app/data \
- -v /etc/localtime:/etc/localtime \
- -v /var/run/docker.sock:/var/run/docker.sock \
- xuchengen/rocketmq:latest
+
 ```
