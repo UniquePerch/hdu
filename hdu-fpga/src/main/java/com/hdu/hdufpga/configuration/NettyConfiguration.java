@@ -49,7 +49,7 @@ public class NettyConfiguration {
 
     @Bean(name = "bossGroup", destroyMethod = "shutdownGracefully")
     public EventLoopGroup bossGroup() {
-        return new NioEventLoopGroup();
+        return new NioEventLoopGroup(bossCount);
     }
 
     @Bean(name = "workerGroup", destroyMethod = "shutdownGracefully")
