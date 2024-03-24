@@ -1,0 +1,36 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.99.175.197:8848
+        namespace: cea83c1b-7a99-4bb1-8596-895a4faab520
+  redis:
+    host: 47.99.175.197
+    database: 1
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: lyh701721
+    url: jdbc:mysql://localhost:3306/hdu-interrupt?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+seata:
+  service:
+    vgroup-mapping:
+      hdu-account-seata-service-group: default
+      hdu-interrupt-seata-service-group: default
+    grouplist:
+      default: 47.99.175.197:8091
+server:
+  port: 8083
+netty:
+  port: 60010
+  boss:
+    thread:
+      count: 2
+  worker:
+    thread:
+      count: 2
+  keepalive : false
+  backlog: 100

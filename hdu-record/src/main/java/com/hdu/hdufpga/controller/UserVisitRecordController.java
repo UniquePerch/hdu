@@ -19,8 +19,6 @@ public class UserVisitRecordController {
     @RequestMapping("/getUserVisitInfo")
     public Result getUserVisitInfo(@DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime,@DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime) {
         try {
-            System.out.println(startTime);
-            System.out.println(endTime);
             return Result.ok(userRecordService.getUserVisitInfo(startTime,endTime));
         } catch (Exception e) {
             log.error("获取用户访问数据失败 : {}",e.getMessage());
