@@ -21,6 +21,8 @@ seata:
     vgroup-mapping:
       hdu-account-seata-service-group: default
       hdu-interrupt-seata-service-group: default
+      hdu-fpga-seata-service-group: default
+      hdu-record-seata-service-group: default
     grouplist:
       default: 47.99.175.197:8091
 dubbo:
