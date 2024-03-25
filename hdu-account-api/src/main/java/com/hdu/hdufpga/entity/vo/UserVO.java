@@ -22,4 +22,5 @@ public class UserVO extends BaseEntity {
     private String userDepartmentName;
     private Integer userRoleId;
     private String userRoleName;
+    private Integer privilegeLevel;
 }

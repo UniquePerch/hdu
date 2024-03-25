@@ -13,5 +13,6 @@ import lombok.*;
 public class RolePO extends BaseEntity {
     private String name;
     private String privilegeCharacter;
+    private Integer privilegeLevel;
     private Boolean enable;
 }

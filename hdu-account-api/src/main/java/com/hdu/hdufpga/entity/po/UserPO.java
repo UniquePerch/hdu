@@ -24,4 +24,6 @@ public class UserPO extends BaseEntity {
     private Integer userRoleId;
     @TableField(exist = false)
     private String userRoleName;
+    @TableField(exist = false)
+    private Integer privilegeLevel;
 }

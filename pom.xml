@@ -18,6 +18,7 @@
         <module>hdu-record-api</module>
         <module>hdu-gateway</module>
         <module>hdu-fpga</module>
+        <module>hdu-auth</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>
