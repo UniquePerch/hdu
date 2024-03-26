@@ -22,7 +22,7 @@ public class MQResourceRecordListener implements RocketMQListener<UserResourceRe
     public void onMessage(UserResourceRecordVO userResourceRecordVO) {
         Integer res;
         UserResourceRecordPO userResourceRecordPO = ConvertUtil.copy(userResourceRecordVO, UserResourceRecordPO.class);
-        if(checkRecordExist(userResourceRecordPO)) {
+        if (checkRecordExist(userResourceRecordPO)) {
             userResourceRecordPO.setUpdateTime(TimeUtil.getNowTime());
             res = studentResourceRecordMapper.updateUserResourceRecord(userResourceRecordPO);
         } else {
@@ -31,7 +31,7 @@ public class MQResourceRecordListener implements RocketMQListener<UserResourceRe
             userResourceRecordPO.setTimes(1);
             res = studentResourceRecordMapper.insert(userResourceRecordPO);
         }
-        if(res == 0) {
+        if (res == 0) {
             throw new RuntimeException("更新学生资源观看记录失败");
         }
     }

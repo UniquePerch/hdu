@@ -15,7 +15,7 @@ public class RedissionLockUtil {
     private RedissonClient redissonClient;
 
     public boolean lock(String lockName) {
-        if(redissonClient == null) {
+        if (redissonClient == null) {
             log.error("redission Client is null");
             return false;
         }
@@ -33,7 +33,7 @@ public class RedissionLockUtil {
     }
 
     public boolean unlock(String lockName) {
-        if(redissonClient == null) {
+        if (redissonClient == null) {
             log.error("redission Client is null");
             return false;
         }

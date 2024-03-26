@@ -17,11 +17,11 @@ public class TestRecordController extends BaseController<TestRecordService, Test
     }
 
     @RequestMapping("/getMaxScore")
-    public Result getMaxScore(Integer userId,Integer classId){
+    public Result getMaxScore(Integer userId, Integer classId) {
         try {
-            return Result.ok(service.getMaxScore(userId,classId));
-        } catch (Exception e){
-            log.error("获取最高分失败",e);
+            return Result.ok(service.getMaxScore(userId, classId));
+        } catch (Exception e) {
+            log.error("获取最高分失败", e);
             return Result.error("获取最高分失败");
         }
     }

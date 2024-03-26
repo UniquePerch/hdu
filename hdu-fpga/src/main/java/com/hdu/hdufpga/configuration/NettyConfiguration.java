@@ -36,13 +36,13 @@ public class NettyConfiguration {
     public ServerBootstrap bootstrap() {
         ServerBootstrap b = new ServerBootstrap();
         b
-                .group(bossGroup(),workerGroup())
+                .group(bossGroup(), workerGroup())
                 .channel(NioServerSocketChannel.class)
-                .option(ChannelOption.SO_BACKLOG,backlog)
-                .option(ChannelOption.SO_KEEPALIVE,keepAlive)
-                .option(ChannelOption.SO_REUSEADDR,true)
-                        //TODO: childHandler
-                ;
+                .option(ChannelOption.SO_BACKLOG, backlog)
+                .option(ChannelOption.SO_KEEPALIVE, keepAlive)
+                .option(ChannelOption.SO_REUSEADDR, true)
+        //TODO: childHandler
+        ;
         return b;
     }
 

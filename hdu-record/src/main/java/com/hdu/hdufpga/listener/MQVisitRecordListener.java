@@ -15,11 +15,12 @@ import javax.annotation.Resource;
 public class MQVisitRecordListener implements RocketMQListener<VisitRecordPO> {
     @Resource
     VisitRecordMapper visitRecordMapper;
+
     @Override
     public void onMessage(VisitRecordPO visitRecordPO) {
         int res = visitRecordMapper.insert(visitRecordPO);
-        if(res <= 0) {
-            log.error("数据库更新失败:{}",visitRecordMapper.getClass().getName());
+        if (res <= 0) {
+            log.error("数据库更新失败:{}", visitRecordMapper.getClass().getName());
             throw new RuntimeException("更新数据库表失败");
         }
     }

@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 public class TestRecordServiceImpl extends MPJBaseServiceImpl<TestRecordMapper, TestRecordPO> implements TestRecordService {
     @Resource
     TestRecordMapper testRecordMapper;
+
     @Override
     public Double getMaxScore(Integer userId, Integer classId) {
         return testRecordMapper.getMaxScore(userId, classId);

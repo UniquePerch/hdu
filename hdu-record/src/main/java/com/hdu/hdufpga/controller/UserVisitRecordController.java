@@ -16,12 +16,13 @@ import java.util.Date;
 public class UserVisitRecordController {
     @Resource
     UserRecordService userRecordService;
+
     @RequestMapping("/getUserVisitInfo")
-    public Result getUserVisitInfo(@DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime,@DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime) {
+    public Result getUserVisitInfo(@DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime, @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime) {
         try {
-            return Result.ok(userRecordService.getUserVisitInfo(startTime,endTime));
+            return Result.ok(userRecordService.getUserVisitInfo(startTime, endTime));
         } catch (Exception e) {
-            log.error("获取用户访问数据失败 : {}",e.getMessage());
+            log.error("获取用户访问数据失败 : {}", e.getMessage());
             return Result.error(e.getMessage());
         }
     }

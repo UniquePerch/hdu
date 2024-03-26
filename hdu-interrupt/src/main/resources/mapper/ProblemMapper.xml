@@ -5,6 +5,9 @@
 <mapper namespace="com.hdu.hdufpga.mapper.ProblemMapper">
 
     <select id="getRandomProblems" resultType="com.hdu.hdufpga.entity.po.Problem1PO">
-        SELECT * FROM t_problem ORDER BY RAND() limit #{limit}
+        SELECT *
+        FROM t_problem
+        ORDER BY RAND()
+        limit #{limit}
     </select>
 </mapper>

@@ -10,5 +10,5 @@ import java.util.Date;
 @Mapper
 public interface ChapterMapper extends MPJBaseMapper<ChapterPO> {
 
-    int recordFinish(@Param("user_id") Integer userId,@Param("chapter_id") Integer chapterId,@Param("finish_time") Date now);
+    int recordFinish(@Param("user_id") Integer userId, @Param("chapter_id") Integer chapterId, @Param("finish_time") Date now);
 }

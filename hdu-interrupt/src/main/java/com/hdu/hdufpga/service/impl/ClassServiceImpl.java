@@ -52,16 +52,16 @@ public class ClassServiceImpl extends MPJBaseServiceImpl<ClassMapper, ClassPO> i
         });
         List<UserPO> poList = ConvertUtil.copyList(voList, UserPO.class);
         voList.clear();
-        poList.forEach(e->{
-            if(!userService.save(e)){
-                voList.add(ConvertUtil.copy(e,UserVO.class));
+        poList.forEach(e -> {
+            if (!userService.save(e)) {
+                voList.add(ConvertUtil.copy(e, UserVO.class));
                 poList.remove(e);
             }
         });
         List<String> userNameList = new ArrayList<>();
-        poList.forEach(e->userNameList.add(e.getUsername()));
+        poList.forEach(e -> userNameList.add(e.getUsername()));
         List<Integer> idList = userService.getIdByUserName(userNameList);
-        idList.forEach(e-> classMapper.insertStudentClassRelation(e,classId));
+        idList.forEach(e -> classMapper.insertStudentClassRelation(e, classId));
         return voList;
     }
 
@@ -69,16 +69,16 @@ public class ClassServiceImpl extends MPJBaseServiceImpl<ClassMapper, ClassPO> i
     public List<ClassVO> getSortedClassList(Integer teacherId) {
         LambdaQueryWrapper<ClassPO> wrapper = new LambdaQueryWrapper<>();
         wrapper
-                .eq(ClassPO::getCreateByUserId,teacherId)
+                .eq(ClassPO::getCreateByUserId, teacherId)
                 .orderByDesc(ClassPO::getCreateTime)
         ;
         List<ClassPO> poList = classMapper.selectList(wrapper);
-        return ConvertUtil.copyList(poList,ClassVO.class);
+        return ConvertUtil.copyList(poList, ClassVO.class);
     }
 
     @Override
     public List<UserVO> getStudentListByClassId(Integer classId) {
         List<UserPO> poList = classMapper.selectStudentListByClassId(classId);
-        return ConvertUtil.copyList(poList,UserVO.class);
+        return ConvertUtil.copyList(poList, UserVO.class);
     }
 }

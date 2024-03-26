@@ -25,11 +25,11 @@ public class ProblemController extends BaseController<ProblemService, Problem1PO
     }
 
     @RequestMapping("/checkAnswer")
-    public Result checkAnswer(Integer userId, Integer classId, List<Problem1VO> voList){
+    public Result checkAnswer(Integer userId, Integer classId, List<Problem1VO> voList) {
         try {
-            return Result.ok(service.checkAnswer(userId,classId,voList));
-        } catch (Exception e){
-            log.error("打分失败",e);
+            return Result.ok(service.checkAnswer(userId, classId, voList));
+        } catch (Exception e) {
+            log.error("打分失败", e);
             return Result.error("打分失败");
         }
     }

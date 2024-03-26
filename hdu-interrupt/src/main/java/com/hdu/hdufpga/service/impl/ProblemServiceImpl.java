@@ -30,6 +30,7 @@ public class ProblemServiceImpl extends MPJBaseServiceImpl<ProblemMapper, Proble
 
     @Resource
     TestRecordMapper testRecordMapper;
+
     @Override
     public List<Problem1VO> getProblems() {
         List<Problem1PO> poList = problemMapper.getRandomProblems(ProblemConstant.PROBLEM_LIMIT);
@@ -47,8 +48,8 @@ public class ProblemServiceImpl extends MPJBaseServiceImpl<ProblemMapper, Proble
         voList.forEach(vo -> problemIds.add(vo.getId()));
         LambdaQueryWrapper<Problem1PO> wrapper = new LambdaQueryWrapper<>();
         wrapper
-                .select(BaseEntity::getId,Problem1PO::getAnswer)
-                .in(BaseEntity::getId,problemIds);
+                .select(BaseEntity::getId, Problem1PO::getAnswer)
+                .in(BaseEntity::getId, problemIds);
         List<Problem1PO> poList = problemMapper.selectList(wrapper);
         // 排序
         poList.sort(Problem1PO::compareTo);
@@ -56,24 +57,24 @@ public class ProblemServiceImpl extends MPJBaseServiceImpl<ProblemMapper, Proble
 
         testRecordPO.setProblemsJson(JSONUtil.toJsonStr(poList));
         testRecordPO.setChoicesJson(JSONUtil.toJsonStr(voList));
-        if(voList.size() != poList.size()) {
+        if (voList.size() != poList.size()) {
             throw new RuntimeException("查询答案出错，选择和答案数量不符");
         }
         double score = 0.0;
-        for(int i = 0; i < voList.size(); i++) {
-            if(!voList.get(i).getId().equals(poList.get(i).getId())) {
+        for (int i = 0; i < voList.size(); i++) {
+            if (!voList.get(i).getId().equals(poList.get(i).getId())) {
                 throw new RuntimeException("比较答案时题目顺序不符合标准");
             }
             String choice = voList.get(i).getAnswer();
             String answer = poList.get(i).getAnswer();
-            if(choice.equals(answer)) score += 100.0 / voList.size();
+            if (choice.equals(answer)) score += 100.0 / voList.size();
         }
         testRecordPO.setScore(score);
         testRecordMapper.insert(testRecordPO);
-        Double maxScore = testRecordMapper.getMaxScore(userId,classId);
-        Map<String,Double> res = new HashMap<>();
-        res.put("maxScore",maxScore);
-        res.put("nowScore",score);
+        Double maxScore = testRecordMapper.getMaxScore(userId, classId);
+        Map<String, Double> res = new HashMap<>();
+        res.put("maxScore", maxScore);
+        res.put("nowScore", score);
         return res;
     }
 }

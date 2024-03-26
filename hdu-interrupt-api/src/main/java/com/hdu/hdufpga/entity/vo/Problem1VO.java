@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Problem1VO extends BaseEntity implements Comparable<Problem1VO>{
+public class Problem1VO extends BaseEntity implements Comparable<Problem1VO> {
     private Integer type;
     private String content;
     private String choice;
@@ -18,8 +18,8 @@ public class Problem1VO extends BaseEntity implements Comparable<Problem1VO>{
 
     @Override
     public int compareTo(Problem1VO o) {
-        if(this.id < o.id) return -1;
-        else if(this.id.equals(o.id)) return 0;
+        if (this.id < o.id) return -1;
+        else if (this.id.equals(o.id)) return 0;
         else return 1;
     }
 }

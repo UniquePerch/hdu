@@ -31,14 +31,14 @@ public class UserServiceImpl extends MPJBaseServiceImpl<UserMapper, UserPO> impl
                 .in(UserPO::getUsername, userNameList);
         List<UserPO> poList = userMapper.selectList(wrapper);
         List<Integer> idList = new ArrayList<>();
-        poList.forEach(e->idList.add(e.getId()));
+        poList.forEach(e -> idList.add(e.getId()));
         return idList;
     }
 
     @Override
     public Long getUserCountByDate(Date startDate, Date endDate) {
         LambdaQueryWrapper<UserPO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.between(UserPO::getCreateTime,startDate,endDate);
+        wrapper.between(UserPO::getCreateTime, startDate, endDate);
         return userMapper.selectCount(wrapper);
     }
 
@@ -48,18 +48,19 @@ public class UserServiceImpl extends MPJBaseServiceImpl<UserMapper, UserPO> impl
         entity.setUpdateTime(TimeUtil.getNowTime());
         return super.save(entity);
     }
+
     @Override
     public UserPO getUserByUserName(String userName) {
         MPJLambdaWrapper<UserPO> wrapper = new MPJLambdaWrapper<>();
         wrapper
                 .selectAll(UserPO.class)
-                .selectAs(RolePO::getPrivilegeCharacter,UserPO::getUserRoleName)
-                .selectAs(RolePO::getPrivilegeLevel,UserPO::getPrivilegeLevel)
-                .selectAs(DepartmentPO::getName,UserPO::getUserDepartmentName)
-                .leftJoin(RolePO.class,RolePO::getId,UserPO::getUserRoleId)
-                .leftJoin(DepartmentPO.class,DepartmentPO::getId,UserPO::getUserDepartmentId)
-                .eq(UserPO::getUsername,userName)
-                ;
-        return userMapper.selectJoinOne(UserPO.class,wrapper);
+                .selectAs(RolePO::getPrivilegeCharacter, UserPO::getUserRoleName)
+                .selectAs(RolePO::getPrivilegeLevel, UserPO::getPrivilegeLevel)
+                .selectAs(DepartmentPO::getName, UserPO::getUserDepartmentName)
+                .leftJoin(RolePO.class, RolePO::getId, UserPO::getUserRoleId)
+                .leftJoin(DepartmentPO.class, DepartmentPO::getId, UserPO::getUserDepartmentId)
+                .eq(UserPO::getUsername, userName)
+        ;
+        return userMapper.selectJoinOne(UserPO.class, wrapper);
     }
 }

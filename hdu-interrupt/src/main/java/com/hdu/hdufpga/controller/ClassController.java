@@ -1,8 +1,8 @@
 package com.hdu.hdufpga.controller;
 
 import com.hdu.hdufpga.entity.Result;
-import com.hdu.hdufpga.entity.vo.UserVO;
 import com.hdu.hdufpga.entity.po.ClassPO;
+import com.hdu.hdufpga.entity.vo.UserVO;
 import com.hdu.hdufpga.service.ClassService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -15,15 +15,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/co/class")
 @Slf4j
-public class ClassController extends BaseController<ClassService, ClassPO>{
-    @RequestMapping(value = "/importStudentFromExcel",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+public class ClassController extends BaseController<ClassService, ClassPO> {
+    @RequestMapping(value = "/importStudentFromExcel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result importStudentFromExcel(MultipartFile file, Integer classId, Integer departmentId) {
         try {
             List<UserVO> userVOList = service.uploadStudentList(file, classId, departmentId);
-            if(userVOList.isEmpty()){
+            if (userVOList.isEmpty()) {
                 return Result.ok();
             } else {
-                return Result.error("以下学生导入失败:"+userVOList);
+                return Result.error("以下学生导入失败:" + userVOList);
             }
         } catch (Exception e) {
             log.error(e.toString());

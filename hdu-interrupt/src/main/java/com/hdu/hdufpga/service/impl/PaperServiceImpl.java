@@ -54,7 +54,7 @@ public class PaperServiceImpl extends MPJBaseServiceImpl<PaperMapper, PaperPO> i
     @Override
     public Boolean handInPaper(HandInInfoVO handInInfoVO) throws IOException, HomeworkException {
         PaperPO paperPO = paperMapper.selectById(handInInfoVO.getPaperId());
-        if(paperPO.getDeadline().before(TimeUtil.getNowTime())){
+        if (paperPO.getDeadline().before(TimeUtil.getNowTime())) {
             throw new HomeworkException("已超过截止时间");
         }
         handInInfoVO.setFilePath(MFileUtil.uploadFile(handInInfoVO.getFile(), FileConstant.STUDENT_PAPER_UPLOAD_PATH));
@@ -67,13 +67,13 @@ public class PaperServiceImpl extends MPJBaseServiceImpl<PaperMapper, PaperPO> i
     public List<HandInInfoVO> getHandInInfoByClassId(Integer classId) {
         MPJLambdaWrapper<HandInInfoPO> wrapper = new MPJLambdaWrapper<>();
         wrapper
-                .select(HandInInfoPO::getId,HandInInfoPO::getFilePath, HandInInfoPO::getGrade, HandInInfoPO::getState,HandInInfoPO::getPaperId,HandInInfoPO::getUserId,HandInInfoPO::getClassId)
+                .select(HandInInfoPO::getId, HandInInfoPO::getFilePath, HandInInfoPO::getGrade, HandInInfoPO::getState, HandInInfoPO::getPaperId, HandInInfoPO::getUserId, HandInInfoPO::getClassId)
                 .selectAs(UserPO::getRealName, HandInInfoPO::getUserRealName)
                 .selectAs(UserPO::getUsername, HandInInfoPO::getUserName)
                 .leftJoin(UserPO.class, UserPO::getId, HandInInfoPO::getUserId)
                 .orderByDesc(UserPO::getUsername)
-                ;
-        List<HandInInfoPO> poList = handInInfoMapper.selectJoinList(HandInInfoPO.class,wrapper);
+        ;
+        List<HandInInfoPO> poList = handInInfoMapper.selectJoinList(HandInInfoPO.class, wrapper);
         return ConvertUtil.copyList(poList, HandInInfoVO.class);
     }
 
@@ -97,10 +97,10 @@ public class PaperServiceImpl extends MPJBaseServiceImpl<PaperMapper, PaperPO> i
     public Boolean updateHandInInfo(HandInInfoVO handInInfoVO) throws HomeworkException {
         HandInInfoPO handInInfoPOOld = handInInfoMapper.selectById(handInInfoVO.getId());
         PaperPO paperPO = paperMapper.selectById(handInInfoPOOld.getPaperId());
-        if(paperPO.getDeadline().before(TimeUtil.getNowTime())){
+        if (paperPO.getDeadline().before(TimeUtil.getNowTime())) {
             throw new HomeworkException("已超过截止时间");
         }
-        if(handInInfoPOOld.getState()) {
+        if (handInInfoPOOld.getState()) {
             throw new HomeworkException("作业已批改，不可修改提交");
         }
         HandInInfoPO handInInfoPONew = ConvertUtil.copy(handInInfoVO, HandInInfoPO.class);

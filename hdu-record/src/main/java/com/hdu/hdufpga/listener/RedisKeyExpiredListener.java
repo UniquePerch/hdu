@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 public class RedisKeyExpiredListener extends KeyExpirationEventMessageListener {
     @Resource
     RocketMQTemplate rocketMQTemplate;
+
     public RedisKeyExpiredListener(RedisMessageListenerContainer listenerContainer) {
         super(listenerContainer);
     }
@@ -30,7 +31,7 @@ public class RedisKeyExpiredListener extends KeyExpirationEventMessageListener {
 
             @Override
             public void onException(Throwable throwable) {
-                log.error("更新访问量失败，报错:{}",throwable.getMessage());
+                log.error("更新访问量失败，报错:{}", throwable.getMessage());
             }
         });
     }

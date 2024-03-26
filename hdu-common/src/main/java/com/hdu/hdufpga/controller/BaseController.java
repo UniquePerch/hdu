@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
-public abstract class BaseController <S extends MPJBaseService<T>,T extends BaseEntity>{
+public abstract class BaseController<S extends MPJBaseService<T>, T extends BaseEntity> {
     //此处必须使用Autowired
     @Autowired
     protected S service;
 
     @RequestMapping("/create")
-    public Result create(@RequestBody T t){
+    public Result create(@RequestBody T t) {
         try {
             t.setCreateTime(TimeUtil.getNowTime());
             t.setUpdateTime(TimeUtil.getNowTime());
@@ -27,28 +27,28 @@ public abstract class BaseController <S extends MPJBaseService<T>,T extends Base
             } else {
                 return Result.error();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e.toString());
             return Result.error();
         }
     }
 
     @RequestMapping("/delete")
-    public Result delete(Integer id){
+    public Result delete(Integer id) {
         try {
             if (service.removeById(id)) {
                 return Result.ok();
             } else {
                 return Result.error();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e.toString());
             return Result.error();
         }
     }
 
     @RequestMapping("/update")
-    public Result update(T t){
+    public Result update(T t) {
         try {
             t.setUpdateTime(TimeUtil.getNowTime());
             if (service.updateById(t)) {
@@ -56,14 +56,14 @@ public abstract class BaseController <S extends MPJBaseService<T>,T extends Base
             } else {
                 return Result.error();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e.toString());
             return Result.error();
         }
     }
 
     @RequestMapping("/get")
-    public Result get(Integer id){
+    public Result get(Integer id) {
         try {
             T t = service.getById(id);
             if (t != null) {
@@ -71,19 +71,19 @@ public abstract class BaseController <S extends MPJBaseService<T>,T extends Base
             } else {
                 return Result.error("没有找到对应的信息");
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e.toString());
             return Result.error();
         }
     }
 
     @RequestMapping("/listPage")
-    public Result listPage(Integer current,Integer size){
+    public Result listPage(Integer current, Integer size) {
         try {
             Page<T> page = service.page(new Page<>(current, size));
             PageRecord<T> pageRecord = new PageRecord<>(page.getCurrent(), page.getSize(), page.getTotal(), page.getRecords());
             return Result.ok(pageRecord);
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e.toString());
             return Result.error();
         }

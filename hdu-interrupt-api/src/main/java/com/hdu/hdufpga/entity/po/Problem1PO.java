@@ -22,8 +22,8 @@ public class Problem1PO extends BaseEntity implements Comparable<Problem1PO> {
 
     @Override
     public int compareTo(Problem1PO o) {
-        if(this.id < o.id) return -1;
-        else if(this.id.equals(o.id)) return 0;
+        if (this.id < o.id) return -1;
+        else if (this.id.equals(o.id)) return 0;
         else return 1;
     }
 }

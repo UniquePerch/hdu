@@ -22,6 +22,7 @@ class HduAccountApplicationTests {
 
     @Resource
     UserController userController;
+
     @Test
     void testUser() {
     }
@@ -29,6 +30,7 @@ class HduAccountApplicationTests {
 
     @Resource
     DepartmentController departmentController;
+
     @Test
     void testDepartment() {
 
@@ -36,8 +38,9 @@ class HduAccountApplicationTests {
 
     @Resource
     RoleController roleController;
+
     @Test
-    void testRole(){
+    void testRole() {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         UserPO userPO = new UserPO();
         userPO.setUserRoleId(1);

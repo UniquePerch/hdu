@@ -7,10 +7,8 @@ import java.io.Serializable;
 
 @Data
 public class Result implements Serializable {
-    private static final long serialVersionUID = 1L;
-
     public static final Integer CODE = 0;
-
+    private static final long serialVersionUID = 1L;
     private Integer code;
 
     private String msg;

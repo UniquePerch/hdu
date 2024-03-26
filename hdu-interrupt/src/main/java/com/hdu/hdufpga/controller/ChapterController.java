@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class ChapterController extends BaseController<ChapterService, ChapterPO> {
     @RequestMapping("/recordFinish")
-    public Result recordFinish(Integer userId,Integer chapterId){
+    public Result recordFinish(Integer userId, Integer chapterId) {
         try {
-            if(service.recordFinish(userId,chapterId)){
+            if (service.recordFinish(userId, chapterId)) {
                 return Result.ok("记录学习记录成功");
             } else {
                 return Result.error("已经学习过该知识点");
@@ -26,12 +26,12 @@ public class ChapterController extends BaseController<ChapterService, ChapterPO>
     }
 
     @RequestMapping("/getAllChapterRecord")
-    public Result getAllChapterRecord(){
+    public Result getAllChapterRecord() {
         try {
             return Result.ok(service.getAllChapterRecord());
         } catch (Exception e) {
             log.error(e.getMessage());
-            if(e.getMessage().toLowerCase().contains("unique")){
+            if (e.getMessage().toLowerCase().contains("unique")) {
                 return Result.ok("已经学习过该知识点");
             }
             return Result.error("数据库原因，获取学习记录失败");
@@ -39,7 +39,7 @@ public class ChapterController extends BaseController<ChapterService, ChapterPO>
     }
 
     @RequestMapping("/getChapterRecordByUserId")
-    public Result getChapterRecordByUserId(Integer userId){
+    public Result getChapterRecordByUserId(Integer userId) {
         try {
             return Result.ok(service.getChapterRecordByUserId(userId));
         } catch (Exception e) {

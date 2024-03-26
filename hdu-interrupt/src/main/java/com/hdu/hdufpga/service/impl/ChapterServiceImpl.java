@@ -25,9 +25,10 @@ public class ChapterServiceImpl extends MPJBaseServiceImpl<ChapterMapper, Chapte
 
     @Resource
     UserChapterMapper userChapterMapper;
+
     @Override
     public Boolean recordFinish(Integer userId, Integer chapterId) {
-        return chapterMapper.recordFinish(userId,chapterId, TimeUtil.getNowTime()) == 1;
+        return chapterMapper.recordFinish(userId, chapterId, TimeUtil.getNowTime()) == 1;
     }
 
     @Override
@@ -35,31 +36,31 @@ public class ChapterServiceImpl extends MPJBaseServiceImpl<ChapterMapper, Chapte
         MPJLambdaWrapper<UserChapterRecordPO> wrapper = new MPJLambdaWrapper<>();
         wrapper
                 .select(UserChapterRecordPO::getId)
-                .selectAs(UserPO::getId,UserChapterRecordPO::getUserId)
-                .selectAs(UserPO::getUsername,UserChapterRecordPO::getUserName)
-                .selectAs(UserPO::getRealName,UserChapterRecordPO::getRealName)
-                .selectAs(ChapterPO::getId,UserChapterRecordPO::getChapterId)
-                .selectAs(ChapterPO::getTitle,UserChapterRecordPO::getChapterTitle)
-                .selectAs(UserChapterRecordPO::getMark,UserChapterRecordPO::getMark)
+                .selectAs(UserPO::getId, UserChapterRecordPO::getUserId)
+                .selectAs(UserPO::getUsername, UserChapterRecordPO::getUserName)
+                .selectAs(UserPO::getRealName, UserChapterRecordPO::getRealName)
+                .selectAs(ChapterPO::getId, UserChapterRecordPO::getChapterId)
+                .selectAs(ChapterPO::getTitle, UserChapterRecordPO::getChapterTitle)
+                .selectAs(UserChapterRecordPO::getMark, UserChapterRecordPO::getMark)
                 .select(UserChapterRecordPO::getFinishTime)
-                .leftJoin(UserPO.class,UserPO::getId,UserChapterRecordPO::getUserId)
-                .leftJoin(ChapterPO.class,ChapterPO::getId,UserChapterRecordPO::getChapterId)
-                ;
-        return ConvertUtil.copyList(userChapterMapper.selectJoinList(UserChapterRecordPO.class,wrapper),UserChapterRecordVO.class);
+                .leftJoin(UserPO.class, UserPO::getId, UserChapterRecordPO::getUserId)
+                .leftJoin(ChapterPO.class, ChapterPO::getId, UserChapterRecordPO::getChapterId)
+        ;
+        return ConvertUtil.copyList(userChapterMapper.selectJoinList(UserChapterRecordPO.class, wrapper), UserChapterRecordVO.class);
     }
 
     @Override
     public List<UserChapterRecordVO> getChapterRecordByUserId(Integer userId) {
         MPJLambdaWrapper<UserChapterRecordPO> wrapper = new MPJLambdaWrapper<>();
         wrapper
-                .selectAs(UserPO::getId,UserChapterRecordPO::getUserId)
-                .selectAs(UserPO::getUsername,UserChapterRecordPO::getUserName)
-                .selectAs(ChapterPO::getId,UserChapterRecordPO::getChapterId)
-                .selectAs(ChapterPO::getTitle,UserChapterRecordPO::getChapterTitle)
-                .leftJoin(UserPO.class,UserPO::getId,UserChapterRecordPO::getUserId)
-                .leftJoin(ChapterPO.class,ChapterPO::getId,UserChapterRecordPO::getChapterId)
-                .eq(UserChapterRecordPO::getUserId,userId)
-                ;
-        return ConvertUtil.copyList(userChapterMapper.selectJoinList(UserChapterRecordPO.class,wrapper),UserChapterRecordVO.class);
+                .selectAs(UserPO::getId, UserChapterRecordPO::getUserId)
+                .selectAs(UserPO::getUsername, UserChapterRecordPO::getUserName)
+                .selectAs(ChapterPO::getId, UserChapterRecordPO::getChapterId)
+                .selectAs(ChapterPO::getTitle, UserChapterRecordPO::getChapterTitle)
+                .leftJoin(UserPO.class, UserPO::getId, UserChapterRecordPO::getUserId)
+                .leftJoin(ChapterPO.class, ChapterPO::getId, UserChapterRecordPO::getChapterId)
+                .eq(UserChapterRecordPO::getUserId, userId)
+        ;
+        return ConvertUtil.copyList(userChapterMapper.selectJoinList(UserChapterRecordPO.class, wrapper), UserChapterRecordVO.class);
     }
 }

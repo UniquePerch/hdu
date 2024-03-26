@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/co/paper")
 @Slf4j
 public class PaperController extends BaseController<PaperService, PaperPO> {
-    @RequestMapping(value = "/uploadPaper",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/uploadPaper", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result uploadPaper(@RequestBody PaperVO paperVO) {
         try {
             return Result.ok(service.uploadPaper(paperVO));
@@ -35,11 +35,11 @@ public class PaperController extends BaseController<PaperService, PaperPO> {
         }
     }
 
-    @RequestMapping(value = "/handInPaper",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/handInPaper", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result handInPaper(HandInInfoVO handInInfoVO) {
         try {
             return Result.ok(service.handInPaper(handInInfoVO));
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.toString());
             return Result.error(e.getMessage());
         }

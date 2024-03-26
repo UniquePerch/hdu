@@ -2,10 +2,10 @@ package com.hdu.hdufpga;
 
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.hdu.hdufpga.controller.ClassController;
-import com.hdu.hdufpga.entity.BaseEntity;
-import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.controller.PaperController;
+import com.hdu.hdufpga.entity.BaseEntity;
 import com.hdu.hdufpga.entity.po.ClassPO;
+import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.mapper.ClassMapper;
 import com.hdu.hdufpga.service.UserService;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -21,20 +21,21 @@ import java.util.List;
 class HduInterruptApplicationTests {
     @Resource
     ClassMapper classMapper;
+
     @Test
     void contextLoads() {
         MPJLambdaWrapper<ClassPO> wrapper = new MPJLambdaWrapper<>();
         wrapper
-                .select(ClassPO::getCreateByUserId,ClassPO::getName, BaseEntity::getId,ClassPO::getIsOver,BaseEntity::getIsDeleted,BaseEntity::getCreateTime,BaseEntity::getUpdateTime)
-                .selectAs(UserPO::getUsername,ClassPO::getCreateByUsername)
-                .leftJoin(UserPO.class,UserPO::getId,ClassPO::getCreateByUserId)
-                ;
-        List<ClassPO> list = classMapper.selectJoinList(ClassPO.class,wrapper);
+                .select(ClassPO::getCreateByUserId, ClassPO::getName, BaseEntity::getId, ClassPO::getIsOver, BaseEntity::getIsDeleted, BaseEntity::getCreateTime, BaseEntity::getUpdateTime)
+                .selectAs(UserPO::getUsername, ClassPO::getCreateByUsername)
+                .leftJoin(UserPO.class, UserPO::getId, ClassPO::getCreateByUserId)
+        ;
+        List<ClassPO> list = classMapper.selectJoinList(ClassPO.class, wrapper);
         System.out.println(list);
     }
 
     @Test
-    void testCal(){
+    void testCal() {
         Calendar calendar = Calendar.getInstance();
         System.out.println(calendar.get(Calendar.YEAR));
         System.out.println(calendar.get(Calendar.MONTH) + 1);
@@ -43,15 +44,17 @@ class HduInterruptApplicationTests {
 
     @Resource
     PaperController paperController;
+
     @Test
-    void testPaper(){
+    void testPaper() {
         System.out.println(paperController.getHandInInfoByClassId(1));
     }
 
     @Resource
     ClassController classController;
+
     @Test
-    void testClass(){
+    void testClass() {
         System.out.println(classController.getStudentListByClassId(1));
     }
 
@@ -59,7 +62,7 @@ class HduInterruptApplicationTests {
     UserService userService;
 
     @Test
-    void testDubbo(){
+    void testDubbo() {
         ArrayList<String> objects = new ArrayList<>();
         objects.add("20042025");
         System.out.println(userService.getIdByUserName(objects));

@@ -11,5 +11,5 @@ import java.util.Date;
 public interface StudentResourceRecordMapper extends MPJBaseMapper<UserResourceRecordPO> {
     Integer updateUserResourceRecord(UserResourceRecordPO userResourceRecordPO);
 
-    Long getStudnetResourceDurationSum(@Param("date1")Date d1,@Param("date2") Date d2);
+    Long getStudnetResourceDurationSum(@Param("date1") Date d1, @Param("date2") Date d2);
 }

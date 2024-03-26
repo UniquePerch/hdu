@@ -5,9 +5,16 @@
 <mapper namespace="com.hdu.hdufpga.mapper.StudentResourceRecordMapper">
 
     <update id="updateUserResourceRecord">
-        UPDATE t_user_resource_record SET duration = duration + #{duration}, times = times + 1, update_time = #{updateTime} WHERE user_id = #{userId} AND resource_id = #{resourceId}
+        UPDATE t_user_resource_record
+        SET duration    = duration + #{duration},
+            times       = times + 1,
+            update_time = #{updateTime}
+        WHERE user_id = #{userId}
+          AND resource_id = #{resourceId}
     </update>
     <select id="getStudnetResourceDurationSum" resultType="java.lang.Long">
-        SELECT SUM(duration) FROM t_user_resource_record WHERE create_time BETWEEN #{date1} AND #{date2}
+        SELECT SUM(duration)
+        FROM t_user_resource_record
+        WHERE create_time BETWEEN #{date1} AND #{date2}
     </select>
 </mapper>

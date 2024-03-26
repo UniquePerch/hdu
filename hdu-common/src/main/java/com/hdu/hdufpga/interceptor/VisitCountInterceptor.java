@@ -16,11 +16,11 @@ public class VisitCountInterceptor implements HandlerInterceptor {
     RedisUtil redisUtil;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response,@NonNull Object handler) {
-        if(redisUtil.get(request.getSession().getId()) != null) {
+    public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
+        if (redisUtil.get(request.getSession().getId()) != null) {
             redisUtil.expire(request.getSession().getId(), 30, TimeUnit.MINUTES);
         } else {
-            redisUtil.set(request.getSession().getId(), "1",30, TimeUnit.MINUTES);
+            redisUtil.set(request.getSession().getId(), "1", 30, TimeUnit.MINUTES);
         }
         return true;
     }

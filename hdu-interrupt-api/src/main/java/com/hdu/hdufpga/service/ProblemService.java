@@ -10,5 +10,5 @@ import java.util.Map;
 public interface ProblemService extends MPJBaseService<Problem1PO> {
     List<Problem1VO> getProblems();
 
-    Map<String,Double> checkAnswer(Integer userId, Integer classId, List<Problem1VO> voList);
+    Map<String, Double> checkAnswer(Integer userId, Integer classId, List<Problem1VO> voList);
 }

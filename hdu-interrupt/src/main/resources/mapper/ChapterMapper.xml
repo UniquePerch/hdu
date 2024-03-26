@@ -5,6 +5,7 @@
 <mapper namespace="com.hdu.hdufpga.mapper.ChapterMapper">
 
     <insert id="recordFinish">
-        insert into foreign_user_chapter (user_id, chapter_id, finish_time) values (#{user_id}, #{chapter_id}, #{finish_time})
+        insert into foreign_user_chapter (user_id, chapter_id, finish_time)
+        values (#{user_id}, #{chapter_id}, #{finish_time})
     </insert>
 </mapper>

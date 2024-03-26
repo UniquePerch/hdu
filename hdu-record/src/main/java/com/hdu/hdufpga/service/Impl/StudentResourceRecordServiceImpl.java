@@ -52,7 +52,7 @@ public class StudentResourceRecordServiceImpl extends MPJBaseServiceImpl<Student
 
             @Override
             public void onException(Throwable throwable) {
-                log.error("send resourceRecord error : {} \n exception : {}", JSONUtil.parse(userResourceRecordVO),throwable.getMessage());
+                log.error("send resourceRecord error : {} \n exception : {}", JSONUtil.parse(userResourceRecordVO), throwable.getMessage());
             }
         });
         return true;
@@ -62,19 +62,19 @@ public class StudentResourceRecordServiceImpl extends MPJBaseServiceImpl<Student
     public List<UserResourceRecordPO> getRecordByUserId(Integer userId) {
         MPJLambdaWrapper<UserResourceRecordPO> wrapper = new MPJLambdaWrapper<>();
         wrapper
-                .selectAs(UserPO::getId,UserResourceRecordPO::getUserId)
-                .selectAs(UserPO::getUsername,UserResourceRecordPO::getUserName)
-                .selectAs(UserPO::getRealName,UserResourceRecordPO::getUserRealName)
-                .selectAs(ResourcePO::getId,UserResourceRecordPO::getResourceId)
-                .selectAs(ResourcePO::getResourceName,UserResourceRecordPO::getResourceName)
+                .selectAs(UserPO::getId, UserResourceRecordPO::getUserId)
+                .selectAs(UserPO::getUsername, UserResourceRecordPO::getUserName)
+                .selectAs(UserPO::getRealName, UserResourceRecordPO::getUserRealName)
+                .selectAs(ResourcePO::getId, UserResourceRecordPO::getResourceId)
+                .selectAs(ResourcePO::getResourceName, UserResourceRecordPO::getResourceName)
                 .select(UserResourceRecordPO::getDuration)
                 .select(UserResourceRecordPO::getTimes)
                 .select(UserResourceRecordPO::getCreateTime)
                 .select(UserResourceRecordPO::getUpdateTime)
-                .leftJoin(UserPO.class,UserPO::getId,UserResourceRecordPO::getUserId)
-                .leftJoin(ResourcePO.class,ResourcePO::getId,UserResourceRecordPO::getResourceId)
+                .leftJoin(UserPO.class, UserPO::getId, UserResourceRecordPO::getUserId)
+                .leftJoin(ResourcePO.class, ResourcePO::getId, UserResourceRecordPO::getResourceId)
                 .eq(UserResourceRecordPO::getUserId, userId)
-                ;
+        ;
         return studentResourceRecordMapper.selectJoinList(UserResourceRecordPO.class, wrapper);
     }
 
@@ -83,12 +83,12 @@ public class StudentResourceRecordServiceImpl extends MPJBaseServiceImpl<Student
         String className = classService.getById(classId).getName();
         List<StudentStudyRecord> userRecordList = new ArrayList<>();
         List<UserVO> userList = classService.getStudentListByClassId(classId);
-        for(UserVO userVO : userList) {
+        for (UserVO userVO : userList) {
             StudentStudyRecord userRecord = new StudentStudyRecord();
             userRecord.setClassName(className);
             userRecord.setUserRealName(userVO.getRealName());
-            userRecord.setTestCount(testRecordService.getTestCount(userVO.getId(),classId));
-            userRecord.setMaxTestScore(testRecordService.getMaxScore(userVO.getId(),classId));
+            userRecord.setTestCount(testRecordService.getTestCount(userVO.getId(), classId));
+            userRecord.setMaxTestScore(testRecordService.getMaxScore(userVO.getId(), classId));
             userRecord.setUserResourceRecordVOList(ConvertUtil.copyList(getRecordByUserId(userVO.getId()), UserResourceRecordVO.class));
             userRecordList.add(userRecord);
         }

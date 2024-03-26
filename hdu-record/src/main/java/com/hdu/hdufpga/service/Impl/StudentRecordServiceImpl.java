@@ -30,10 +30,10 @@ public class StudentRecordServiceImpl implements UserRecordService {
     public UserVisitInfoVO getUserVisitInfo(Date startDate, Date endDate) {
         UserVisitInfoVO userVisitInfoVO = new UserVisitInfoVO();
         LambdaQueryWrapper<VisitRecordPO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.between(VisitRecordPO::getVisitTime,startDate,endDate);
+        wrapper.between(VisitRecordPO::getVisitTime, startDate, endDate);
         userVisitInfoVO.setVisitCount(visitRecordMapper.selectCount(wrapper));
-        userVisitInfoVO.setStudyDuration(studentResourceRecordMapper.getStudnetResourceDurationSum(startDate,endDate));
-        userVisitInfoVO.setUserCount(userService.getUserCountByDate(startDate,endDate));
+        userVisitInfoVO.setStudyDuration(studentResourceRecordMapper.getStudnetResourceDurationSum(startDate, endDate));
+        userVisitInfoVO.setUserCount(userService.getUserCountByDate(startDate, endDate));
         return userVisitInfoVO;
     }
 }
