@@ -1,19 +1,5 @@
 server:
   port: 8080
-security:
-  oauth2:
-    client:
-      client-id: hdu-fpga
-      client-secret: yy5201314
-        #Token获取地址
-      access-token-uri: http://localhost:9090/sso/oauth/token
-        #验证页面地址
-      user-authorization-uri: http://localhost:9090/sso/oauth/authorize
-    resource:
-          #Token信息获取和校验地址
-      token-info-uri: http://localhost:9090/sso/oauth/check_token
-      jwt:
-        key-value: yy5201314
 spring:
   cloud:
     nacos:
@@ -24,9 +10,9 @@ spring:
     name: hdu-account
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: lyh701721
-    url: jdbc:mysql://localhost:3306/hdu-interrupt?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8
+    username: lyh
+    password: Lyh701721...
+    url: jdbc:mysql://124.221.61.179:13306/hdu-interrupt?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
