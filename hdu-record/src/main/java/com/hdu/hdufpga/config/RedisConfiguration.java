@@ -1,7 +1,7 @@
 package com.hdu.hdufpga.config;
 
 import com.alibaba.fastjson2.support.spring.data.redis.GenericFastJsonRedisSerializer;
-import com.hdu.hdufpga.listener.RedisKeyExpiredListener;
+import com.hdu.hdufpga.listener.UserSessionExpiredListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -26,7 +26,7 @@ public class RedisConfiguration {
 
     @Bean
     public KeyExpirationEventMessageListener keyExpiredListener() {
-        return new RedisKeyExpiredListener(this.redisMessageListenerContainer());
+        return new UserSessionExpiredListener(this.redisMessageListenerContainer());
     }
 
     @Bean

@@ -67,4 +67,20 @@ public class RedisUtil {
     public Boolean hasKey(String key) {
         return redisTemplate.hasKey(key);
     }
+
+    public Long getZSetRank(String k, String o) {
+        return redisTemplate.opsForZSet().rank(k, o);
+    }
+
+    public Boolean addInZSet(String k, String v) {
+        return redisTemplate.opsForZSet().add(k, v, getZSetSize(k));
+    }
+
+    public Long removeInZSet(String k, String v) {
+        return redisTemplate.opsForZSet().remove(k, v);
+    }
+
+    public Long getZSetSize(String k) {
+        return redisTemplate.opsForZSet().zCard(k);
+    }
 }
