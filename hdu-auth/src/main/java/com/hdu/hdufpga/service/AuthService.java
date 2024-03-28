@@ -29,6 +29,15 @@ public class AuthService {
      * @return 子系统的登录信息
      */
     public Object login(String username, String password, String applicationName) {
+        // 如果已经登录则直接返回
+        if (StpUtil.isLogin(username)) {
+            for (AbstractSsoService service : ssoServices) {
+                if (StrUtil.equals(service.type(), applicationName)) {
+                    return service.login(username);
+                }
+            }
+            return null;
+        }
         UserPO userPO = userService.getUserByUserName(username);
         if (Objects.isNull(userPO)) {
             return null;
