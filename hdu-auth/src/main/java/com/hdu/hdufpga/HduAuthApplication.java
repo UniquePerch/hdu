@@ -1,13 +1,15 @@
 package com.hdu.hdufpga;
 
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HduAuthApplicaion {
+@EnableDubbo
+public class HduAuthApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HduAuthApplicaion.class, args);
+        SpringApplication.run(HduAuthApplication.class, args);
     }
 
 }
