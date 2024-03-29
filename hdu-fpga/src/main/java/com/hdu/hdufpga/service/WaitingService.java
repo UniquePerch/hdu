@@ -1,7 +1,11 @@
 package com.hdu.hdufpga.service;
 
-public interface WaitingService {
-    Long getRankInQueue(String token);
+import com.hdu.hdufpga.entity.Result;
 
-    Boolean userInQueue(String token);
+public interface WaitingService {
+    Result userInQueue(String token);
+
+    Result checkAvailability(String token);
+
+    boolean freezeConnection(String token);
 }

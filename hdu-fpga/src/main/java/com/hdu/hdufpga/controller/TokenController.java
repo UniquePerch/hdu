@@ -1,6 +1,7 @@
 package com.hdu.hdufpga.controller;
 
 import cn.hutool.json.JSONUtil;
+import com.hdu.hdufpga.annotation.CheckToken;
 import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.entity.vo.UserVO;
 import com.hdu.hdufpga.service.TokenService;
@@ -24,6 +25,30 @@ public class TokenController {
         try {
             UserVO userVO = JSONUtil.toBean(request.getHeader("login_user"), UserVO.class);
             return tokenService.generateToken(userVO);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return Result.error(e.getMessage());
+        }
+    }
+
+    @PostMapping("/reload")
+    @CheckToken
+    public Result reload(HttpServletRequest request) {
+        try {
+            String token = request.getHeader("token");
+            return tokenService.reload(token);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return Result.error(e.getMessage());
+        }
+    }
+
+    @PostMapping("/checkToken")
+    @CheckToken
+    public Result checkToken(HttpServletRequest request) {
+        try {
+            String token = request.getHeader("token");
+            return tokenService.checkToken(token);
         } catch (Exception e) {
             log.error(e.getMessage());
             return Result.error(e.getMessage());
