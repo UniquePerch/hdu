@@ -1,9 +1,12 @@
 package com.hdu.hdufpga.service;
 
+import cn.dev33.satoken.stp.StpUtil;
+
 /**
  * 子系统SSO抽象类
  */
-public abstract class AbstractSsoService {
+public interface AbstractSsoService {
+
 
     /**
      * 子系统登录
@@ -11,20 +14,29 @@ public abstract class AbstractSsoService {
      * @param username 用户名
      * @return 登录后Session信息
      */
-    public abstract Object login(String username);
+    default Object login(String username) {
+        System.out.println("login username " + username);
+        if (!StpUtil.isLogin(username)) {
+            StpUtil.login(username);
+        }
+        return StpUtil.getSessionByLoginId(username);
+    }
 
     /**
      * 子系统注销
      *
      * @param username 用户名
      */
-    public abstract void logout(String username);
+    default void logout(String username) {
+        System.out.println("logout username " + username);
+        StpUtil.logout(username);
+    }
 
     /**
      * 子系统识别码
      *
      * @return 识别码
      */
-    public abstract String type();
+    String getApplicationName();
 
 }
