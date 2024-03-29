@@ -13,8 +13,9 @@ spring:
   application:
     name: hdu-auth
   redis:
-    host: 127.0.0.1
+    host: 47.99.175.197
     port: 6379
+    database: 2
 dubbo:
   application:
     name: ${spring.application.name}
