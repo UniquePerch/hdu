@@ -1,11 +1,14 @@
 package com.hdu.hdufpga.util;
 
 import cn.hutool.core.collection.CollectionUtil;
+import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -64,6 +67,18 @@ public class RedisUtil {
         }
     }
 
+    public void multi() {
+        redisTemplate.multi();
+    }
+
+    public void exec() {
+        redisTemplate.exec();
+    }
+
+    public void discard() {
+        redisTemplate.discard();
+    }
+
     public Boolean hasKey(String key) {
         return redisTemplate.hasKey(key);
     }
@@ -72,15 +87,49 @@ public class RedisUtil {
         return redisTemplate.opsForZSet().rank(k, o);
     }
 
-    public Boolean addInZSet(String k, String v) {
-        return redisTemplate.opsForZSet().add(k, v, getZSetSize(k));
+    public void addInZSet(String k, String v) {
+        redisTemplate.opsForZSet().add(k, v, getZSetSize(k));
     }
 
-    public Long removeInZSet(String k, String v) {
-        return redisTemplate.opsForZSet().remove(k, v);
+    public void removeInZSet(String k, String v) {
+        redisTemplate.opsForZSet().remove(k, v);
     }
 
     public Long getZSetSize(String k) {
         return redisTemplate.opsForZSet().zCard(k);
+    }
+
+    public Object getHashValue(String k1, String k2) {
+        return redisTemplate.opsForHash().get(k1, k2);
+    }
+
+    public void putHash(String k1, HashMap<String, Object> info) {
+        redisTemplate.opsForHash().putAll(k1, info);
+    }
+
+    public void removeHash(String k1) {
+        redisTemplate.delete(k1);
+    }
+
+    public HashMap<String, Object> getHash(String k1) {
+        Map<Object, Object> map = redisTemplate.opsForHash().entries(k1);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        map.forEach((k, v) -> {
+            String newK = "";
+            if (k instanceof String) {
+                newK = (String) k;
+            }
+            hashMap.put(newK, v);
+        });
+        return hashMap;
+    }
+
+    public ChannelHandlerContext getCtx(String longId) {
+        Object o = redisTemplate.opsForHash().get(longId, "ctx");
+        if (o instanceof ChannelHandlerContext) {
+            return (ChannelHandlerContext) o;
+        } else {
+            throw new RuntimeException("获取ctx出错");
+        }
     }
 }

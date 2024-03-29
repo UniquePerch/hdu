@@ -15,8 +15,6 @@ public class UserConnectionVO {
     private Date updateDate;
     private Long leftSecond;
     private Boolean isFrozen;
-    //操作流水号
-    private String billId;
     private String userIp;
     private String cbIp;
     private String longId;

@@ -1,5 +1,6 @@
 package com.hdu.hdufpga.controller;
 
+import com.hdu.hdufpga.annotation.CheckToken;
 import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.service.WaitingService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +17,24 @@ public class WaitingController {
     WaitingService waitingService;
 
     @PostMapping("/inLine")
+    @CheckToken
     public Result userInLine(HttpServletRequest request) {
-        String token = request.getHeader("token");
-        return null;
+        try {
+            String token = request.getHeader("token");
+            return waitingService.userInQueue(token);
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    @PostMapping("/checkAvailability")
+    @CheckToken
+    public Result checkAvailability(HttpServletRequest request) {
+        try {
+            String token = request.getHeader("token");
+            return waitingService.checkAvailability(token);
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
     }
 }
