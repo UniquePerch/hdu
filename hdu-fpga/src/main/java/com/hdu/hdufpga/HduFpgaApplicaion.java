@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
+//TODO : Redis键过期监听器，用来释放板卡
 public class HduFpgaApplicaion {
 
     public static void main(String[] args) {

@@ -38,3 +38,5 @@ netty:
       count: 2
   keepalive : false
   backlog: 100
+wait-queue:
+  name: fpgaWaitLine

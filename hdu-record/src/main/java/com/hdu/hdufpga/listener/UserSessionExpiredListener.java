@@ -13,11 +13,11 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import javax.annotation.Resource;
 
 @Slf4j
-public class RedisKeyExpiredListener extends KeyExpirationEventMessageListener {
+public class UserSessionExpiredListener extends KeyExpirationEventMessageListener {
     @Resource
     RocketMQTemplate rocketMQTemplate;
 
-    public RedisKeyExpiredListener(RedisMessageListenerContainer listenerContainer) {
+    public UserSessionExpiredListener(RedisMessageListenerContainer listenerContainer) {
         super(listenerContainer);
     }
 
