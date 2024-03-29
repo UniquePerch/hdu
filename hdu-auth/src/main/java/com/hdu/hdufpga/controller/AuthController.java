@@ -17,18 +17,18 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public Result<Object> login(@RequestBody LoginRO loginRO) {
+    public Result login(@RequestBody LoginRO loginRO) {
         return Result.ok(authService.login(loginRO));
     }
 
     @GetMapping("/logout")
-    public Result<Void> logout(String username) {
+    public Result logout(String username) {
         authService.logout(username);
         return Result.ok();
     }
 
     @PostMapping("/generate-verification-code")
-    public Result<Void> generateVerificationCode(@RequestBody VerificationCodeRO verificationCodeRO) throws IOException {
+    public Result generateVerificationCode(@RequestBody VerificationCodeRO verificationCodeRO) throws IOException {
         authService.generateVerificationCode(verificationCodeRO);
         return Result.ok();
     }
