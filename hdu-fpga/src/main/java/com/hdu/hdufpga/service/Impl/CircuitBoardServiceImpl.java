@@ -5,6 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.hdu.hdufpga.entity.po.CircuitBoardPO;
+import com.hdu.hdufpga.exception.CircuitBoardException;
 import com.hdu.hdufpga.mapper.CircuitBoardMapper;
 import com.hdu.hdufpga.service.CircuitBoardService;
 import com.hdu.hdufpga.util.RedisUtil;
@@ -28,7 +29,7 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
     RedisUtil redisUtil;
 
     @Override
-    public CircuitBoardPO getAFreeCircuitBoard() {
+    public CircuitBoardPO getAFreeCircuitBoard() throws CircuitBoardException {
         redissionLockUtil.lock("allocateCircuitBoard");
         try {
             LambdaQueryWrapper<CircuitBoardPO> queryWrapper = new LambdaQueryWrapper<>();
@@ -42,7 +43,7 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
                 baseMapper.updateById(circuitBoardPO);
                 return circuitBoardPO;
             } else {
-                return null;
+                throw new CircuitBoardException("暂无空闲板卡");
             }
         } finally {
             redissionLockUtil.unlock("allocateCircuitBoard");

@@ -2,15 +2,11 @@ package com.hdu.hdufpga.service;
 
 import com.hdu.hdufpga.entity.vo.UserConnectionVO;
 import com.hdu.hdufpga.entity.vo.UserVO;
-import com.hdu.hdufpga.exception.IdentifyException;
-import com.hdu.hdufpga.exception.NullTokenException;
-import com.hdu.hdufpga.exception.TokenExpiredException;
-import com.hdu.hdufpga.exception.UserQueueException;
 
 public interface TokenService {
-    String generateToken(UserVO userVO) throws IdentifyException;
+    String generateToken(UserVO userVO) throws Exception;
 
-    Boolean checkToken(String token) throws NullTokenException, TokenExpiredException;
+    Boolean checkToken(String token) throws Exception;
 
-    UserConnectionVO reload(String token) throws UserQueueException;
+    UserConnectionVO reload(String token) throws Exception;
 }

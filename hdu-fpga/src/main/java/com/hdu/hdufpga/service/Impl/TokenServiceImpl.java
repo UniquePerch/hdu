@@ -8,7 +8,6 @@ import com.hdu.hdufpga.entity.vo.UserVO;
 import com.hdu.hdufpga.exception.IdentifyException;
 import com.hdu.hdufpga.exception.NullTokenException;
 import com.hdu.hdufpga.exception.TokenExpiredException;
-import com.hdu.hdufpga.exception.UserQueueException;
 import com.hdu.hdufpga.service.TokenService;
 import com.hdu.hdufpga.service.WaitingService;
 import com.hdu.hdufpga.util.RedisUtil;
@@ -41,7 +40,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public UserConnectionVO reload(String token) throws UserQueueException {
+    public UserConnectionVO reload(String token) throws Exception {
         redisUtil.set(RedisConstant.REDIS_TTL_PREFIX + token, true, RedisConstant.REDIS_TTL_LIMIT, TimeUnit.SECONDS);
         return waitingService.userInQueue(token);
     }

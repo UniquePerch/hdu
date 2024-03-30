@@ -42,7 +42,7 @@ public class WaitingServiceImpl implements WaitingService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public UserConnectionVO userInQueue(String token) throws UserQueueException {
+    public UserConnectionVO userInQueue(String token) throws Exception {
         lockUtil.lock(queueName);
         try {
             if (Validator.isNull(getRankInQueue(token))) {
@@ -91,7 +91,7 @@ public class WaitingServiceImpl implements WaitingService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result checkAvailability(String token) throws UserQueueException {
+    public Result checkAvailability(String token) throws Exception {
         Long number = getRankInQueue(token);
         if (Validator.isNull(number)) {
             throw new UserQueueException("用户不在队列中");
