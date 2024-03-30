@@ -18,6 +18,9 @@ public class MQVisitRecordListener implements RocketMQListener<VisitRecordPO> {
 
     @Override
     public void onMessage(VisitRecordPO visitRecordPO) {
+        String sessionWithPre = visitRecordPO.getSessionId();
+        String session = sessionWithPre.split(":")[1];
+        visitRecordPO.setSessionId(session);
         int res = visitRecordMapper.insert(visitRecordPO);
         if (res <= 0) {
             log.error("数据库更新失败:{}", visitRecordMapper.getClass().getName());

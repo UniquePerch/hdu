@@ -1,5 +1,6 @@
 package com.hdu.hdufpga.util;
 
+import com.hdu.hdufpga.entity.constant.RedisConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -14,39 +15,35 @@ public class RedissionLockUtil {
     @Resource
     private RedissonClient redissonClient;
 
-    public boolean lock(String lockName) {
+    public void lock(String lockName) {
         if (redissonClient == null) {
             log.error("redission Client is null");
-            return false;
+            return;
         }
 
         try {
-            RLock rLock = redissonClient.getFairLock(lockName);
+            RLock rLock = redissonClient.getFairLock(RedisConstant.REDIS_LOCK_PREFIX + lockName);
             rLock.lock(15, TimeUnit.SECONDS);
             log.info("Thread [{}] DistributedRedisLock lock [{}] success", Thread.currentThread().getName(), lockName);
             // 加锁成功
-            return true;
         } catch (Exception e) {
             log.error("DistributedRedisLock lock [{}] Exception:", lockName, e);
-            return false;
         }
     }
 
-    public boolean unlock(String lockName) {
+    public void unlock(String lockName) {
         if (redissonClient == null) {
             log.error("redission Client is null");
-            return false;
+            return;
         }
 
         try {
-            RLock lock = redissonClient.getFairLock(lockName);
+            RLock lock = redissonClient.getFairLock(RedisConstant.REDIS_LOCK_PREFIX + lockName);
             lock.unlock();
             log.info("Thread [{}] DistributedRedisLock unlock [{}] success", Thread.currentThread().getName(), lockName);
             // 释放锁成功
-            return true;
         } catch (Exception e) {
             log.error("DistributedRedisLock unlock [{}] Exception:", lockName, e);
-            return false;
         }
     }
 }

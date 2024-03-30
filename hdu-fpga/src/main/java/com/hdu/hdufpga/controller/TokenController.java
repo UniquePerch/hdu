@@ -1,11 +1,11 @@
 package com.hdu.hdufpga.controller;
 
-import cn.hutool.json.JSONUtil;
 import com.hdu.hdufpga.annotation.CheckToken;
 import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.entity.vo.UserVO;
 import com.hdu.hdufpga.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,11 +20,10 @@ public class TokenController {
     @Resource
     TokenService tokenService;
 
-    @PostMapping("/generateToken")
-    public Result generateToken(HttpServletRequest request) {
+    @GetMapping("/generateToken")
+    public Result generateToken(UserVO userVO) {
         try {
-            UserVO userVO = JSONUtil.toBean(request.getHeader("login_user"), UserVO.class);
-            return tokenService.generateToken(userVO);
+            return Result.ok(tokenService.generateToken(userVO));
         } catch (Exception e) {
             log.error(e.getMessage());
             return Result.error(e.getMessage());
@@ -36,7 +35,7 @@ public class TokenController {
     public Result reload(HttpServletRequest request) {
         try {
             String token = request.getHeader("token");
-            return tokenService.reload(token);
+            return Result.ok(tokenService.reload(token));
         } catch (Exception e) {
             log.error(e.getMessage());
             return Result.error(e.getMessage());
@@ -48,7 +47,7 @@ public class TokenController {
     public Result checkToken(HttpServletRequest request) {
         try {
             String token = request.getHeader("token");
-            return tokenService.checkToken(token);
+            return Result.ok(tokenService.checkToken(token));
         } catch (Exception e) {
             log.error(e.getMessage());
             return Result.error(e.getMessage());

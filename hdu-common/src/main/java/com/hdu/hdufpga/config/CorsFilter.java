@@ -33,7 +33,6 @@ public class CorsFilter implements Filter {
             response.getWriter().print("");
             return;
         }
-        log.info("*********************************过滤器被使用**************************");
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }

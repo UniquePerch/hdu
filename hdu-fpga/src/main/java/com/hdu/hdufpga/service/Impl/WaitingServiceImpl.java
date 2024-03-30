@@ -7,6 +7,7 @@ import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.entity.constant.RedisConstant;
 import com.hdu.hdufpga.entity.po.CircuitBoardPO;
 import com.hdu.hdufpga.entity.vo.UserConnectionVO;
+import com.hdu.hdufpga.exception.UserQueueException;
 import com.hdu.hdufpga.service.CircuitBoardService;
 import com.hdu.hdufpga.service.WaitingService;
 import com.hdu.hdufpga.util.RedisUtil;
@@ -15,6 +16,7 @@ import com.hdu.hdufpga.util.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -39,52 +41,75 @@ public class WaitingServiceImpl implements WaitingService {
     HttpServletRequest request;
 
     @Override
-    public Result userInQueue(String token) {
+    @Transactional(rollbackFor = Exception.class)
+    public UserConnectionVO userInQueue(String token) throws UserQueueException {
         lockUtil.lock(queueName);
         try {
             if (Validator.isNull(getRankInQueue(token))) {
-                redisUtil.multi();
-                boolean bShadow = redisUtil.set(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, true);
-                UserConnectionVO userConnectionVO = createUserConnectionVO(token);
-                boolean bWaiting = redisUtil.set(RedisConstant.REDIS_CONN_PREFIX + token, userConnectionVO);
-                redisUtil.set(RedisConstant.REDIS_TTL_PREFIX + token, true);
-                redisUtil.addInZSet(queueName, token);
-                redisUtil.exec();
-                if (bShadow && bWaiting) {
-                    return Result.ok(userConnectionVO);
-                } else {
-                    return Result.error("用户验证出错");
+                //如果有空闲的板子，那就不入队，直接找一块
+                if (circuitBoardService.getFreeCircuitBoardCount() > 0) {
+                    UserConnectionVO userConnectionVO = createUserConnectionVO(token);
+                    boolean bShadow = redisUtil.set(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, true, 12, TimeUnit.HOURS);
+                    boolean bWaiting = redisUtil.set(RedisConstant.REDIS_CONN_PREFIX + token, userConnectionVO, 12, TimeUnit.HOURS);
+                    if (bWaiting && bShadow) {
+                        CircuitBoardPO circuitBoardPO = circuitBoardService.getAFreeCircuitBoard();
+                        if (Validator.isNotNull(circuitBoardPO)) {
+                            userConnectionVO = unfreezeConnection(token, circuitBoardPO);
+                            if (Validator.isNull(userConnectionVO)) {
+                                throw new UserQueueException("解冻用户失败");
+                            } else {
+                                return userConnectionVO;
+                            }
+                        } else {
+                            throw new UserQueueException("分配板卡失败");
+                        }
+                    } else {
+                        throw new UserQueueException("用户验证出错");
+                    }
                 }
             } else {
-                return Result.error("已经在队列中");
+                throw new UserQueueException("已经在队列中");
             }
-        } catch (Exception e) {
-            redisUtil.discard();
-            log.error(e.getMessage());
-            return Result.error("出错了");
+
+            if (Validator.isNull(getRankInQueue(token))) {
+                boolean bShadow = redisUtil.set(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, true, 12, TimeUnit.HOURS);
+                UserConnectionVO userConnectionVO = createUserConnectionVO(token);
+                boolean bWaiting = redisUtil.set(RedisConstant.REDIS_CONN_PREFIX + token, userConnectionVO, 12, TimeUnit.HOURS);
+                redisUtil.addInZSet(queueName, token);
+                if (bShadow && bWaiting) {
+                    return userConnectionVO;
+                } else {
+                    throw new UserQueueException("用户验证出错");
+                }
+            } else {
+                throw new UserQueueException("已经在队列中");
+            }
         } finally {
             lockUtil.unlock(queueName);
         }
     }
 
     @Override
-    public Result checkAvailability(String token) {
+    @Transactional(rollbackFor = Exception.class)
+    public Result checkAvailability(String token) throws UserQueueException {
         Long number = getRankInQueue(token);
         if (Validator.isNull(number)) {
-            return Result.error("用户不在队列中");
+            throw new UserQueueException("用户不在队列中");
         } else if (number == 0) {
             CircuitBoardPO circuitBoardPO = circuitBoardService.getAFreeCircuitBoard();
             if (Validator.isNotNull(circuitBoardPO)) {
+                redisUtil.removeInZSet(queueName, token);
                 UserConnectionVO userConnectionVO = unfreezeConnection(token, circuitBoardPO);
                 if (userConnectionVO == null) {
-                    return Result.error("解冻用户失败,请重试");
+                    throw new UserQueueException("解冻用户失败,请重试");
                 }
                 return Result.ok(userConnectionVO);
+            } else {
+                throw new UserQueueException("分配板卡失败");
             }
         } else {
             return Result.ok("用户在队列中，排在第" + number + "位");
         }
-        return Result.error("出错了,请稍后重试");
     }
 
     @Override
@@ -97,10 +122,8 @@ public class WaitingServiceImpl implements WaitingService {
                 userConnectionVO.setIsFrozen(true);
                 userConnectionVO.setLeftSecond(redisUtil.getExpire(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, TimeUnit.SECONDS));
                 userConnectionVO.setUpdateDate(TimeUtil.getNowTime());
-                redisUtil.multi();
-                redisUtil.set(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, true, -1, TimeUnit.SECONDS);
-                redisUtil.set(RedisConstant.REDIS_CONN_PREFIX + token, userConnectionVO, -1, TimeUnit.SECONDS);
-                redisUtil.exec();
+                redisUtil.set(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, true, 12, TimeUnit.HOURS);
+                redisUtil.set(RedisConstant.REDIS_CONN_PREFIX + token, userConnectionVO, 12, TimeUnit.HOURS);
                 return true;
             } else {
                 return false;
@@ -142,26 +165,21 @@ public class WaitingServiceImpl implements WaitingService {
     private UserConnectionVO unfreezeConnection(String token, CircuitBoardPO circuitBoard) {
         lockUtil.lock(token);
         try {
-            UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX) + token);
+            UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
             Object shadow = redisUtil.get(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token);
             if (Validator.isNotNull(shadow) && Validator.isNotNull(userConnectionVO) && userConnectionVO.getIsFrozen()) {
-                redisUtil.removeInZSet(queueName, token);
                 userConnectionVO.setIsFrozen(false);
                 userConnectionVO.setCbIp(circuitBoard.getIp());
                 userConnectionVO.setLongId(circuitBoard.getLongId());
                 userConnectionVO.setUpdateDate(TimeUtil.getNowTime());
-                redisUtil.multi();
                 redisUtil.set(RedisConstant.REDIS_CONN_PREFIX + token, userConnectionVO);
                 redisUtil.set(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, true, userConnectionVO.getLeftSecond(), TimeUnit.SECONDS);
-                redisUtil.expire(RedisConstant.REDIS_TTL_PREFIX + token, RedisConstant.REDIS_TTL_LIMIT, TimeUnit.SECONDS);
-                redisUtil.exec();
                 return userConnectionVO;
             } else {
                 return null;
             }
         } catch (Exception e) {
-            redisUtil.discard();
-            log.error(e.getMessage());
+            log.error(e.toString());
             return null;
         } finally {
             lockUtil.unlock(token);

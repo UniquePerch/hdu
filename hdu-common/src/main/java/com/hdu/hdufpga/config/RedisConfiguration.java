@@ -35,7 +35,7 @@ public class RedisConfiguration {
         redisTemplate.setHashKeySerializer(new GenericToStringSerializer<>(Object.class));
         redisTemplate.setHashValueSerializer(genericFastJsonRedisSerializer);
         // 设置支持事物
-        redisTemplate.setEnableTransactionSupport(true);
+        redisTemplate.setEnableTransactionSupport(false);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }

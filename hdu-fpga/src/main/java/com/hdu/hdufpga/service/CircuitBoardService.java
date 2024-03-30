@@ -8,4 +8,6 @@ public interface CircuitBoardService extends MPJBaseService<CircuitBoardPO> {
     CircuitBoardPO getAFreeCircuitBoard();
 
     String freeCircuitBoard(String longId);
+
+    Long getFreeCircuitBoardCount();
 }

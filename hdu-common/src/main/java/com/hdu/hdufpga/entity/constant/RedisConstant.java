@@ -9,6 +9,9 @@ public class RedisConstant {
     public final static String REDIS_CONN_SHADOW_PREFIX = "shadow:";
     public final static Integer REDIS_CONN_SHADOW_LIMIT = 30 * 60;
 
+    public final static String REDIS_SESSION_PREFIX = "session:";
+
+    public final static String REDIS_LOCK_PREFIX = "lock:";
     //板卡连接服务器的倒计时
     public final static String REDIS_BOARD_SERVER_PREFIX = "boardConnection:";
     public final static Integer REDIS_BOARD_SERVER_LIMIT = 2 * 60 + 30;

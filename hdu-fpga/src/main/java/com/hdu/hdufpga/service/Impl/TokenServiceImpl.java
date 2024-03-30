@@ -2,9 +2,13 @@ package com.hdu.hdufpga.service.Impl;
 
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.IdUtil;
-import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.entity.constant.RedisConstant;
+import com.hdu.hdufpga.entity.vo.UserConnectionVO;
 import com.hdu.hdufpga.entity.vo.UserVO;
+import com.hdu.hdufpga.exception.IdentifyException;
+import com.hdu.hdufpga.exception.NullTokenException;
+import com.hdu.hdufpga.exception.TokenExpiredException;
+import com.hdu.hdufpga.exception.UserQueueException;
 import com.hdu.hdufpga.service.TokenService;
 import com.hdu.hdufpga.service.WaitingService;
 import com.hdu.hdufpga.util.RedisUtil;
@@ -23,34 +27,34 @@ public class TokenServiceImpl implements TokenService {
     WaitingService waitingService;
 
     @Override
-    public Result generateToken(UserVO userVO) {
+    public String generateToken(UserVO userVO) throws IdentifyException {
         if (ParamUtil.CheckUserInfoLegal(userVO)) {
             String salt = IdUtil.simpleUUID();
             String token = ParamUtil.generateUserToken(userVO, salt);
             if (Validator.isNull(token)) {
-                return Result.error("身份信息有误");
+                throw new IdentifyException("身份信息有误");
             }
             redisUtil.set(RedisConstant.REDIS_TTL_PREFIX + token, true, RedisConstant.REDIS_TTL_LIMIT, TimeUnit.SECONDS);
-            return Result.ok(token);
+            return token;
         }
-        return Result.error("身份信息有误");
+        throw new IdentifyException("身份信息有误");
     }
 
     @Override
-    public Result reload(String token) {
-        //TODO:用户重连操作
-        return null;
+    public UserConnectionVO reload(String token) throws UserQueueException {
+        redisUtil.set(RedisConstant.REDIS_TTL_PREFIX + token, true, RedisConstant.REDIS_TTL_LIMIT, TimeUnit.SECONDS);
+        return waitingService.userInQueue(token);
     }
 
     @Override
-    public Result checkToken(String token) {
+    public Boolean checkToken(String token) throws NullTokenException, TokenExpiredException {
         if (Validator.isNull(token)) {
-            return Result.error("token为空");
+            throw new NullTokenException("token为空");
         }
         Boolean res = redisUtil.hasKey(RedisConstant.REDIS_TTL_PREFIX + token);
         if (res) {
-            return Result.ok("token有效");
+            return true;
         }
-        return Result.error("token无效");
+        throw new TokenExpiredException("token已过期");
     }
 }

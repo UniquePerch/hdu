@@ -69,11 +69,19 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
                 redisUtil.putHash(e.getLongId(), CBInfo);
                 e.setStatus(false);
                 baseMapper.updateById(e);
-                log.info("版卡{}已经释放!", e.getLongId());
             });
             return longId;
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Long getFreeCircuitBoardCount() {
+        LambdaQueryWrapper<CircuitBoardPO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(CircuitBoardPO::getStatus, false);
+        queryWrapper.eq(CircuitBoardPO::getIsReserved, false);
+        queryWrapper.eq(CircuitBoardPO::getIsRecorded, false);
+        return baseMapper.selectCount(queryWrapper);
     }
 }
