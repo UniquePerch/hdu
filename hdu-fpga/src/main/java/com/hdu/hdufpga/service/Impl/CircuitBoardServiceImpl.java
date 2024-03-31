@@ -3,6 +3,7 @@ package com.hdu.hdufpga.service.Impl;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.hdu.hdufpga.entity.po.CircuitBoardPO;
 import com.hdu.hdufpga.exception.CircuitBoardException;
@@ -84,5 +85,22 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
         queryWrapper.eq(CircuitBoardPO::getIsReserved, false);
         queryWrapper.eq(CircuitBoardPO::getIsRecorded, false);
         return baseMapper.selectCount(queryWrapper);
+    }
+
+    @Override
+    public CircuitBoardPO getByCBLongId(String longId) {
+        LambdaQueryWrapper<CircuitBoardPO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(CircuitBoardPO::getLongId, longId);
+        List<CircuitBoardPO> list = baseMapper.selectList(wrapper);
+        if (!list.isEmpty()) return list.get(0);
+        else return null;
+    }
+
+    @Override
+    public Integer updateByLongId(CircuitBoardPO circuitBoardPO) {
+        LambdaUpdateWrapper<CircuitBoardPO> wrapper = new LambdaUpdateWrapper<>();
+        wrapper
+                .eq(CircuitBoardPO::getLongId, circuitBoardPO.getLongId());
+        return baseMapper.update(circuitBoardPO, wrapper);
     }
 }

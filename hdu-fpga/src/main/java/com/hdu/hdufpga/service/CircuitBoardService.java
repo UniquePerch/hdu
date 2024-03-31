@@ -11,4 +11,8 @@ public interface CircuitBoardService extends MPJBaseService<CircuitBoardPO> {
     String freeCircuitBoard(String longId);
 
     Long getFreeCircuitBoardCount();
+
+    CircuitBoardPO getByCBLongId(String longId);
+
+    Integer updateByLongId(CircuitBoardPO circuitBoardPO);
 }
