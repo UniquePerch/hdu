@@ -16,4 +16,10 @@ public class CircuitBoardConstant {
     public static final String NIXIE_TUBE_STATUS = "nixieTubeStatus";
 
     public static final String LONG_ID = "longId";
+
+    public static final String COUNT = "count";
+
+    public static final String FILE_PATH = "filePath";
+
+    public static final Integer SLICE_SIZE = 12800;
 }

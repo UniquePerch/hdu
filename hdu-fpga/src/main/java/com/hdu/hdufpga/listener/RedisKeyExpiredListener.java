@@ -43,6 +43,10 @@ public class RedisKeyExpiredListener extends KeyExpirationEventMessageListener {
             String token = split[1];
             if (RedisConstant.REDIS_TTL_PREFIX.contains(split[0])) {
                 freeBoardAndFreezeConnection(token);
+            } else if (RedisConstant.REDIS_BOARD_SERVER_PREFIX.contains(split[0])) {
+                redisUtil.removeHash(RedisConstant.REDIS_HOLDER + token);
+                circuitBoardService.deleteByLongId(token);
+                log.error("板卡:{}，失去连接，已经从缓存与数据库中移除", token);
             }
         } catch (Exception e) {
             log.error(e.toString());
@@ -50,13 +54,13 @@ public class RedisKeyExpiredListener extends KeyExpirationEventMessageListener {
         }
     }
 
-    void freeBoardAndFreezeConnection(String token) {
+    private void freeBoardAndFreezeConnection(String token) {
         if (Validator.isNotNull(redisUtil.getZSetRank(queueName, token))) {
             // 如果用户还在队伍中
             redisUtil.removeInZSet(queueName, token);
         }
         UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
-        String freeRes = circuitBoardService.freeCircuitBoard(userConnectionVO.getLongId());
+        String freeRes = circuitBoardService.freeCircuitBoard(userConnectionVO.getCbIp());
         if (Validator.isNull(freeRes)) {
             log.error("板卡资源:{} 释放失败", userConnectionVO.getLongId());
         } else {

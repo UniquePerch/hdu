@@ -107,6 +107,10 @@ public class RedisUtil {
         redisTemplate.opsForHash().putAll(k1, info);
     }
 
+    public void putHashValue(String k1, String k2, Object v1) {
+        redisTemplate.opsForHash().put(k1, k2, v1);
+    }
+
     public void removeHash(String k1) {
         redisTemplate.delete(k1);
     }

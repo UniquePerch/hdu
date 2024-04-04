@@ -14,5 +14,6 @@ public class SysFilePO extends BaseEntity {
     private String type;
     private String info;
     private String absolutePath;
+    private String createUser;
     private String resourcePath;
 }
