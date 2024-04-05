@@ -89,7 +89,7 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
             List<CircuitBoardPO> circuitBoardPOList = baseMapper.selectList(wrapper);
             if (!circuitBoardPOList.isEmpty()) {
                 circuitBoardPOList.forEach(e -> {
-                    ChannelHandlerContext ctx = redisUtil.getCtx(RedisConstant.REDIS_HOLDER + e.getLongId());
+                    ChannelHandlerContext ctx = redisUtil.getCtx(e.getLongId());
                     CircuitBoardUtil.sendEndToCB(ctx);
                     HashMap<String, Object> CBInfo = redisUtil.getHash(RedisConstant.REDIS_HOLDER + e.getLongId());
                     if (Validator.isNull(CBInfo)) CBInfo = new HashMap<>();
@@ -148,7 +148,7 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
         UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
         String longId = userConnectionVO.getLongId();
         if (Validator.isNotNull(longId) && !longId.isEmpty()) {
-            ChannelHandlerContext ctx = redisUtil.getCtx(RedisConstant.REDIS_HOLDER + longId);
+            ChannelHandlerContext ctx = redisUtil.getCtx(longId);
             HashMap<String, Object> info = redisUtil.getHash(RedisConstant.REDIS_HOLDER + longId);
             info.put(CircuitBoardConstant.IS_RECORDED, false);
             info.put(CircuitBoardConstant.COUNT, 0);
