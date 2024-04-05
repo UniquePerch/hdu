@@ -23,6 +23,12 @@ spring:
             - Path=/record/**
           filters:
             - StripPrefix=1
+        - id: hdu-fpga
+          uri: lb://hdu-record
+          predicates:
+            - Path=/fpga/**
+          filters:
+            - StripPrefix=1
       globalcors: #跨域配置
         cors-configurations:
           '[/**]':
@@ -30,6 +36,7 @@ spring:
               - "http://127.0.0.1:8080" #允许跨域
               - "http://127.0.0.1:8081"
               - "http://127.0.0.1:8082"
+              - "http://127.0.0.1:8083"
             allow-credentials: true
             allowed-headers: "*"
             allowedMethods: #请求方式
