@@ -1,6 +1,5 @@
 package com.hdu.hdufpga;
 
-import com.hdu.hdufpga.entity.constant.RedisConstant;
 import com.hdu.hdufpga.util.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RLock;
@@ -48,10 +47,12 @@ public class TestZset {
         redisTemplate.exec();
     }
 
+    @Value("${wait-queue.name}")
+    String getQueueName;
+
     @Test
     void testGet() {
-        System.out.println(redisUtil.get(RedisConstant.REDIS_CONN_SHADOW_PREFIX + "yangyang_hdu_f909f14b35aa4a74bdd5eecfd5cc2612"));
-        System.out.println(redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + "yangyang_hdu_f909f14b35aa4a74bdd5eecfd5cc2612"));
+        redisUtil.putHashValue("1", "1", "1");
     }
 
 }

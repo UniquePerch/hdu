@@ -1,6 +1,8 @@
 package com.hdu.hdufpga.util;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.hdu.hdufpga.entity.constant.CircuitBoardConstant;
+import com.hdu.hdufpga.entity.constant.RedisConstant;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -67,18 +69,6 @@ public class RedisUtil {
         }
     }
 
-    public void multi() {
-        redisTemplate.multi();
-    }
-
-    public void exec() {
-        redisTemplate.exec();
-    }
-
-    public void discard() {
-        redisTemplate.discard();
-    }
-
     public Boolean hasKey(String key) {
         return redisTemplate.hasKey(key);
     }
@@ -129,7 +119,7 @@ public class RedisUtil {
     }
 
     public ChannelHandlerContext getCtx(String longId) {
-        Object o = redisTemplate.opsForHash().get(longId, "ctx");
+        Object o = redisTemplate.opsForHash().get(RedisConstant.REDIS_HOLDER + longId, CircuitBoardConstant.CTX);
         if (o instanceof ChannelHandlerContext) {
             return (ChannelHandlerContext) o;
         } else {

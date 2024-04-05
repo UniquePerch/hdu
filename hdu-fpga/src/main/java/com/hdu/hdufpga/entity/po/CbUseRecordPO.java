@@ -17,21 +17,11 @@ public class CbUseRecordPO extends BaseEntity {
 
     private String cbIp;
 
-    private Integer userId;
-
     private String userName;
 
     private String userIp;
 
-    private Integer classId;
-
-    @TableField(exist = false)
-    private String className;
-
-    @TableField("school_id")
-    private Integer departmentId;
-
-    @TableField(exist = false)
+    @TableField("school_name")
     private String departmentName;
 
     private Integer duration;

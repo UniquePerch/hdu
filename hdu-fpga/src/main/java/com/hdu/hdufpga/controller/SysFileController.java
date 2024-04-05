@@ -1,6 +1,6 @@
 package com.hdu.hdufpga.controller;
 
-import com.hdu.hdufpga.annotation.CheckToken;
+import com.hdu.hdufpga.annotation.CheckAndRefreshToken;
 import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.service.SysFileService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public class SysFileController {
     SysFileService sysFileService;
 
     @PostMapping(value = "/uploadBit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @CheckToken
+    @CheckAndRefreshToken
     public Result uploadBit(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
         try {
             return Result.ok(sysFileService.uploadBit(request, file));
@@ -33,7 +33,7 @@ public class SysFileController {
     }
 
     @PostMapping("/reloadBitFile")
-    @CheckToken
+    @CheckAndRefreshToken
     public Result reloadBitFile(HttpServletRequest request) {
         String token = request.getHeader("token");
         try {

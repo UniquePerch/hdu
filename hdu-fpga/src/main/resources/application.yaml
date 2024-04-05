@@ -38,4 +38,4 @@ netty:
   keepalive : false
   backlog: 100
 wait-queue:
-  name: fpgaWaitLine
+  name: "queue:fpgaWaitLine"

@@ -43,10 +43,14 @@ public class RedisKeyExpiredListener extends KeyExpirationEventMessageListener {
             String token = split[1];
             if (RedisConstant.REDIS_TTL_PREFIX.contains(split[0])) {
                 freeBoardAndFreezeConnection(token);
-            } else if (RedisConstant.REDIS_BOARD_SERVER_PREFIX.contains(split[0])) {
+            }
+            if (RedisConstant.REDIS_BOARD_SERVER_PREFIX.contains(split[0])) {
                 redisUtil.removeHash(RedisConstant.REDIS_HOLDER + token);
                 circuitBoardService.deleteByLongId(token);
                 log.error("板卡:{}，失去连接，已经从缓存与数据库中移除", token);
+            }
+            if (RedisConstant.REDIS_CONN_SHADOW_PREFIX.contains(split[0])) {
+                circuitBoardService.clearUserRedisAndFreeCB(token);
             }
         } catch (Exception e) {
             log.error(e.toString());
