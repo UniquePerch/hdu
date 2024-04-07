@@ -8,8 +8,9 @@ import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.util.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 public abstract class BaseController<S extends MPJBaseService<T>, T extends BaseEntity> {
@@ -17,7 +18,7 @@ public abstract class BaseController<S extends MPJBaseService<T>, T extends Base
     @Autowired
     protected S service;
 
-    @RequestMapping("/create")
+    @PostMapping("/create")
     public Result create(@RequestBody T t) {
         try {
             t.setCreateTime(TimeUtil.getNowTime());
@@ -33,10 +34,10 @@ public abstract class BaseController<S extends MPJBaseService<T>, T extends Base
         }
     }
 
-    @RequestMapping("/delete")
-    public Result delete(Integer id) {
+    @PostMapping("/delete")
+    public Result delete(@RequestBody T t) {
         try {
-            if (service.removeById(id)) {
+            if (service.removeById(t.getId())) {
                 return Result.ok();
             } else {
                 return Result.error();
@@ -47,8 +48,8 @@ public abstract class BaseController<S extends MPJBaseService<T>, T extends Base
         }
     }
 
-    @RequestMapping("/update")
-    public Result update(T t) {
+    @PostMapping("/update")
+    public Result update(@RequestBody T t) {
         try {
             t.setUpdateTime(TimeUtil.getNowTime());
             if (service.updateById(t)) {
@@ -62,7 +63,7 @@ public abstract class BaseController<S extends MPJBaseService<T>, T extends Base
         }
     }
 
-    @RequestMapping("/get")
+    @GetMapping("/get")
     public Result get(Integer id) {
         try {
             T t = service.getById(id);
@@ -77,7 +78,7 @@ public abstract class BaseController<S extends MPJBaseService<T>, T extends Base
         }
     }
 
-    @RequestMapping("/listPage")
+    @GetMapping("/listPage")
     public Result listPage(Integer current, Integer size) {
         try {
             Page<T> page = service.page(new Page<>(current, size));

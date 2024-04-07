@@ -63,7 +63,8 @@ public class AuthService {
             return null;
         }
         // 查询用户信息
-        UserPO userPO = userService.getUserByUserName(username);
+        //todo:根据用户学校进行鉴权
+        UserPO userPO = userService.getUserByUserName(username, 1);
         if (Objects.isNull(userPO)) {
             return null;
         }

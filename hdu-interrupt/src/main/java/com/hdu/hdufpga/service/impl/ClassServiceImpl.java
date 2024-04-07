@@ -60,7 +60,7 @@ public class ClassServiceImpl extends MPJBaseServiceImpl<ClassMapper, ClassPO> i
         });
         List<String> userNameList = new ArrayList<>();
         poList.forEach(e -> userNameList.add(e.getUsername()));
-        List<Integer> idList = userService.getIdByUserName(userNameList);
+        List<Integer> idList = userService.getIdByUserName(userNameList, departmentId);
         idList.forEach(e -> classMapper.insertStudentClassRelation(e, classId));
         return voList;
     }

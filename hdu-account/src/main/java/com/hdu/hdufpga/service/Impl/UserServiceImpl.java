@@ -1,5 +1,6 @@
 package com.hdu.hdufpga.service.Impl;
 
+import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
@@ -24,11 +25,12 @@ public class UserServiceImpl extends MPJBaseServiceImpl<UserMapper, UserPO> impl
     UserMapper userMapper;
 
     @Override
-    public List<Integer> getIdByUserName(List<String> userNameList) {
+    public List<Integer> getIdByUserName(List<String> userNameList, Integer departmentId) {
         LambdaQueryWrapper<UserPO> wrapper = new LambdaQueryWrapper<>();
         wrapper
                 .select(UserPO::getId)
-                .in(UserPO::getUsername, userNameList);
+                .in(UserPO::getUsername, userNameList)
+                .eq(UserPO::getUserDepartmentId, departmentId);
         List<UserPO> poList = userMapper.selectList(wrapper);
         List<Integer> idList = new ArrayList<>();
         poList.forEach(e -> idList.add(e.getId()));
@@ -46,11 +48,20 @@ public class UserServiceImpl extends MPJBaseServiceImpl<UserMapper, UserPO> impl
     public boolean save(UserPO entity) {
         entity.setCreateTime(TimeUtil.getNowTime());
         entity.setUpdateTime(TimeUtil.getNowTime());
+        entity.setPassword(SecureUtil.md5(entity.getPassword()));
         return super.save(entity);
     }
 
     @Override
-    public UserPO getUserByUserName(String userName) {
+    public boolean updateById(UserPO entity) {
+        if (entity.getPassword() != null) {
+            entity.setPassword(SecureUtil.md5(entity.getPassword()));
+        }
+        return super.updateById(entity);
+    }
+
+    @Override
+    public UserPO getUserByUserName(String userName, Integer departmentId) {
         MPJLambdaWrapper<UserPO> wrapper = new MPJLambdaWrapper<>();
         wrapper
                 .selectAll(UserPO.class)
@@ -60,6 +71,7 @@ public class UserServiceImpl extends MPJBaseServiceImpl<UserMapper, UserPO> impl
                 .leftJoin(RolePO.class, RolePO::getId, UserPO::getUserRoleId)
                 .leftJoin(DepartmentPO.class, DepartmentPO::getId, UserPO::getUserDepartmentId)
                 .eq(UserPO::getUsername, userName)
+                .eq(UserPO::getUserDepartmentId, departmentId)
         ;
         return userMapper.selectJoinOne(UserPO.class, wrapper);
     }
