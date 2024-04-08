@@ -28,7 +28,7 @@ import java.util.List;
 @Service
 @DubboService
 public class ClassServiceImpl extends MPJBaseServiceImpl<ClassMapper, ClassPO> implements ClassService {
-    @DubboReference
+    @DubboReference(check = false)
     UserService userService;
 
     @Resource

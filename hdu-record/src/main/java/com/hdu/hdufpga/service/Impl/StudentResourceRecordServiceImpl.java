@@ -36,10 +36,10 @@ public class StudentResourceRecordServiceImpl extends MPJBaseServiceImpl<Student
     @Resource
     private RocketMQTemplate rocketMQTemplate;
 
-    @DubboReference
+    @DubboReference(check = false)
     private ClassService classService;
 
-    @DubboReference
+    @DubboReference(check = false)
     private TestRecordService testRecordService;
 
     @Override

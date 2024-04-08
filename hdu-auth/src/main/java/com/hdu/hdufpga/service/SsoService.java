@@ -17,7 +17,7 @@ public class SsoService {
 
     private final Set<AbstractSsoService> ssoServices = new HashSet<>();
 
-    @DubboReference(group = "account")
+    @DubboReference(group = "account", check = false)
     private AbstractSsoService accountSsoService;
 
     private void init() {

@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/co/class")
+@RequestMapping("/class")
 @Slf4j
 public class ClassController extends BaseController<ClassService, ClassPO> {
     @RequestMapping(value = "/importStudentFromExcel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

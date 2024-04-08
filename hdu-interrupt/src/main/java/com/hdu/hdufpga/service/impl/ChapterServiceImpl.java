@@ -1,7 +1,9 @@
 package com.hdu.hdufpga.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
+import com.hdu.hdufpga.entity.PageRecord;
 import com.hdu.hdufpga.entity.po.ChapterPO;
 import com.hdu.hdufpga.entity.po.UserChapterRecordPO;
 import com.hdu.hdufpga.entity.po.UserPO;
@@ -32,7 +34,7 @@ public class ChapterServiceImpl extends MPJBaseServiceImpl<ChapterMapper, Chapte
     }
 
     @Override
-    public List<UserChapterRecordVO> getAllChapterRecord() {
+    public PageRecord<UserChapterRecordVO> getAllChapterRecord(Integer current, Integer size) {
         MPJLambdaWrapper<UserChapterRecordPO> wrapper = new MPJLambdaWrapper<>();
         wrapper
                 .select(UserChapterRecordPO::getId)
@@ -41,12 +43,17 @@ public class ChapterServiceImpl extends MPJBaseServiceImpl<ChapterMapper, Chapte
                 .selectAs(UserPO::getRealName, UserChapterRecordPO::getRealName)
                 .selectAs(ChapterPO::getId, UserChapterRecordPO::getChapterId)
                 .selectAs(ChapterPO::getTitle, UserChapterRecordPO::getChapterTitle)
-                .selectAs(UserChapterRecordPO::getMark, UserChapterRecordPO::getMark)
                 .select(UserChapterRecordPO::getFinishTime)
                 .leftJoin(UserPO.class, UserPO::getId, UserChapterRecordPO::getUserId)
                 .leftJoin(ChapterPO.class, ChapterPO::getId, UserChapterRecordPO::getChapterId)
         ;
-        return ConvertUtil.copyList(userChapterMapper.selectJoinList(UserChapterRecordPO.class, wrapper), UserChapterRecordVO.class);
+        Page<UserChapterRecordPO> poPage = userChapterMapper.selectJoinPage(new Page<>(current, size), UserChapterRecordPO.class, wrapper);
+        PageRecord<UserChapterRecordVO> voPage = new PageRecord<>();
+        voPage.setTotal(poPage.getTotal());
+        voPage.setCurrent(poPage.getCurrent());
+        voPage.setSize(poPage.getSize());
+        voPage.setObject(ConvertUtil.copyList(poPage.getRecords(), UserChapterRecordVO.class));
+        return voPage;
     }
 
     @Override
@@ -56,6 +63,7 @@ public class ChapterServiceImpl extends MPJBaseServiceImpl<ChapterMapper, Chapte
                 .selectAs(UserPO::getId, UserChapterRecordPO::getUserId)
                 .selectAs(UserPO::getUsername, UserChapterRecordPO::getUserName)
                 .selectAs(ChapterPO::getId, UserChapterRecordPO::getChapterId)
+                .selectAs(UserPO::getRealName, UserChapterRecordPO::getRealName)
                 .selectAs(ChapterPO::getTitle, UserChapterRecordPO::getChapterTitle)
                 .leftJoin(UserPO.class, UserPO::getId, UserChapterRecordPO::getUserId)
                 .leftJoin(ChapterPO.class, ChapterPO::getId, UserChapterRecordPO::getChapterId)

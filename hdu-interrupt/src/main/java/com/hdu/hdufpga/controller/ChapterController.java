@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/co/capter")
+@RequestMapping("/chapter")
 @Slf4j
 public class ChapterController extends BaseController<ChapterService, ChapterPO> {
     @RequestMapping("/recordFinish")
@@ -26,14 +26,11 @@ public class ChapterController extends BaseController<ChapterService, ChapterPO>
     }
 
     @RequestMapping("/getAllChapterRecord")
-    public Result getAllChapterRecord() {
+    public Result getAllChapterRecord(Integer current, Integer size) {
         try {
-            return Result.ok(service.getAllChapterRecord());
+            return Result.ok(service.getAllChapterRecord(current, size));
         } catch (Exception e) {
             log.error(e.getMessage());
-            if (e.getMessage().toLowerCase().contains("unique")) {
-                return Result.ok("已经学习过该知识点");
-            }
             return Result.error("数据库原因，获取学习记录失败");
         }
     }

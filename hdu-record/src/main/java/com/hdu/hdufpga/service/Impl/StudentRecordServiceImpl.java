@@ -23,7 +23,7 @@ public class StudentRecordServiceImpl implements UserRecordService {
     @Resource
     StudentResourceRecordMapper studentResourceRecordMapper;
 
-    @DubboReference
+    @DubboReference(check = false)
     UserService userService;
 
     @Override

@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class AuthService {
 
-    @DubboReference
+    @DubboReference(check = false)
     private UserService userService;
 
     @Resource

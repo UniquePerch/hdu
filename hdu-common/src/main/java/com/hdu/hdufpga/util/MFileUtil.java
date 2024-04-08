@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.text.UnicodeUtil;
 import com.hdu.hdufpga.entity.constant.FileConstant;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
@@ -46,11 +47,16 @@ public class MFileUtil {
             log.error("文件名过长");
             throw new IllegalArgumentException("文件名过长");
         }
+        if (file.getSize() > FileConstant.DEFAULT_MAX_SIZE) {
+            log.error("文件过大");
+            throw new FileSizeLimitExceededException("文件大小超过50M", file.getSize() / 1024 / 1024, FileConstant.DEFAULT_MAX_SIZE / 1024 / 1024);
+        }
         File dest = new File(absoluteFilePath);
         if (FileUtil.exist(dest)) {
             log.info("文件{}已存在，正在删除文件", dest.getAbsoluteFile());
             FileUtil.del(dest);
         }
+        System.out.println(dest.getAbsolutePath());
         dest = FileUtil.touch(dest);
         FileUtil.writeFromStream(file.getInputStream(), dest);
         return FileUtil.getAbsolutePath(dest);

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -18,5 +19,6 @@ public class PaperVO {
     Integer classId;
     Integer createByUserId;
     MultipartFile file;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     Date deadline;
 }
