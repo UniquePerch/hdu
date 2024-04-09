@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/co/problem")
+@RequestMapping("/problem")
 @Slf4j
 public class ProblemController extends BaseController<ProblemService, Problem1PO> {
     @RequestMapping("/getProblems")

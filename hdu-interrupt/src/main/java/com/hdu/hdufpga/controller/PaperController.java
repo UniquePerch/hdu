@@ -1,25 +1,36 @@
 package com.hdu.hdufpga.controller;
 
 import com.hdu.hdufpga.entity.Result;
-import com.hdu.hdufpga.entity.po.PaperPO;
 import com.hdu.hdufpga.entity.vo.HandInInfoVO;
 import com.hdu.hdufpga.entity.vo.PaperVO;
 import com.hdu.hdufpga.service.PaperService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/paper")
 @Slf4j
-public class PaperController extends BaseController<PaperService, PaperPO> {
+public class PaperController {
+    @Resource
+    private PaperService paperService;
+
     @PostMapping(value = "/uploadPaper", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result uploadPaper(PaperVO paperVO) {
+    public Result uploadPaper(@RequestBody PaperVO paperVO) {
         try {
-            return Result.ok(service.uploadPaper(paperVO));
+            return Result.ok(paperService.uploadPaper(paperVO));
+        } catch (Exception e) {
+            log.error(e.toString());
+            return Result.error();
+        }
+    }
+
+    @PostMapping(value = "/deletePaper")
+    public Result deletePaper(@RequestBody PaperVO paperVO) {
+        try {
+            return Result.ok(paperService.deletePaper(paperVO));
         } catch (Exception e) {
             log.error(e.toString());
             return Result.error();
@@ -29,7 +40,7 @@ public class PaperController extends BaseController<PaperService, PaperPO> {
     @GetMapping("/getAllPaperByClassId")
     public Result getPapersByClassId(Integer classId) {
         try {
-            return Result.ok(service.getPapersByClassId(classId));
+            return Result.ok(paperService.getPapersByClassId(classId));
         } catch (Exception e) {
             log.error(e.toString());
             return Result.error();
@@ -39,7 +50,7 @@ public class PaperController extends BaseController<PaperService, PaperPO> {
     @PostMapping(value = "/handInPaper", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result handInPaper(HandInInfoVO handInInfoVO) {
         try {
-            return Result.ok(service.handInPaper(handInInfoVO));
+            return Result.ok(paperService.handInPaper(handInInfoVO));
         } catch (Exception e) {
             log.error(e.toString());
             return Result.error(e.getMessage());
@@ -49,27 +60,37 @@ public class PaperController extends BaseController<PaperService, PaperPO> {
     @GetMapping("/getHandInInfoByClassId")
     public Result getHandInInfoByClassId(Integer classId) {
         try {
-            return Result.ok(service.getHandInInfoByClassId(classId));
+            return Result.ok(paperService.getHandInInfoByClassId(classId));
         } catch (Exception e) {
             log.error(e.toString());
             return Result.error();
         }
     }
 
-    @PostMapping(value = "/updateHandInInfo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result updateHandInInfo(HandInInfoVO handInInfoVO) {
+    @GetMapping("/getHandInInfoByUserId")
+    public Result getHandInInfoByUserId(Integer userId) {
         try {
-            return Result.ok(service.updateHandInInfo(handInInfoVO));
+            return Result.ok(paperService.getHandInInfoByUserId(userId));
         } catch (Exception e) {
             log.error(e.toString());
             return Result.error(e.getMessage());
         }
     }
 
-    @RequestMapping("/correctingPaper")
-    public Result correctingPaper(HandInInfoVO handInInfoVO) {
+    @PostMapping(value = "/updateHandInInfo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result updateHandInInfo(HandInInfoVO handInInfoVO) {
         try {
-            return Result.ok(service.correctingPaper(handInInfoVO));
+            return Result.ok(paperService.updateHandInInfo(handInInfoVO));
+        } catch (Exception e) {
+            log.error(e.toString());
+            return Result.error(e.getMessage());
+        }
+    }
+
+    @PostMapping("/correctingPaper")
+    public Result correctingPaper(@RequestBody HandInInfoVO handInInfoVO) {
+        try {
+            return Result.ok(paperService.correctingPaper(handInInfoVO));
         } catch (Exception e) {
             log.error(e.toString());
             return Result.error();
@@ -77,10 +98,10 @@ public class PaperController extends BaseController<PaperService, PaperPO> {
     }
 
     //打回报告
-    @RequestMapping("/returnPaper")
-    public Result returnPaper(HandInInfoVO handInInfoVO) {
+    @PostMapping("/returnPaper")
+    public Result returnPaper(@RequestBody HandInInfoVO handInInfoVO) {
         try {
-            return Result.ok(service.returnPaper(handInInfoVO.getId()));
+            return Result.ok(paperService.returnPaper(handInInfoVO.getId()));
         } catch (Exception e) {
             log.error(e.toString());
             return Result.error();

@@ -19,6 +19,7 @@
         <module>hdu-gateway</module>
         <module>hdu-fpga</module>
         <module>hdu-auth</module>
+        <module>hdu-data-transform</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

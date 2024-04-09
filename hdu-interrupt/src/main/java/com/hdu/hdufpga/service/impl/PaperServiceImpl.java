@@ -1,5 +1,6 @@
 package com.hdu.hdufpga.service.impl;
 
+import cn.hutool.core.io.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.github.yulichang.base.MPJBaseServiceImpl;
@@ -10,6 +11,7 @@ import com.hdu.hdufpga.entity.po.PaperPO;
 import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.entity.vo.HandInInfoVO;
 import com.hdu.hdufpga.entity.vo.PaperVO;
+import com.hdu.hdufpga.exception.FileDeleteException;
 import com.hdu.hdufpga.exception.HomeworkException;
 import com.hdu.hdufpga.mapper.HandInInfoMapper;
 import com.hdu.hdufpga.mapper.PaperMapper;
@@ -59,6 +61,7 @@ public class PaperServiceImpl extends MPJBaseServiceImpl<PaperMapper, PaperPO> i
         }
         handInInfoVO.setFilePath(MFileUtil.uploadFile(handInInfoVO.getFile(), FileConstant.STUDENT_PAPER_UPLOAD_PATH));
         handInInfoVO.setClassId(paperPO.getClassId());
+        handInInfoVO.setState(false);
         HandInInfoPO handInInfoPO = ConvertUtil.copy(handInInfoVO, HandInInfoPO.class);
         return handInInfoMapper.insert(handInInfoPO) > 0;
     }
@@ -105,5 +108,26 @@ public class PaperServiceImpl extends MPJBaseServiceImpl<PaperMapper, PaperPO> i
         }
         HandInInfoPO handInInfoPONew = ConvertUtil.copy(handInInfoVO, HandInInfoPO.class);
         return handInInfoMapper.updateById(handInInfoPONew) > 0;
+    }
+
+    @Override
+    public List<HandInInfoVO> getHandInInfoByUserId(Integer userId) {
+        LambdaQueryWrapper<HandInInfoPO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(HandInInfoPO::getUserId, userId);
+        List<HandInInfoPO> poList = handInInfoMapper.selectList(wrapper);
+        return ConvertUtil.copyList(poList, HandInInfoVO.class);
+    }
+
+    @Override
+    public Boolean deletePaper(PaperVO paperVO) throws Exception {
+        PaperPO paperPO = paperMapper.selectById(paperVO.getId());
+        if (paperPO == null) {
+            throw new Exception("找不到对应的报告");
+        }
+        if (FileUtil.del(paperPO.getLink())) {
+            return paperMapper.deleteById(paperVO.getId()) > 0;
+        } else {
+            throw new FileDeleteException(paperPO.getLink(), "", "文件删除失败");
+        }
     }
 }

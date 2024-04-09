@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: hud-data-transform
+  datasource:
+    dynamic:
+      datasource:
+        new:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          username: lyh
+          password: Lyh701721...
+          url: jdbc:mysql://124.221.61.179:13306/hdu-interrupt?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+        old:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          username: root
+          password: lyh701721
+          url: jdbc:mysql://localhost:3306/ry?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8

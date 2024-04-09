@@ -12,6 +12,7 @@ import com.hdu.hdufpga.mapper.ProblemMapper;
 import com.hdu.hdufpga.mapper.TestRecordMapper;
 import com.hdu.hdufpga.service.ProblemService;
 import com.hdu.hdufpga.util.ConvertUtil;
+import com.hdu.hdufpga.util.TimeUtil;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +71,8 @@ public class ProblemServiceImpl extends MPJBaseServiceImpl<ProblemMapper, Proble
             if (choice.equals(answer)) score += 100.0 / voList.size();
         }
         testRecordPO.setScore(score);
+        testRecordPO.setCreateTime(TimeUtil.getNowTime());
+        testRecordPO.setUpdateTime(TimeUtil.getNowTime());
         testRecordMapper.insert(testRecordPO);
         Double maxScore = testRecordMapper.getMaxScore(userId, classId);
         Map<String, Double> res = new HashMap<>();

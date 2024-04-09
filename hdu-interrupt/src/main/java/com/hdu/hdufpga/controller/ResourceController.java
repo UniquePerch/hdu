@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/co/resource")
+@RequestMapping("/resource")
 @Slf4j
 public class ResourceController extends BaseController<ResourceService, ResourcePO> {
 }

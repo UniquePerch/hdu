@@ -23,4 +23,8 @@ public interface PaperService extends MPJBaseService<PaperPO> {
     Boolean returnPaper(Integer id);
 
     Boolean updateHandInInfo(HandInInfoVO handInInfoVO) throws HomeworkException;
+
+    List<HandInInfoVO> getHandInInfoByUserId(Integer userId);
+
+    Boolean deletePaper(PaperVO paperVO) throws Exception;
 }
