@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/co/userVisitRecord")
+@RequestMapping("/userVisitRecord")
 @Slf4j
 public class UserVisitRecordController {
     @Resource

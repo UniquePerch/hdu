@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class StudentStudyRecord {
+    String username;
 
     String userRealName;
 
@@ -15,5 +16,5 @@ public class StudentStudyRecord {
 
     Long testCount;
 
-    List<UserResourceRecordVO> userResourceRecordVOList;
+    List<UserResourceRecordVO> userResourceRecord;
 }

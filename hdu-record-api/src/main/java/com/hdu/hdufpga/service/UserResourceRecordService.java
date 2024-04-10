@@ -10,7 +10,5 @@ import java.util.List;
 public interface UserResourceRecordService extends MPJBaseService<UserResourceRecordPO> {
     Boolean updateResourceRecord(UserResourceRecordVO userResourceRecordVO);
 
-    List<UserResourceRecordPO> getRecordByUserId(Integer userId);
-
     List<StudentStudyRecord> getRecordByClass(Integer classId);
 }

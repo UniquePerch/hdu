@@ -58,8 +58,7 @@ public class StudentResourceRecordServiceImpl extends MPJBaseServiceImpl<Student
         return true;
     }
 
-    @Override
-    public List<UserResourceRecordPO> getRecordByUserId(Integer userId) {
+    private List<UserResourceRecordPO> getRecordByUserId(Integer userId) {
         MPJLambdaWrapper<UserResourceRecordPO> wrapper = new MPJLambdaWrapper<>();
         wrapper
                 .selectAs(UserPO::getId, UserResourceRecordPO::getUserId)
@@ -86,10 +85,11 @@ public class StudentResourceRecordServiceImpl extends MPJBaseServiceImpl<Student
         for (UserVO userVO : userList) {
             StudentStudyRecord userRecord = new StudentStudyRecord();
             userRecord.setClassName(className);
+            userRecord.setUsername(userVO.getUsername());
             userRecord.setUserRealName(userVO.getRealName());
             userRecord.setTestCount(testRecordService.getTestCount(userVO.getId(), classId));
             userRecord.setMaxTestScore(testRecordService.getMaxScore(userVO.getId(), classId));
-            userRecord.setUserResourceRecordVOList(ConvertUtil.copyList(getRecordByUserId(userVO.getId()), UserResourceRecordVO.class));
+            userRecord.setUserResourceRecord(ConvertUtil.copyList(getRecordByUserId(userVO.getId()), UserResourceRecordVO.class));
             userRecordList.add(userRecord);
         }
         return userRecordList;
