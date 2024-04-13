@@ -10,7 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.entity.ro.LoginRO;
 import com.hdu.hdufpga.entity.ro.VerificationCodeRO;
-import com.hdu.hdufpga.util.LocalCache;
+import com.hdu.hdufpga.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class AuthService {
     private UserService userService;
 
     @Resource
-    private LocalCache<String, Object> localCache;
+    private RedisUtil redisUtil;
 
     @Resource
     private SsoService ssoService;
@@ -58,13 +58,13 @@ public class AuthService {
         if (StrUtil.isBlank(verificationCodeKey) || StrUtil.isBlank(verificationCodeValue)) {
             return null;
         }
-        Integer code = (Integer) localCache.get(verificationCodeKey, true);
+        Integer code = (Integer) redisUtil.get(verificationCodeKey);
+        redisUtil.removeHash(verificationCodeKey);
         if (!StrUtil.equals(String.valueOf(code), verificationCodeValue)) {
             return null;
         }
         // 查询用户信息
-        //todo:根据用户学校进行鉴权
-        UserPO userPO = userService.getUserByUserName(username, 1);
+        UserPO userPO = userService.getUserByUserName(username, loginRO.getDepartmentId());
         if (Objects.isNull(userPO)) {
             return null;
         }
@@ -137,7 +137,7 @@ public class AuthService {
         String code = shearCaptcha.getCode();
         Integer result = (int) Calculator.conversion(code);
         // 存放到缓存中
-        localCache.put(uuid, result, 1, TimeUnit.MINUTES);
+        redisUtil.set(uuid, result, 1, TimeUnit.MINUTES);
         // 渲染到前端
         ServletOutputStream out = response.getOutputStream();
         shearCaptcha.write(out);
