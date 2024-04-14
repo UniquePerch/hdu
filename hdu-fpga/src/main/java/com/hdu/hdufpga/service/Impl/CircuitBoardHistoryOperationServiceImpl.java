@@ -6,6 +6,7 @@ import cn.hutool.core.lang.Validator;
 import com.hdu.hdufpga.entity.constant.RedisConstant;
 import com.hdu.hdufpga.entity.vo.UserConnectionVO;
 import com.hdu.hdufpga.exception.EmptyHistoryStepsException;
+import com.hdu.hdufpga.netty.NettySocketHolder;
 import com.hdu.hdufpga.service.CircuitBoardHistoryOperationService;
 import com.hdu.hdufpga.util.RedisUtil;
 import com.hdu.hdufpga.utils.CircuitBoardUtil;
@@ -36,7 +37,7 @@ public class CircuitBoardHistoryOperationServiceImpl implements CircuitBoardHist
     public Boolean loadOperationHistory(String token) throws EmptyHistoryStepsException {
         UserConnectionVO connectionVo = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
         String longId = connectionVo.getLongId();
-        ChannelHandlerContext ctx = redisUtil.getCtx(longId);
+        ChannelHandlerContext ctx = NettySocketHolder.getCtx(longId);
         List<String> steps = readSteps(token);
         if (Validator.isNotEmpty(steps) && !steps.isEmpty()) {
             for (String step : steps) {

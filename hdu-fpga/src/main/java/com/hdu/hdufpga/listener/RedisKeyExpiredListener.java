@@ -4,6 +4,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Validator;
 import com.hdu.hdufpga.entity.constant.RedisConstant;
 import com.hdu.hdufpga.entity.vo.UserConnectionVO;
+import com.hdu.hdufpga.netty.NettySocketHolder;
 import com.hdu.hdufpga.service.CircuitBoardService;
 import com.hdu.hdufpga.service.WaitingService;
 import com.hdu.hdufpga.util.RedisUtil;
@@ -45,7 +46,7 @@ public class RedisKeyExpiredListener extends KeyExpirationEventMessageListener {
                 freeBoardAndFreezeConnection(token);
             }
             if (RedisConstant.REDIS_BOARD_SERVER_PREFIX.contains(split[0])) {
-                redisUtil.removeHash(RedisConstant.REDIS_HOLDER + token);
+                NettySocketHolder.remove(token);
                 circuitBoardService.deleteByLongId(token);
                 log.error("板卡:{}，失去连接，已经从缓存与数据库中移除", token);
             }

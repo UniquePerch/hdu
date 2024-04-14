@@ -1,16 +1,11 @@
 package com.hdu.hdufpga.util;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.hdu.hdufpga.entity.constant.CircuitBoardConstant;
-import com.hdu.hdufpga.entity.constant.RedisConstant;
-import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -87,43 +82,5 @@ public class RedisUtil {
 
     public Long getZSetSize(String k) {
         return redisTemplate.opsForZSet().zCard(k);
-    }
-
-    public Object getHashValue(String k1, String k2) {
-        return redisTemplate.opsForHash().get(k1, k2);
-    }
-
-    public void putHash(String k1, HashMap<String, Object> info) {
-        redisTemplate.opsForHash().putAll(k1, info);
-    }
-
-    public void putHashValue(String k1, String k2, Object v1) {
-        redisTemplate.opsForHash().put(k1, k2, v1);
-    }
-
-    public void removeHash(String k1) {
-        redisTemplate.delete(k1);
-    }
-
-    public HashMap<String, Object> getHash(String k1) {
-        Map<Object, Object> map = redisTemplate.opsForHash().entries(k1);
-        HashMap<String, Object> hashMap = new HashMap<>();
-        map.forEach((k, v) -> {
-            String newK = "";
-            if (k instanceof String) {
-                newK = (String) k;
-            }
-            hashMap.put(newK, v);
-        });
-        return hashMap;
-    }
-
-    public ChannelHandlerContext getCtx(String longId) {
-        Object o = redisTemplate.opsForHash().get(RedisConstant.REDIS_HOLDER + longId, CircuitBoardConstant.CTX);
-        if (o instanceof ChannelHandlerContext) {
-            return (ChannelHandlerContext) o;
-        } else {
-            throw new RuntimeException("获取ctx出错");
-        }
     }
 }

@@ -13,11 +13,11 @@ import com.hdu.hdufpga.entity.po.CircuitBoardPO;
 import com.hdu.hdufpga.entity.vo.UserConnectionVO;
 import com.hdu.hdufpga.exception.CircuitBoardException;
 import com.hdu.hdufpga.mapper.CircuitBoardMapper;
+import com.hdu.hdufpga.netty.NettySocketHolder;
 import com.hdu.hdufpga.service.CbUseRecordService;
 import com.hdu.hdufpga.service.CircuitBoardHistoryOperationService;
 import com.hdu.hdufpga.service.CircuitBoardService;
 import com.hdu.hdufpga.util.RedisUtil;
-import com.hdu.hdufpga.util.RedissionLockUtil;
 import com.hdu.hdufpga.utils.CircuitBoardUtil;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +33,6 @@ import java.util.List;
 @Slf4j
 public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapper, CircuitBoardPO> implements CircuitBoardService {
     @Resource
-    RedissionLockUtil redissionLockUtil;
-
-    @Resource
     CbUseRecordService cbUseRecordService;
 
     @Resource
@@ -49,23 +46,18 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
 
     @Override
     public CircuitBoardPO getAFreeCircuitBoard() throws CircuitBoardException {
-        redissionLockUtil.lock("allocateCircuitBoard");
-        try {
-            LambdaQueryWrapper<CircuitBoardPO> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(CircuitBoardPO::getStatus, false);
-            queryWrapper.eq(CircuitBoardPO::getIsReserved, false);
-            queryWrapper.eq(CircuitBoardPO::getIsRecorded, false);
-            List<CircuitBoardPO> circuitBoardPOS = baseMapper.selectList(queryWrapper);
-            if (!circuitBoardPOS.isEmpty()) {
-                CircuitBoardPO circuitBoardPO = circuitBoardPOS.get(RandomUtil.randomInt(circuitBoardPOS.size()));
-                circuitBoardPO.setStatus(true);
-                baseMapper.updateById(circuitBoardPO);
-                return circuitBoardPO;
-            } else {
-                throw new CircuitBoardException("暂无空闲板卡");
-            }
-        } finally {
-            redissionLockUtil.unlock("allocateCircuitBoard");
+        LambdaQueryWrapper<CircuitBoardPO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(CircuitBoardPO::getStatus, false);
+        queryWrapper.eq(CircuitBoardPO::getIsReserved, false);
+        queryWrapper.eq(CircuitBoardPO::getIsRecorded, false);
+        List<CircuitBoardPO> circuitBoardPOS = baseMapper.selectList(queryWrapper);
+        if (!circuitBoardPOS.isEmpty()) {
+            CircuitBoardPO circuitBoardPO = circuitBoardPOS.get(RandomUtil.randomInt(circuitBoardPOS.size()));
+            circuitBoardPO.setStatus(true);
+            baseMapper.updateById(circuitBoardPO);
+            return circuitBoardPO;
+        } else {
+            throw new CircuitBoardException("暂无空闲板卡");
         }
     }
 
@@ -89,9 +81,9 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
             List<CircuitBoardPO> circuitBoardPOList = baseMapper.selectList(wrapper);
             if (!circuitBoardPOList.isEmpty()) {
                 circuitBoardPOList.forEach(e -> {
-                    ChannelHandlerContext ctx = redisUtil.getCtx(e.getLongId());
+                    ChannelHandlerContext ctx = NettySocketHolder.getCtx(e.getLongId());
                     CircuitBoardUtil.sendEndToCB(ctx);
-                    HashMap<String, Object> CBInfo = redisUtil.getHash(RedisConstant.REDIS_HOLDER + e.getLongId());
+                    HashMap<String, Object> CBInfo = NettySocketHolder.getInfo(e.getLongId());
                     if (Validator.isNull(CBInfo)) CBInfo = new HashMap<>();
                     CBInfo.put(CircuitBoardConstant.STATUS, false);
                     CBInfo.put(CircuitBoardConstant.IS_RECORDED, false);
@@ -99,7 +91,7 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
                     CBInfo.remove(CircuitBoardConstant.COUNT);
                     CBInfo.put(CircuitBoardConstant.BUTTON_STATUS, "");
                     CBInfo.put(CircuitBoardConstant.LIGHT_STATUS, "");
-                    redisUtil.putHash(RedisConstant.REDIS_HOLDER + e.getLongId(), CBInfo);
+                    NettySocketHolder.put(e.getLongId(), CBInfo);
                     e.setStatus(false);
                     baseMapper.updateById(e);
                 });
@@ -148,13 +140,13 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
         UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
         String longId = userConnectionVO.getLongId();
         if (Validator.isNotNull(longId) && !longId.isEmpty()) {
-            ChannelHandlerContext ctx = redisUtil.getCtx(longId);
-            HashMap<String, Object> info = redisUtil.getHash(RedisConstant.REDIS_HOLDER + longId);
+            ChannelHandlerContext ctx = NettySocketHolder.getCtx(longId);
+            HashMap<String, Object> info = NettySocketHolder.getInfo(longId);
             info.put(CircuitBoardConstant.IS_RECORDED, false);
             info.put(CircuitBoardConstant.COUNT, 0);
             info.put(CircuitBoardConstant.FILE_PATH, filePath);
-            redisUtil.putHash(RedisConstant.REDIS_HOLDER + longId, info);
-            log.info("instance: {}", redisUtil.getHash(RedisConstant.REDIS_HOLDER + longId));
+            NettySocketHolder.put(longId, info);
+            log.info("instance: {}", NettySocketHolder.getInfo(longId));
             CircuitBoardUtil.recordBitToCB(ctx, filePath, 0);
         }
     }
@@ -183,7 +175,7 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
     public Boolean getRecordStatus(String token, String cbIp) throws CircuitBoardException {
         CircuitBoardPO circuitBoardPO = getCircuitBoardByIp(cbIp);
         if (Validator.isNotNull(circuitBoardPO)) {
-            Boolean isRecorded = (Boolean) redisUtil.getHashValue(RedisConstant.REDIS_HOLDER + circuitBoardPO.getLongId(), CircuitBoardConstant.IS_RECORDED);
+            Boolean isRecorded = (Boolean) NettySocketHolder.getValue(circuitBoardPO.getLongId(), CircuitBoardConstant.IS_RECORDED);
             if (Validator.isNotNull(isRecorded)) {
                 return isRecorded;
             } else {
@@ -199,10 +191,10 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
         UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
         String longId = userConnectionVO.getLongId();
         String finalString = CircuitBoardUtil.processButtonString(switchButtonStatus, tapButtonStatus);
-        redisUtil.putHashValue(RedisConstant.REDIS_HOLDER + longId, CircuitBoardConstant.BUTTON_STATUS, finalString);
-        Boolean isRecorded = (Boolean) redisUtil.getHashValue(RedisConstant.REDIS_HOLDER + longId, CircuitBoardConstant.IS_RECORDED);
+        NettySocketHolder.putValue(longId, CircuitBoardConstant.BUTTON_STATUS, finalString);
+        Boolean isRecorded = (Boolean) NettySocketHolder.getValue(longId, CircuitBoardConstant.IS_RECORDED);
         if (Validator.isNotNull(isRecorded) && isRecorded) {
-            CircuitBoardUtil.sendButtonStringToCB(redisUtil.getCtx(longId), finalString);
+            CircuitBoardUtil.sendButtonStringToCB(NettySocketHolder.getCtx(longId), finalString);
             circuitBoardHistoryOperationService.saveOperationStep(token, finalString);
             return true;
         } else {
@@ -214,7 +206,7 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
     public String getLightString(String token) throws CircuitBoardException {
         UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
         String longId = userConnectionVO.getLongId();
-        String lightString = (String) redisUtil.getHashValue(RedisConstant.REDIS_HOLDER + longId, CircuitBoardConstant.LIGHT_STATUS);
+        String lightString = (String) NettySocketHolder.getValue(longId, CircuitBoardConstant.LIGHT_STATUS);
         if (Validator.isNotNull(lightString)) {
             return lightString;
         } else {
@@ -226,7 +218,7 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
     public String getNixieTubeString(String token) throws CircuitBoardException {
         UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
         String longId = userConnectionVO.getLongId();
-        String nixieTubeString = (String) redisUtil.getHashValue(RedisConstant.REDIS_HOLDER + longId, CircuitBoardConstant.NIXIE_TUBE_STATUS);
+        String nixieTubeString = (String) NettySocketHolder.getValue(longId, CircuitBoardConstant.NIXIE_TUBE_STATUS);
         if (Validator.isNotNull(nixieTubeString)) {
             return nixieTubeString;
         } else {
@@ -238,7 +230,7 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
     public String getProcessedBtnStr(String token) throws CircuitBoardException {
         UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
         String longId = userConnectionVO.getLongId();
-        String buttonString = (String) redisUtil.getHashValue(RedisConstant.REDIS_HOLDER + longId, CircuitBoardConstant.BUTTON_STATUS);
+        String buttonString = (String) NettySocketHolder.getValue(longId, CircuitBoardConstant.BUTTON_STATUS);
         if (Validator.isNotNull(buttonString)) {
             return buttonString;
         } else {

@@ -7,7 +7,6 @@ import com.hdu.hdufpga.entity.constant.RedisConstant;
 import com.hdu.hdufpga.entity.po.CircuitBoardPO;
 import com.hdu.hdufpga.service.CircuitBoardService;
 import com.hdu.hdufpga.util.RedisUtil;
-import com.hdu.hdufpga.util.RedissionLockUtil;
 import com.hdu.hdufpga.utils.CircuitBoardUtil;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,9 +27,6 @@ public class FpgaNettyServerHandler extends SimpleChannelInboundHandler<String> 
     private final String pattern = "^[0-9A-Fa-f]{4}$";
     @Resource
     RedisUtil redisUtil;
-
-    @Resource
-    RedissionLockUtil lock;
     @Resource
     CircuitBoardService circuitBoardService;
 
@@ -39,31 +35,26 @@ public class FpgaNettyServerHandler extends SimpleChannelInboundHandler<String> 
         log.info("电路板消息:{}", msg);
         String ip = (ctx.channel().remoteAddress().toString().split("/"))[1];
         String longId = msg.split("#")[1];
-        lock.lock(longId);
-        try {
-            if (msg.contains("Login")) {
-                processLoginReq(ctx, ip, longId);
-            }
-            if (msg.contains("Heartbeat")) {
-                processHeartBeatReq(ctx, ip, longId);
-            }
-            if (msg.contains("OK")) {
-                processOKReq(ctx, longId);
-            }
-            if (msg.contains("END")) {
-                processENDReq(longId);
-            }
-            if (msg.contains("bye")) {
-                processBYEReq();
-            }
-            if (msg.contains("NICE")) {
-                processNICEReq();
-            }
-            if (msg.contains("STAT")) {
-                processSTATReq(ip, msg);
-            }
-        } finally {
-            lock.unlock(longId);
+        if (msg.contains("Login")) {
+            processLoginReq(ctx, ip, longId);
+        }
+        if (msg.contains("Heartbeat")) {
+            processHeartBeatReq(ctx, ip, longId);
+        }
+        if (msg.contains("OK")) {
+            processOKReq(ctx, longId);
+        }
+        if (msg.contains("END")) {
+            processENDReq(longId);
+        }
+        if (msg.contains("bye")) {
+            processBYEReq();
+        }
+        if (msg.contains("NICE")) {
+            processNICEReq();
+        }
+        if (msg.contains("STAT")) {
+            processSTATReq(ip, msg);
         }
     }
 
@@ -82,7 +73,7 @@ public class FpgaNettyServerHandler extends SimpleChannelInboundHandler<String> 
         CircuitBoardPO circuitBoard = circuitBoardService.getCircuitBoardByIp(ip);
         if (Validator.isNotNull(circuitBoard)) {
             String longId = circuitBoard.getLongId();
-            redisUtil.removeHash(RedisConstant.REDIS_HOLDER + longId);
+            NettySocketHolder.remove(longId);
             redisUtil.del(RedisConstant.REDIS_BOARD_SERVER_PREFIX + longId);
             circuitBoardService.deleteByLongId(longId);
             log.error("板卡:{}，失去连接，已经从缓存与数据库中移除", longId);
@@ -105,14 +96,14 @@ public class FpgaNettyServerHandler extends SimpleChannelInboundHandler<String> 
         if (str[1].length() == 8) {
             String lightString = str[1];
             log.info("lightString:{}", lightString);
-            redisUtil.putHashValue(RedisConstant.REDIS_HOLDER + longId, CircuitBoardConstant.LIGHT_STATUS, lightString);
-            redisUtil.putHashValue(RedisConstant.REDIS_HOLDER, CircuitBoardConstant.NIXIE_TUBE_STATUS, "");
+            NettySocketHolder.putValue(longId, CircuitBoardConstant.LIGHT_STATUS, lightString);
+            NettySocketHolder.putValue(longId, CircuitBoardConstant.NIXIE_TUBE_STATUS, "");
         } else if (str[1].length() == 18) {
             String lightString = str[1].substring(0, 8);
             String nixieTubeString = StrUtil.reverse(str[1].substring(8, 16));
             log.info("lightString:{}, nixieTubeString:{}", lightString, nixieTubeString);
-            redisUtil.putHashValue(RedisConstant.REDIS_HOLDER + longId, CircuitBoardConstant.LIGHT_STATUS, lightString);
-            redisUtil.putHashValue(RedisConstant.REDIS_HOLDER, CircuitBoardConstant.NIXIE_TUBE_STATUS, nixieTubeString);
+            NettySocketHolder.putValue(longId, CircuitBoardConstant.LIGHT_STATUS, lightString);
+            NettySocketHolder.putValue(longId, CircuitBoardConstant.NIXIE_TUBE_STATUS, nixieTubeString);
         } else {
             log.error("STAT数据格式错误");
         }
@@ -129,7 +120,7 @@ public class FpgaNettyServerHandler extends SimpleChannelInboundHandler<String> 
 
     private void processENDReq(String londId) {
         redisUtil.set(RedisConstant.REDIS_BOARD_SERVER_PREFIX + londId, true, RedisConstant.REDIS_BOARD_SERVER_LIMIT, TimeUnit.SECONDS);
-        redisUtil.putHashValue(RedisConstant.REDIS_HOLDER + londId, CircuitBoardConstant.IS_RECORDED, true);
+        NettySocketHolder.putValue(londId, CircuitBoardConstant.IS_RECORDED, true);
         log.info("已更新烧录状态！longId:{}", londId);
     }
 
@@ -145,11 +136,11 @@ public class FpgaNettyServerHandler extends SimpleChannelInboundHandler<String> 
 
     private void processOKReq(ChannelHandlerContext ctx, String longId) {
         redisUtil.set(RedisConstant.REDIS_BOARD_SERVER_PREFIX + longId, true, RedisConstant.REDIS_BOARD_SERVER_LIMIT, TimeUnit.SECONDS);
-        HashMap<String, Object> info = redisUtil.getHash(RedisConstant.REDIS_HOLDER + longId);
+        HashMap<String, Object> info = NettySocketHolder.getInfo(longId);
         Integer count = (Integer) info.get(CircuitBoardConstant.COUNT);
         String filepath = (String) info.get(CircuitBoardConstant.FILE_PATH);
         CircuitBoardUtil.recordBitToCB(ctx, filepath, count + 1);
-        redisUtil.putHashValue(RedisConstant.REDIS_HOLDER + longId, CircuitBoardConstant.COUNT, count + 1);
+        NettySocketHolder.putValue(longId, CircuitBoardConstant.COUNT, count + 1);
     }
 
     private void processHeartBeatReq(ChannelHandlerContext ctx, String ip, String longId) {
@@ -172,21 +163,21 @@ public class FpgaNettyServerHandler extends SimpleChannelInboundHandler<String> 
     }
 
     private void updateMap(ChannelHandlerContext ctx, String longdId, String ip) {
-        if (Validator.isNull(redisUtil.getHash(RedisConstant.REDIS_HOLDER + longdId))) {
+        if (Validator.isNull(NettySocketHolder.getInfo(longdId))) {
             HashMap<String, Object> info = initMap(ctx, ip, longdId);
-            redisUtil.putHash(RedisConstant.REDIS_HOLDER + longdId, info);
+            NettySocketHolder.put(longdId, info);
             log.info("添加新板卡到 map！ longId: {} remoteAddress : {}", longdId, ip);
         }
     }
 
     private void insertNewCBToMap(ChannelHandlerContext ctx, String longId, String ip) {
         HashMap<String, Object> info = initMap(ctx, ip, longId);
-        if (Validator.isNotNull(redisUtil.getHash(RedisConstant.REDIS_HOLDER + longId))) {
+        if (Validator.isNotNull(NettySocketHolder.getInfo(longId))) {
             log.info("缓存中已经缓存板卡信息");
         } else {
             log.info("添加新的板卡到map中 longId:{},remoteAddress:{}", longId, ip);
         }
-        redisUtil.putHash(RedisConstant.REDIS_HOLDER + longId, info);
+        NettySocketHolder.put(longId, info);
     }
 
     private void insertNewCBToDB(String longId, String ip) {

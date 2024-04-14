@@ -11,7 +11,6 @@ import com.hdu.hdufpga.exception.UserQueueException;
 import com.hdu.hdufpga.service.CircuitBoardService;
 import com.hdu.hdufpga.service.WaitingService;
 import com.hdu.hdufpga.util.RedisUtil;
-import com.hdu.hdufpga.util.RedissionLockUtil;
 import com.hdu.hdufpga.util.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,9 +28,6 @@ public class WaitingServiceImpl implements WaitingService {
     RedisUtil redisUtil;
 
     @Resource
-    RedissionLockUtil lockUtil;
-
-    @Resource
     CircuitBoardService circuitBoardService;
 
     @Value("${wait-queue.name}")
@@ -43,49 +39,44 @@ public class WaitingServiceImpl implements WaitingService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserConnectionVO userInQueue(String token) throws Exception {
-        lockUtil.lock(queueName);
-        try {
-            if (Validator.isNull(getRankInQueue(token))) {
-                //如果有空闲的板子，那就不入队，直接找一块
-                if (circuitBoardService.getFreeCircuitBoardCount() > 0) {
-                    UserConnectionVO userConnectionVO = createUserConnectionVO(token);
-                    boolean bShadow = redisUtil.set(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, true, 12, TimeUnit.HOURS);
-                    boolean bWaiting = redisUtil.set(RedisConstant.REDIS_CONN_PREFIX + token, userConnectionVO, 12, TimeUnit.HOURS);
-                    if (bWaiting && bShadow) {
-                        CircuitBoardPO circuitBoardPO = circuitBoardService.getAFreeCircuitBoard();
-                        if (Validator.isNotNull(circuitBoardPO)) {
-                            userConnectionVO = unfreezeConnection(token, circuitBoardPO);
-                            if (Validator.isNull(userConnectionVO)) {
-                                throw new UserQueueException("解冻用户失败");
-                            } else {
-                                return userConnectionVO;
-                            }
+        if (Validator.isNull(getRankInQueue(token))) {
+            //如果有空闲的板子，那就不入队，直接找一块
+            if (circuitBoardService.getFreeCircuitBoardCount() > 0) {
+                UserConnectionVO userConnectionVO = createUserConnectionVO(token);
+                boolean bShadow = redisUtil.set(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, true, 12, TimeUnit.HOURS);
+                boolean bWaiting = redisUtil.set(RedisConstant.REDIS_CONN_PREFIX + token, userConnectionVO, 12, TimeUnit.HOURS);
+                if (bWaiting && bShadow) {
+                    CircuitBoardPO circuitBoardPO = circuitBoardService.getAFreeCircuitBoard();
+                    if (Validator.isNotNull(circuitBoardPO)) {
+                        userConnectionVO = unfreezeConnection(token, circuitBoardPO);
+                        if (Validator.isNull(userConnectionVO)) {
+                            throw new UserQueueException("解冻用户失败");
                         } else {
-                            throw new UserQueueException("分配板卡失败");
+                            return userConnectionVO;
                         }
                     } else {
-                        throw new UserQueueException("用户验证出错");
+                        throw new UserQueueException("分配板卡失败");
                     }
-                }
-            } else {
-                throw new UserQueueException("已经在队列中");
-            }
-
-            if (Validator.isNull(getRankInQueue(token))) {
-                boolean bShadow = redisUtil.set(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, true, 12, TimeUnit.HOURS);
-                UserConnectionVO userConnectionVO = createUserConnectionVO(token);
-                boolean bWaiting = redisUtil.set(RedisConstant.REDIS_CONN_PREFIX + token, userConnectionVO, 12, TimeUnit.HOURS);
-                redisUtil.addInZSet(queueName, token);
-                if (bShadow && bWaiting) {
-                    return userConnectionVO;
                 } else {
                     throw new UserQueueException("用户验证出错");
                 }
-            } else {
-                throw new UserQueueException("已经在队列中");
             }
-        } finally {
-            lockUtil.unlock(queueName);
+        } else {
+            throw new UserQueueException("已经在队列中");
+        }
+
+        if (Validator.isNull(getRankInQueue(token))) {
+            boolean bShadow = redisUtil.set(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, true, 12, TimeUnit.HOURS);
+            UserConnectionVO userConnectionVO = createUserConnectionVO(token);
+            boolean bWaiting = redisUtil.set(RedisConstant.REDIS_CONN_PREFIX + token, userConnectionVO, 12, TimeUnit.HOURS);
+            redisUtil.addInZSet(queueName, token);
+            if (bShadow && bWaiting) {
+                return userConnectionVO;
+            } else {
+                throw new UserQueueException("用户验证出错");
+            }
+        } else {
+            throw new UserQueueException("已经在队列中");
         }
     }
 
@@ -114,7 +105,6 @@ public class WaitingServiceImpl implements WaitingService {
 
     @Override
     public boolean freezeConnection(String token) {
-        lockUtil.lock(token);
         try {
             Object shadow = redisUtil.get(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token);
             UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
@@ -131,8 +121,6 @@ public class WaitingServiceImpl implements WaitingService {
         } catch (Exception e) {
             log.info(e.getMessage());
             return false;
-        } finally {
-            lockUtil.unlock(token);
         }
     }
 
@@ -163,7 +151,6 @@ public class WaitingServiceImpl implements WaitingService {
     }
 
     private UserConnectionVO unfreezeConnection(String token, CircuitBoardPO circuitBoard) {
-        lockUtil.lock(token);
         try {
             UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
             Object shadow = redisUtil.get(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token);
@@ -181,8 +168,6 @@ public class WaitingServiceImpl implements WaitingService {
         } catch (Exception e) {
             log.error(e.toString());
             return null;
-        } finally {
-            lockUtil.unlock(token);
         }
     }
 }
