@@ -4,7 +4,7 @@
 
 1.nacos(记得要在数据库上部署相关的sql)
 ```shell
-docker run --name nacos -p 8848:8849 --privileged=true --restart=always -e SPRING_DATASOURCE_PLATFORM=mysql -e MYSQL_SERVICE_HOST=localhost -e MYSQL_SERVICE_PORT=3306 -e MYSQL_SERVICE_USER=root -e MYSQL_SERVICE_PASSWORD=lyh701721 -e MYSQL_SERVICE_DB_NAME=nacos -e MODE=standalone -d nacos/nacos-server:2.0.2
+docker run --name nacos --net=host --privileged=true --restart=always -e SPRING_DATASOURCE_PLATFORM=mysql -e MYSQL_SERVICE_HOST=localhost -e MYSQL_SERVICE_PORT=3306 -e MYSQL_SERVICE_USER=root -e MYSQL_SERVICE_PASSWORD=321456987 -e MYSQL_SERVICE_DB_NAME=nacos -e MODE=standalone -d nacos/nacos-server:2.0.2
 ```
 
 2.mysql
