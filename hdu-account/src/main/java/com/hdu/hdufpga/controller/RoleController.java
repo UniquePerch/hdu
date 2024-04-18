@@ -4,6 +4,7 @@ import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.entity.po.RolePO;
 import com.hdu.hdufpga.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoleController extends BaseController<RoleService, RolePO> {
     //level >= 3
     @Override
-    public Result create(RolePO rolePO) {
+    public Result create(@RequestBody RolePO rolePO) {
         return super.create(rolePO);
     }
 
