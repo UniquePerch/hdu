@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/sso")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Resource
