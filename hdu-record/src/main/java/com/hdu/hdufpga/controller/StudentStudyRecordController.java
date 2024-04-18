@@ -15,6 +15,7 @@ public class StudentStudyRecordController {
     @Resource
     UserResourceRecordService userResourceRecordService;
 
+    //level >= 1
     @PostMapping("/updateResourceRecord")
     public Result updateResourceRecord(@RequestBody UserResourceRecordVO userResourceRecordVO) {
         try {
@@ -25,6 +26,7 @@ public class StudentStudyRecordController {
         }
     }
 
+    //level >= 2
     @GetMapping("/getRecordByClass")
     public Result getRecordByClass(Integer classId) {
         try {

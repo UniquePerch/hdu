@@ -17,6 +17,31 @@ public class TestRecordController extends BaseController<TestRecordService, Test
         return Result.error("此接口不支持本方法");
     }
 
+    //level >= 2
+    @Override
+    public Result delete(TestRecordPO testRecordPO) {
+        return super.delete(testRecordPO);
+    }
+
+    //level >= 2
+    @Override
+    public Result update(TestRecordPO testRecordPO) {
+        return super.update(testRecordPO);
+    }
+
+    //level >= 2
+    @Override
+    public Result listPage(Integer current, Integer size) {
+        return super.listPage(current, size);
+    }
+
+    //level >= 2
+    @Override
+    public Result get(Integer id) {
+        return super.get(id);
+    }
+
+    //level >= 1
     @GetMapping("/getMaxScore")
     public Result getMaxScore(Integer userId, Integer classId) {
         try {

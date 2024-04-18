@@ -11,11 +11,12 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/co/waiting")
+@RequestMapping("/waiting")
 public class WaitingController {
     @Resource
     WaitingService waitingService;
 
+    //level >= 1
     @PostMapping("/inLine")
     @CheckAndRefreshToken
     public Result userInLine(HttpServletRequest request) {
@@ -27,6 +28,7 @@ public class WaitingController {
         }
     }
 
+    //level >= 1
     @PostMapping("/checkAvailability")
     @CheckAndRefreshToken
     public Result checkAvailability(HttpServletRequest request) {

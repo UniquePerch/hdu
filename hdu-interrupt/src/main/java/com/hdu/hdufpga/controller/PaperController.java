@@ -17,6 +17,7 @@ public class PaperController {
     @Resource
     private PaperService paperService;
 
+    //level >= 2
     @PostMapping(value = "/uploadPaper", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result uploadPaper(@RequestBody PaperVO paperVO) {
         try {
@@ -27,6 +28,7 @@ public class PaperController {
         }
     }
 
+    //level >= 2
     @PostMapping(value = "/deletePaper")
     public Result deletePaper(@RequestBody PaperVO paperVO) {
         try {
@@ -37,6 +39,7 @@ public class PaperController {
         }
     }
 
+    //level >= 1
     @GetMapping("/getAllPaperByClassId")
     public Result getPapersByClassId(Integer classId) {
         try {
@@ -47,6 +50,7 @@ public class PaperController {
         }
     }
 
+    //level >= 1
     @PostMapping(value = "/handInPaper", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result handInPaper(HandInInfoVO handInInfoVO) {
         try {
@@ -57,6 +61,7 @@ public class PaperController {
         }
     }
 
+    //level >= 2
     @GetMapping("/getHandInInfoByClassId")
     public Result getHandInInfoByClassId(Integer classId) {
         try {
@@ -67,6 +72,7 @@ public class PaperController {
         }
     }
 
+    //level >= 1
     @GetMapping("/getHandInInfoByUserId")
     public Result getHandInInfoByUserId(Integer userId) {
         try {
@@ -77,6 +83,7 @@ public class PaperController {
         }
     }
 
+    //level >= 1
     @PostMapping(value = "/updateHandInInfo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result updateHandInInfo(HandInInfoVO handInInfoVO) {
         try {
@@ -87,6 +94,7 @@ public class PaperController {
         }
     }
 
+    //level >= 2
     @PostMapping("/correctingPaper")
     public Result correctingPaper(@RequestBody HandInInfoVO handInInfoVO) {
         try {
@@ -97,7 +105,7 @@ public class PaperController {
         }
     }
 
-    //打回报告
+    //level >= 2
     @PostMapping("/returnPaper")
     public Result returnPaper(@RequestBody HandInInfoVO handInInfoVO) {
         try {

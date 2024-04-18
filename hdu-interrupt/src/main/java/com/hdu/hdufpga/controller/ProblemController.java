@@ -14,6 +14,37 @@ import java.util.List;
 @RequestMapping("/problem")
 @Slf4j
 public class ProblemController extends BaseController<ProblemService, Problem1PO> {
+    //level >= 3
+    @Override
+    public Result create(Problem1PO problem1PO) {
+        return super.create(problem1PO);
+    }
+
+    //level >= 3
+    @Override
+    public Result delete(Problem1PO problem1PO) {
+        return super.delete(problem1PO);
+    }
+
+    //level >= 3
+    @Override
+    public Result update(Problem1PO problem1PO) {
+        return super.update(problem1PO);
+    }
+
+    //level >= 3
+    @Override
+    public Result listPage(Integer current, Integer size) {
+        return super.listPage(current, size);
+    }
+
+    //level >= 3
+    @Override
+    public Result get(Integer id) {
+        return super.get(id);
+    }
+
+    //level >= 1
     @RequestMapping("/getProblems")
     public Result getProblems() {
         try {
@@ -24,6 +55,7 @@ public class ProblemController extends BaseController<ProblemService, Problem1PO
         }
     }
 
+    //level >= 1
     @RequestMapping("/checkAnswer")
     public Result checkAnswer(Integer userId, Integer classId, List<Problem1VO> voList) {
         try {

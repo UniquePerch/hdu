@@ -16,11 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @Slf4j
-@RequestMapping("/co/file")
+@RequestMapping("/file")
 public class SysFileController {
     @Resource
     SysFileService sysFileService;
 
+    //level >= 1
     @PostMapping(value = "/uploadBit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @CheckAndRefreshToken
     public Result uploadBit(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
@@ -32,6 +33,7 @@ public class SysFileController {
         }
     }
 
+    //level >= 1
     @PostMapping("/reloadBitFile")
     @CheckAndRefreshToken
     public Result reloadBitFile(HttpServletRequest request) {

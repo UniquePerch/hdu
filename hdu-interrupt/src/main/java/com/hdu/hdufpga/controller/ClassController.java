@@ -16,6 +16,37 @@ import java.util.List;
 @RequestMapping("/class")
 @Slf4j
 public class ClassController extends BaseController<ClassService, ClassPO> {
+    //level >= 2
+    @Override
+    public Result create(ClassPO classPO) {
+        return super.create(classPO);
+    }
+
+    //level >= 2
+    @Override
+    public Result update(ClassPO classPO) {
+        return super.update(classPO);
+    }
+
+    //level >= 2
+    @Override
+    public Result delete(ClassPO classPO) {
+        return super.delete(classPO);
+    }
+
+    //level >= 3
+    @Override
+    public Result listPage(Integer current, Integer size) {
+        return super.listPage(current, size);
+    }
+
+    //level >= 3
+    @Override
+    public Result get(Integer id) {
+        return super.get(id);
+    }
+
+    //level >= 2
     @RequestMapping(value = "/importStudentFromExcel", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result importStudentFromExcel(MultipartFile file, Integer classId, Integer departmentId) {
         try {
@@ -31,6 +62,7 @@ public class ClassController extends BaseController<ClassService, ClassPO> {
         }
     }
 
+    //level >= 2
     @RequestMapping("/getSortedClassListByTeacherId")
     public Result getSortedClassListByTeacherId(Integer teacherId) {
         try {
@@ -41,6 +73,7 @@ public class ClassController extends BaseController<ClassService, ClassPO> {
         }
     }
 
+    //level >= 2
     @RequestMapping("/getStudentListByClassId")
     public Result getStudentListByClassId(Integer classId) {
         try {

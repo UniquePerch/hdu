@@ -14,12 +14,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/co/fpga")
+@RequestMapping("/token")
 @Slf4j
 public class TokenController {
     @Resource
     TokenService tokenService;
 
+    //level >= 1
     @GetMapping("/generateToken")
     public Result generateToken(UserVO userVO) {
         try {
@@ -30,6 +31,7 @@ public class TokenController {
         }
     }
 
+    //level >= 1
     @PostMapping("/reload")
     @CheckToken
     public Result reload(HttpServletRequest request) {
@@ -42,6 +44,7 @@ public class TokenController {
         }
     }
 
+    //level >= 1
     @PostMapping("/checkToken")
     @CheckToken
     public Result checkToken(HttpServletRequest request) {

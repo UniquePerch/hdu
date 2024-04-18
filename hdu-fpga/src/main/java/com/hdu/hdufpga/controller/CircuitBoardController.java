@@ -16,7 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/co/fpga")
+@RequestMapping("/cb")
 @Slf4j
 public class CircuitBoardController extends BaseController<CircuitBoardService, CircuitBoardPO> {
     @Resource
@@ -25,6 +25,34 @@ public class CircuitBoardController extends BaseController<CircuitBoardService, 
     @Resource
     CircuitBoardHistoryOperationService circuitBoardHistoryOperationService;
 
+    //level >= 3
+    @Override
+    public Result listPage(Integer current, Integer size) {
+        return super.listPage(current, size);
+    }
+
+    //level >= 3
+    @Override
+    public Result get(Integer id) {
+        return super.get(id);
+    }
+
+    @Override
+    public Result create(CircuitBoardPO circuitBoardPO) {
+        return Result.error("不支持本方法");
+    }
+
+    @Override
+    public Result update(CircuitBoardPO circuitBoardPO) {
+        return Result.error("不支持本方法");
+    }
+
+    @Override
+    public Result delete(CircuitBoardPO circuitBoardPO) {
+        return Result.error("不支持本方法");
+    }
+
+    //level >= 1
     @PostMapping("/finish")
     @CheckToken
     public Result finish(HttpServletRequest request) {
@@ -37,6 +65,7 @@ public class CircuitBoardController extends BaseController<CircuitBoardService, 
         }
     }
 
+    //level >= 1
     @PostMapping("/getRecordedStatus")
     @CheckAndRefreshToken
     public Result getRecordedStatus(HttpServletRequest request, String cbIp) {
@@ -49,6 +78,7 @@ public class CircuitBoardController extends BaseController<CircuitBoardService, 
         }
     }
 
+    //level >= 1
     @PostMapping("/sendButtonString")
     @CheckAndRefreshToken
     public Result sendButtonString(HttpServletRequest request, String switchButtonStatus, String tapButtonStatus) {
@@ -61,6 +91,7 @@ public class CircuitBoardController extends BaseController<CircuitBoardService, 
         }
     }
 
+    //level >= 1
     @GetMapping("/getLightString")
     @CheckAndRefreshToken
     public Result getLightString(HttpServletRequest request) {
@@ -73,6 +104,7 @@ public class CircuitBoardController extends BaseController<CircuitBoardService, 
         }
     }
 
+    //level >= 1
     @GetMapping("/getNixieTubeString")
     @CheckAndRefreshToken
     public Result getNixieTubeString(HttpServletRequest request) {
@@ -85,6 +117,7 @@ public class CircuitBoardController extends BaseController<CircuitBoardService, 
         }
     }
 
+    //level >= 1
     @GetMapping("/getProcessedBtnStr")
     @CheckAndRefreshToken
     public Result getProcessedBtnStr(HttpServletRequest request) {
@@ -97,6 +130,7 @@ public class CircuitBoardController extends BaseController<CircuitBoardService, 
         }
     }
 
+    //level >= 1
     @PostMapping("/loadHistory")
     @CheckAndRefreshToken
     public Result loadHistory(HttpServletRequest request, Boolean tag) {

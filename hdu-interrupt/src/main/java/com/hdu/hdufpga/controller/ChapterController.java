@@ -11,6 +11,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/chapter")
 @Slf4j
 public class ChapterController extends BaseController<ChapterService, ChapterPO> {
+    //level >= 3
+    @Override
+    public Result create(ChapterPO chapterPO) {
+        return super.create(chapterPO);
+    }
+
+    //level >= 3
+    @Override
+    public Result update(ChapterPO chapterPO) {
+        return super.update(chapterPO);
+    }
+
+    //level >= 3
+    @Override
+    public Result delete(ChapterPO chapterPO) {
+        return super.delete(chapterPO);
+    }
+
+    //level >= 3
+    @Override
+    public Result get(Integer id) {
+        return super.get(id);
+    }
+
+    //level >= 3
+    @Override
+    public Result listPage(Integer current, Integer size) {
+        return super.listPage(current, size);
+    }
+
+    //level >= 1
     @RequestMapping("/recordFinish")
     public Result recordFinish(Integer userId, Integer chapterId) {
         try {
@@ -25,6 +56,7 @@ public class ChapterController extends BaseController<ChapterService, ChapterPO>
         }
     }
 
+    //level >= 3
     @RequestMapping("/getAllChapterRecord")
     public Result getAllChapterRecord(Integer current, Integer size) {
         try {
@@ -35,6 +67,7 @@ public class ChapterController extends BaseController<ChapterService, ChapterPO>
         }
     }
 
+    //level >= 1
     @RequestMapping("/getChapterRecordByUserId")
     public Result getChapterRecordByUserId(Integer userId) {
         try {

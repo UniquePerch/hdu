@@ -17,6 +17,7 @@ public class UserVisitRecordController {
     @Resource
     UserRecordService userRecordService;
 
+    //level >= 3
     @RequestMapping("/getUserVisitInfo")
     public Result getUserVisitInfo(@DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime, @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime) {
         try {
