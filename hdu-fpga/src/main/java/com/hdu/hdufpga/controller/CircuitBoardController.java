@@ -66,7 +66,7 @@ public class CircuitBoardController extends BaseController<CircuitBoardService, 
     }
 
     //level >= 1
-    @PostMapping("/getRecordedStatus")
+    @GetMapping("/getRecordedStatus")
     @CheckAndRefreshToken
     public Result getRecordedStatus(HttpServletRequest request, String cbIp) {
         String token = request.getHeader("token");
