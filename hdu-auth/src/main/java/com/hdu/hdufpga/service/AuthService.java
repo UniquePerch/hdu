@@ -59,7 +59,7 @@ public class AuthService {
             return null;
         }
         Integer code = (Integer) redisUtil.get(verificationCodeKey);
-        redisUtil.removeHash(verificationCodeKey);
+        redisUtil.del(verificationCodeKey);
         if (!StrUtil.equals(String.valueOf(code), verificationCodeValue)) {
             return null;
         }
