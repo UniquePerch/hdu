@@ -7,6 +7,7 @@ import cn.hutool.captcha.generator.MathGenerator;
 import cn.hutool.core.math.Calculator;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import com.hdu.hdufpga.entity.constant.SysConstant;
 import com.hdu.hdufpga.entity.po.UserPO;
 import com.hdu.hdufpga.entity.ro.LoginRO;
 import com.hdu.hdufpga.entity.ro.VerificationCodeRO;
@@ -46,11 +47,13 @@ public class AuthService {
     public Object login(LoginRO loginRO) {
         String username = loginRO.getUsername();
         String password = loginRO.getPassword();
+        Integer departmentId = loginRO.getDepartmentId();
         String applicationName = loginRO.getApplicationName();
         String verificationCodeKey = loginRO.getVerificationCodeKey();
         String verificationCodeValue = loginRO.getVerificationCodeValue();
-        // 如果已经登录则直接返回
-        Object isLogin = isLogin(username, applicationName);
+        // 如果已经登录则直接返回，登录名为用户名+学校id
+        String loginName = username + SysConstant.DASH + departmentId;
+        Object isLogin = isLogin(loginName, applicationName);
         if (Objects.nonNull(isLogin)) {
             return isLogin;
         }
@@ -64,7 +67,7 @@ public class AuthService {
             return null;
         }
         // 查询用户信息
-        UserPO userPO = userService.getUserByUserName(username, loginRO.getDepartmentId());
+        UserPO userPO = userService.getUserByUserName(username, departmentId);
         if (Objects.isNull(userPO)) {
             return null;
         }
@@ -77,10 +80,10 @@ public class AuthService {
         if (Objects.isNull(service)) {
             return null;
         }
-        Object result = service.login(username);
+        Object result = service.login(loginName);
         // 登录成功则登录SSO系统
         if (Objects.nonNull(result)) {
-            StpUtil.login(username);
+            StpUtil.login(loginName);
             return result;
         }
         return null;
