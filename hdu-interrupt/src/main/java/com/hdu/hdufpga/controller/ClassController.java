@@ -6,6 +6,7 @@ import com.hdu.hdufpga.entity.vo.UserVO;
 import com.hdu.hdufpga.service.ClassService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,19 +19,19 @@ import java.util.List;
 public class ClassController extends BaseController<ClassService, ClassPO> {
     //level >= 2
     @Override
-    public Result create(ClassPO classPO) {
+    public Result create(@RequestBody ClassPO classPO) {
         return super.create(classPO);
     }
 
     //level >= 2
     @Override
-    public Result update(ClassPO classPO) {
+    public Result update(@RequestBody ClassPO classPO) {
         return super.update(classPO);
     }
 
     //level >= 2
     @Override
-    public Result delete(ClassPO classPO) {
+    public Result delete(@RequestBody ClassPO classPO) {
         return super.delete(classPO);
     }
 
