@@ -15,11 +15,11 @@ import java.util.Date;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaperVO extends BaseEntity {
-    String title;
-    String link;
-    Integer classId;
-    Integer createByUserId;
-    MultipartFile file;
+    String title; //标题
+    String link; // 报告链接
+    Integer classId; //班级Id
+    Integer createByUserId; //创建者Id
+    MultipartFile file; //文件
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    Date deadline;
+    Date deadline; //截止日期
 }

@@ -40,14 +40,17 @@ public class WaitingServiceImpl implements WaitingService {
     @Transactional(rollbackFor = Exception.class)
     public UserConnectionVO userInQueue(String token) throws Exception {
         if (Validator.isNull(getRankInQueue(token))) {
-            //如果有空闲的板子，那就不入队，直接找一块
+            // 如果有空闲的板子，那就不入队，直接找一块
             if (circuitBoardService.getFreeCircuitBoardCount() > 0) {
                 UserConnectionVO userConnectionVO = createUserConnectionVO(token);
+                // 配置实验相关的计时器
                 boolean bShadow = redisUtil.set(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, true, 12, TimeUnit.HOURS);
                 boolean bWaiting = redisUtil.set(RedisConstant.REDIS_CONN_PREFIX + token, userConnectionVO, 12, TimeUnit.HOURS);
                 if (bWaiting && bShadow) {
+                    // 获取一块空闲板卡
                     CircuitBoardPO circuitBoardPO = circuitBoardService.getAFreeCircuitBoard();
                     if (Validator.isNotNull(circuitBoardPO)) {
+                        //解冻链接，进行实验
                         userConnectionVO = unfreezeConnection(token, circuitBoardPO);
                         if (Validator.isNull(userConnectionVO)) {
                             throw new UserQueueException("解冻用户失败");
@@ -66,6 +69,7 @@ public class WaitingServiceImpl implements WaitingService {
         }
 
         if (Validator.isNull(getRankInQueue(token))) {
+            // 如果没有空闲的板子，直接进入队列
             boolean bShadow = redisUtil.set(RedisConstant.REDIS_CONN_SHADOW_PREFIX + token, true, 12, TimeUnit.HOURS);
             UserConnectionVO userConnectionVO = createUserConnectionVO(token);
             boolean bWaiting = redisUtil.set(RedisConstant.REDIS_CONN_PREFIX + token, userConnectionVO, 12, TimeUnit.HOURS);
@@ -86,10 +90,13 @@ public class WaitingServiceImpl implements WaitingService {
         Long number = getRankInQueue(token);
         if (Validator.isNull(number)) {
             throw new UserQueueException("用户不在队列中");
-        } else if (number == 0) {
+        } else if (number == 0) { // 如果当前队伍前面没人了
+            // 获取空闲板卡
             CircuitBoardPO circuitBoardPO = circuitBoardService.getAFreeCircuitBoard();
             if (Validator.isNotNull(circuitBoardPO)) {
+                // 出队
                 redisUtil.removeInZSet(queueName, token);
+                // 解冻连接，开始实验
                 UserConnectionVO userConnectionVO = unfreezeConnection(token, circuitBoardPO);
                 if (userConnectionVO == null) {
                     throw new UserQueueException("解冻用户失败,请重试");

@@ -97,7 +97,7 @@ public class PaperServiceImpl extends MPJBaseServiceImpl<PaperMapper, PaperPO> i
     }
 
     @Override
-    public Boolean updateHandInInfo(HandInInfoVO handInInfoVO) throws HomeworkException {
+    public Boolean updateHandInInfo(HandInInfoVO handInInfoVO) throws HomeworkException, IOException {
         HandInInfoPO handInInfoPOOld = handInInfoMapper.selectById(handInInfoVO.getId());
         PaperPO paperPO = paperMapper.selectById(handInInfoPOOld.getPaperId());
         if (paperPO.getDeadline().before(TimeUtil.getNowTime())) {
@@ -105,6 +105,11 @@ public class PaperServiceImpl extends MPJBaseServiceImpl<PaperMapper, PaperPO> i
         }
         if (handInInfoPOOld.getState()) {
             throw new HomeworkException("作业已批改，不可修改提交");
+        }
+        if (handInInfoVO.getFile() != null && handInInfoVO.getFile().getSize() > 0) {
+            handInInfoVO.setFilePath(MFileUtil.uploadFile(handInInfoVO.getFile(), FileConstant.STUDENT_PAPER_UPLOAD_PATH));
+        } else {
+            throw new HomeworkException("报告为空");
         }
         HandInInfoPO handInInfoPONew = ConvertUtil.copy(handInInfoVO, HandInInfoPO.class);
         return handInInfoMapper.updateById(handInInfoPONew) > 0;

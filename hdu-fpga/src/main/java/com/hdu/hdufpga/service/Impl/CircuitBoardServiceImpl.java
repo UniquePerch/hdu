@@ -140,13 +140,17 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
         UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
         String longId = userConnectionVO.getLongId();
         if (Validator.isNotNull(longId) && !longId.isEmpty()) {
+            // 获取缓存中对应的ChannelHandlerContext
             ChannelHandlerContext ctx = NettySocketHolder.getCtx(longId);
             HashMap<String, Object> info = NettySocketHolder.getInfo(longId);
+            // 配置缓存信息
             info.put(CircuitBoardConstant.IS_RECORDED, false);
             info.put(CircuitBoardConstant.COUNT, 0);
             info.put(CircuitBoardConstant.FILE_PATH, filePath);
+            // 保存缓存信息
             NettySocketHolder.put(longId, info);
             log.info("instance: {}", NettySocketHolder.getInfo(longId));
+            // 烧录板卡
             CircuitBoardUtil.recordBitToCB(ctx, filePath, 0);
         }
     }
@@ -190,11 +194,14 @@ public class CircuitBoardServiceImpl extends MPJBaseServiceImpl<CircuitBoardMapp
     public Boolean sendButtonString(String token, String switchButtonStatus, String tapButtonStatus) throws CircuitBoardException {
         UserConnectionVO userConnectionVO = Convert.convert(UserConnectionVO.class, redisUtil.get(RedisConstant.REDIS_CONN_PREFIX + token));
         String longId = userConnectionVO.getLongId();
+        // 处理字符串
         String finalString = CircuitBoardUtil.processButtonString(switchButtonStatus, tapButtonStatus);
-        NettySocketHolder.putValue(longId, CircuitBoardConstant.BUTTON_STATUS, finalString);
         Boolean isRecorded = (Boolean) NettySocketHolder.getValue(longId, CircuitBoardConstant.IS_RECORDED);
         if (Validator.isNotNull(isRecorded) && isRecorded) {
             CircuitBoardUtil.sendButtonStringToCB(NettySocketHolder.getCtx(longId), finalString);
+            // 保存缓存
+            NettySocketHolder.putValue(longId, CircuitBoardConstant.BUTTON_STATUS, finalString);
+            // 保存历史操作记录
             circuitBoardHistoryOperationService.saveOperationStep(token, finalString);
             return true;
         } else {
