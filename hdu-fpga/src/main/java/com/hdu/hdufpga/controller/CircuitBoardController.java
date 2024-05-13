@@ -7,10 +7,7 @@ import com.hdu.hdufpga.entity.po.CircuitBoardPO;
 import com.hdu.hdufpga.service.CircuitBoardHistoryOperationService;
 import com.hdu.hdufpga.service.CircuitBoardService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -38,17 +35,17 @@ public class CircuitBoardController extends BaseController<CircuitBoardService, 
     }
 
     @Override
-    public Result create(CircuitBoardPO circuitBoardPO) {
+    public Result create(@RequestBody CircuitBoardPO circuitBoardPO) {
         return Result.error("不支持本方法");
     }
 
     @Override
-    public Result update(CircuitBoardPO circuitBoardPO) {
+    public Result update(@RequestBody CircuitBoardPO circuitBoardPO) {
         return Result.error("不支持本方法");
     }
 
     @Override
-    public Result delete(CircuitBoardPO circuitBoardPO) {
+    public Result delete(@RequestBody CircuitBoardPO circuitBoardPO) {
         return Result.error("不支持本方法");
     }
 

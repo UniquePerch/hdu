@@ -4,6 +4,7 @@ import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.entity.po.ResourcePO;
 import com.hdu.hdufpga.service.ResourceService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,19 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class ResourceController extends BaseController<ResourceService, ResourcePO> {
     //level >= 3
     @Override
-    public Result create(ResourcePO resourcePO) {
+    public Result create(@RequestBody ResourcePO resourcePO) {
         return super.create(resourcePO);
     }
 
     //level >= 3
     @Override
-    public Result delete(ResourcePO resourcePO) {
+    public Result delete(@RequestBody ResourcePO resourcePO) {
         return super.delete(resourcePO);
     }
 
     //level >= 3
     @Override
-    public Result update(ResourcePO resourcePO) {
+    public Result update(@RequestBody ResourcePO resourcePO) {
         return super.update(resourcePO);
     }
 

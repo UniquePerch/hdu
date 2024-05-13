@@ -20,13 +20,13 @@ public class RoleController extends BaseController<RoleService, RolePO> {
 
     //level >= 3
     @Override
-    public Result delete(RolePO rolePO) {
+    public Result delete(@RequestBody RolePO rolePO) {
         return super.delete(rolePO);
     }
 
     //level >= 3
     @Override
-    public Result update(RolePO rolePO) {
+    public Result update(@RequestBody RolePO rolePO) {
         return super.update(rolePO);
     }
 

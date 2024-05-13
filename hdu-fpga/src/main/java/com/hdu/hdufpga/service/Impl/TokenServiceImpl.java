@@ -27,9 +27,9 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public String generateToken(UserVO userVO) throws IdentifyException {
-        if (ParamUtil.CheckUserInfoLegal(userVO)) {
-            String salt = IdUtil.simpleUUID();
-            String token = ParamUtil.generateUserToken(userVO, salt);
+        if (ParamUtil.CheckUserInfoLegal(userVO)) { // 检查传递的userVO参数是否为空
+            String salt = IdUtil.simpleUUID(); // 随机生成一个uuid
+            String token = ParamUtil.generateUserToken(userVO, salt); //生成token
             if (Validator.isNull(token)) {
                 throw new IdentifyException("身份信息有误");
             }

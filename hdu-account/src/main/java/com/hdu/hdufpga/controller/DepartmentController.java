@@ -4,6 +4,7 @@ import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.entity.po.DepartmentPO;
 import com.hdu.hdufpga.service.DepartmentService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,19 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class DepartmentController extends BaseController<DepartmentService, DepartmentPO> {
     //level >= 3
     @Override
-    public Result create(DepartmentPO departmentPO) {
+    public Result create(@RequestBody DepartmentPO departmentPO) {
         return super.create(departmentPO);
     }
 
     //level >= 3
     @Override
-    public Result delete(DepartmentPO departmentPO) {
+    public Result delete(@RequestBody DepartmentPO departmentPO) {
         return super.delete(departmentPO);
     }
 
     //level >= 3
     @Override
-    public Result update(DepartmentPO departmentPO) {
+    public Result update(@RequestBody DepartmentPO departmentPO) {
         return super.update(departmentPO);
     }
 

@@ -52,7 +52,7 @@ public class PaperController {
 
     //level >= 1
     @PostMapping(value = "/handInPaper", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result handInPaper(HandInInfoVO handInInfoVO) {
+    public Result handInPaper(@RequestBody HandInInfoVO handInInfoVO) {
         try {
             return Result.ok(paperService.handInPaper(handInInfoVO));
         } catch (Exception e) {
@@ -85,7 +85,7 @@ public class PaperController {
 
     //level >= 1
     @PostMapping(value = "/updateHandInInfo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result updateHandInInfo(HandInInfoVO handInInfoVO) {
+    public Result updateHandInInfo(@RequestBody HandInInfoVO handInInfoVO) {
         try {
             return Result.ok(paperService.updateHandInInfo(handInInfoVO));
         } catch (Exception e) {

@@ -5,6 +5,7 @@ import com.hdu.hdufpga.entity.po.Problem1PO;
 import com.hdu.hdufpga.entity.vo.Problem1VO;
 import com.hdu.hdufpga.service.ProblemService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,19 +17,19 @@ import java.util.List;
 public class ProblemController extends BaseController<ProblemService, Problem1PO> {
     //level >= 3
     @Override
-    public Result create(Problem1PO problem1PO) {
+    public Result create(@RequestBody Problem1PO problem1PO) {
         return super.create(problem1PO);
     }
 
     //level >= 3
     @Override
-    public Result delete(Problem1PO problem1PO) {
+    public Result delete(@RequestBody Problem1PO problem1PO) {
         return super.delete(problem1PO);
     }
 
     //level >= 3
     @Override
-    public Result update(Problem1PO problem1PO) {
+    public Result update(@RequestBody Problem1PO problem1PO) {
         return super.update(problem1PO);
     }
 

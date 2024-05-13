@@ -5,6 +5,7 @@ import com.hdu.hdufpga.entity.po.TestRecordPO;
 import com.hdu.hdufpga.service.TestRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,19 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class TestRecordController extends BaseController<TestRecordService, TestRecordPO> {
     @Override
-    public Result create(TestRecordPO testRecordPO) {
+    public Result create(@RequestBody TestRecordPO testRecordPO) {
         return Result.error("此接口不支持本方法");
     }
 
     //level >= 2
     @Override
-    public Result delete(TestRecordPO testRecordPO) {
+    public Result delete(@RequestBody TestRecordPO testRecordPO) {
         return super.delete(testRecordPO);
     }
 
     //level >= 2
     @Override
-    public Result update(TestRecordPO testRecordPO) {
+    public Result update(@RequestBody TestRecordPO testRecordPO) {
         return super.update(testRecordPO);
     }
 

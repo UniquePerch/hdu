@@ -4,6 +4,7 @@ import com.hdu.hdufpga.entity.Result;
 import com.hdu.hdufpga.entity.po.ChapterPO;
 import com.hdu.hdufpga.service.ChapterService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,19 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChapterController extends BaseController<ChapterService, ChapterPO> {
     //level >= 3
     @Override
-    public Result create(ChapterPO chapterPO) {
+    public Result create(@RequestBody ChapterPO chapterPO) {
         return super.create(chapterPO);
     }
 
     //level >= 3
     @Override
-    public Result update(ChapterPO chapterPO) {
+    public Result update(@RequestBody ChapterPO chapterPO) {
         return super.update(chapterPO);
     }
 
     //level >= 3
     @Override
-    public Result delete(ChapterPO chapterPO) {
+    public Result delete(@RequestBody ChapterPO chapterPO) {
         return super.delete(chapterPO);
     }
 
