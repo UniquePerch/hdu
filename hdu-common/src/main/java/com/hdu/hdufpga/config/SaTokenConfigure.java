@@ -20,8 +20,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                     .match("/**")    // 拦截的 path 列表，可以写多个 */
                     .notMatch("/auth/**")        // 排除掉的 path 列表，可以写多个
                     .check(r -> StpUtil.checkLogin());        // 要执行的校验动作，可以写完整的 lambda 表达式
-            // 根据路由划分模块，不同模块不同鉴权
-            // todo 记得具体路径优先配，通配符往后配置
+            // 根据路由划分模块，不同模块不同鉴权，记得具体路径优先配，通配符往后配置
             // >=3
             SaRouter.match("/user/delete", "/user/update",
                             "/cb/listPage", "/cb/get",
@@ -56,11 +55,6 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                             "/problem/**",
                             "/resource/**")
                     .check(r -> StpUtil.checkRole(RoleEnum.ADMIN.getRoleId()));
-
-            SaRouter.match("/goods/**", r -> StpUtil.checkRole("goods"));
-            SaRouter.match("/orders/**", r -> StpUtil.checkRole("orders"));
-            SaRouter.match("/notice/**", r -> StpUtil.checkRole("notice"));
-            SaRouter.match("/comment/**", r -> StpUtil.checkRole("comment"));
         })).addPathPatterns("/**");
     }
 }
