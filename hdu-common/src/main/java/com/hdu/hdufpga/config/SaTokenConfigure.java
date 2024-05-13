@@ -18,22 +18,43 @@ public class SaTokenConfigure implements WebMvcConfigurer {
             // 指定一条 match 规则
             SaRouter
                     .match("/**")    // 拦截的 path 列表，可以写多个 */
-                    .notMatch("/user/doLogin")        // 排除掉的 path 列表，可以写多个
+                    .notMatch("/auth/**")        // 排除掉的 path 列表，可以写多个
                     .check(r -> StpUtil.checkLogin());        // 要执行的校验动作，可以写完整的 lambda 表达式
             // 根据路由划分模块，不同模块不同鉴权
             // todo 记得具体路径优先配，通配符往后配置
-            SaRouter.match("/user/**", r -> StpUtil.checkRoleOr(RoleEnum.TEACHER.getRoleId(), RoleEnum.ADMIN.getRoleId()));
+            // >=3
+            SaRouter.match("/user/delete", "/user/update",
+                            "/cb/listPage", "/cb/get",
+                            "/class//listPage", "/class/get")
+                    .check(r -> StpUtil.checkRole(RoleEnum.ADMIN.getRoleId()));
+            // >=1
+            SaRouter.match("/chapter/recordFinish", "/chapter/getChapterRecordByUserId",
+                            "/paper/getAllPaperByClassId", "/paper/handInPaper", "/paper/getHandInInfoByUserId", "/paper/updateHandInInfo",
+                            "/problem/getProblems", "/problem/checkAnswer",
+                            "/testRecord/getMaxScore",
+                            "/studentStudyRecord/updateResourceRecord")
+                    .check(r -> StpUtil.checkRoleOr(RoleEnum.STUDENT.getRoleId(), RoleEnum.TEACHER.getRoleId(), RoleEnum.ADMIN.getRoleId()));
+
+
+            // >=1
             SaRouter.match("/cb/**",
                             "/file/**",
                             "/token/**",
-                            "/waiting/**",
-                            "/chapter/recordFinish", "/chapter/getChapterRecordByUserId")
+                            "/waiting/**")
                     .check(r -> StpUtil.checkRoleOr(RoleEnum.STUDENT.getRoleId(), RoleEnum.TEACHER.getRoleId(), RoleEnum.ADMIN.getRoleId()));
+            // >=2
+            SaRouter.match("/user/**",
+                            "/class/**",
+                            "/testRecord/**",
+                            "/studentStudyRecord/**")
+                    .check(r -> StpUtil.checkRoleOr(RoleEnum.TEACHER.getRoleId(), RoleEnum.ADMIN.getRoleId()));
+            // >=3
             SaRouter.match("/role/**",
-                            "/user/delete", "/user/update",
                             "/department/**",
-                            "/cb/listPage", "/cb/get",
-                            "/chapter/**")
+                            "/chapter/**",
+                            "/knowledge/**",
+                            "/problem/**",
+                            "/resource/**")
                     .check(r -> StpUtil.checkRole(RoleEnum.ADMIN.getRoleId()));
 
             SaRouter.match("/goods/**", r -> StpUtil.checkRole("goods"));
