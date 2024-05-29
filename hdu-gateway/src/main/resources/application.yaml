@@ -24,7 +24,7 @@ spring:
           filters:
             - StripPrefix=1
         - id: hdu-fpga
-          uri: lb://hdu-record
+          uri: lb://hdu-fpga
           predicates:
             - Path=/fpga/**
           filters:
