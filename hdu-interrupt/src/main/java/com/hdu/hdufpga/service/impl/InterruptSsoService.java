@@ -1,4 +1,4 @@
-package com.hdu.hdufpga.service.Impl;
+package com.hdu.hdufpga.service.impl;
 
 import com.hdu.hdufpga.service.AbstractSsoService;
 import lombok.extern.slf4j.Slf4j;
@@ -7,17 +7,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
+@DubboService(group = "interruptSso")
 @Slf4j
-@DubboService(group = "accountSso")
-public class AccountSsoService implements AbstractSsoService {
+public class InterruptSsoService implements AbstractSsoService {
 
     @Value("${spring.application.name}")
     private String applicationName;
 
-
     @Override
     public String getApplicationName() {
-        log.info("application name {}", applicationName);
+        log.info("getApplicationName:{}", applicationName);
         return applicationName;
     }
 }

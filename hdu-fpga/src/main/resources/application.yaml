@@ -4,15 +4,15 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 47.99.175.197:8848
         namespace: cea83c1b-7a99-4bb1-8596-895a4faab520
   redis:
-    host: 127.0.0.1
+    host: 47.99.175.197
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: 321456987
-    url: jdbc:mysql://127.0.0.1:3306/hdu-interrupt?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    password: MySQL142536
+    url: jdbc:mysql://124.221.61.179:3306/hdu-interrupt?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -24,7 +24,7 @@ seata:
       hdu-fpga-seata-service-group: default
       hdu-record-seata-service-group: default
     grouplist:
-      default: 127.0.0.1:8091
+      default: 47.99.175.197:8091
 server:
   port: 8083
 netty:

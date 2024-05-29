@@ -1,4 +1,4 @@
-package com.hdu.hdufpga.config;
+package com.hdu.hdufpga.service.Impl;
 
 import cn.dev33.satoken.stp.StpInterface;
 import cn.hutool.core.util.NumberUtil;

@@ -8,12 +8,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-@DubboService(group = "accountSso")
-public class AccountSsoService implements AbstractSsoService {
-
+@DubboService(group = "fpgaSso")
+public class FpgaSsoService implements AbstractSsoService {
     @Value("${spring.application.name}")
     private String applicationName;
-
 
     @Override
     public String getApplicationName() {

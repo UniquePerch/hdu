@@ -7,17 +7,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
+@DubboService(group = "recordSso")
 @Slf4j
-@DubboService(group = "accountSso")
-public class AccountSsoService implements AbstractSsoService {
-
+public class RecordSsoService implements AbstractSsoService {
     @Value("${spring.application.name}")
     private String applicationName;
 
-
     @Override
     public String getApplicationName() {
-        log.info("application name {}", applicationName);
+        log.info("getApplicationName:{}", applicationName);
         return applicationName;
     }
 }

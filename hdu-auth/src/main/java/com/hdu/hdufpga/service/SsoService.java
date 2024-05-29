@@ -17,12 +17,24 @@ public class SsoService {
 
     private final Set<AbstractSsoService> ssoServices = new HashSet<>();
 
-    @DubboReference(group = "account", check = false)
+    @DubboReference(group = "accountSso", check = false)
     private AbstractSsoService accountSsoService;
+
+    @DubboReference(group = "fpgaSso", check = false)
+    private AbstractSsoService fpgaSsoService;
+
+    @DubboReference(group = "interruptSso", check = false)
+    private AbstractSsoService interruptSsoService;
+
+    @DubboReference(group = "recordSso", check = false)
+    private AbstractSsoService recordSsoService;
 
     private void init() {
         if (ssoServices.isEmpty()) {
             ssoServices.add(accountSsoService);
+            ssoServices.add(fpgaSsoService);
+            ssoServices.add(interruptSsoService);
+            ssoServices.add(recordSsoService);
         }
     }
 
@@ -40,6 +52,4 @@ public class SsoService {
         init();
         return ssoServices;
     }
-
-
 }
