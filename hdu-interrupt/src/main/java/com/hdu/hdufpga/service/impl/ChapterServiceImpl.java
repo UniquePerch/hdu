@@ -13,14 +13,12 @@ import com.hdu.hdufpga.mapper.UserChapterMapper;
 import com.hdu.hdufpga.service.ChapterService;
 import com.hdu.hdufpga.util.ConvertUtil;
 import com.hdu.hdufpga.util.TimeUtil;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-@DubboService
 public class ChapterServiceImpl extends MPJBaseServiceImpl<ChapterMapper, ChapterPO> implements ChapterService {
     @Resource
     ChapterMapper chapterMapper;

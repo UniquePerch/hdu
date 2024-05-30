@@ -16,7 +16,6 @@ import com.hdu.hdufpga.service.UserResourceRecordService;
 import com.hdu.hdufpga.util.ConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -26,7 +25,6 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-@DubboService
 @Service
 @Slf4j
 public class StudentResourceRecordServiceImpl extends MPJBaseServiceImpl<StudentResourceRecordMapper, UserResourceRecordPO> implements UserResourceRecordService {

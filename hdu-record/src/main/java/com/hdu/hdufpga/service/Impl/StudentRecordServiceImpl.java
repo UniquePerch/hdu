@@ -8,14 +8,12 @@ import com.hdu.hdufpga.mapper.VisitRecordMapper;
 import com.hdu.hdufpga.service.UserRecordService;
 import com.hdu.hdufpga.service.UserService;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
 
 @Service
-@DubboService
 public class StudentRecordServiceImpl implements UserRecordService {
     @Resource
     VisitRecordMapper visitRecordMapper;

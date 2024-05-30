@@ -39,3 +39,17 @@ netty:
   backlog: 100
 wait-queue:
   name: "queue:fpgaWaitLine"
+dubbo:
+  application:
+    name: ${spring.application.name}
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://47.99.175.197:8848
+    group: dubbo
+    register-mode: interface
+    parameters:
+      namespace: c29600b0-2e5d-450b-bab0-e56d78292d51
+  metadata-report:
+    address: nacos://47.99.175.197:8848
